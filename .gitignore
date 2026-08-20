@@ -1,0 +1,9 @@
+# Mirrored game assets and cached manifests - large, reproducible, not ours to ship
+data/mirror/
+data/manifests/
+
+# Filesystem snapshots are machine-specific (contain local user paths)
+data/snapshots/
+
+__pycache__/
+*.pyc
