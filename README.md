@@ -78,8 +78,11 @@ concurrent verified downloader, local mirror with resumable index.
 
 **Not done** - placing the mirror into the game's own storage path so the
 updater accepts it. This needs one instrumented run of the game to discover the
-storage directory and the `project.manifest` state format. See
-[tools/DISCOVERY.md](tools/DISCOVERY.md).
+storage directory and the `project.manifest` state format.
+
+- Running that on an x86-64 box with Claude Code? [CLAUDE.md](CLAUDE.md) is
+  the full self-contained handoff and is auto-loaded.
+- Doing it by hand? [tools/DISCOVERY.md](tools/DISCOVERY.md) has the steps.
 
 ## Known blocker on ARM64
 
