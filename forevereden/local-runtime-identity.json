@@ -1,0 +1,288 @@
+{
+  "runtime_id": "fb0167b7db5e8ec9921e9ea2e6499c08c6a2bf893909ed878bfe14e50a8890a5",
+  "identity": {
+    "project": "ForeverEden",
+    "compatibility_version": 1,
+    "schema_version": 1,
+    "private_client_runtime_id": "ea41553f4a1ef8465833805a0a7bedac11507b0d21cd2720a674135ceb54b679",
+    "original_runtime_id": "8998efbb85a1df8986587cbe03c8d162d38c9e8133afb6c2047fc898708aa45f",
+    "package": "games.fed.anothereden",
+    "endpoint": "http://127.0.0.1:28765",
+    "seed": {
+      "path": "data\\forevereden-evidence\\private-login\\seed-6135ee90207fd518.json",
+      "sha256": "787c0f7b736e97f59f9bfa5864f8acd75bf80cb6c6ef515e192bf2a5c60a009a"
+    },
+    "codec": {
+      "path": "data\\forevereden-evidence\\private-login\\body-codec-inputs.json",
+      "sha256": "d286f169a56c76b9c9799b8e34b9862100ca253bb85db0859cbc3c58b1f96daa"
+    },
+    "server": {
+      "tools/forevereden_server.cjs": "0a767f319e771540c1c3fe596f6ae2d4c18b9da63d88f3cf82293fc76919c574",
+      "tools/forevereden_save.cjs": "e37746c634e875bb2ab064d0bbd9d3db78dc8093655eecb48ca20bc1856018b6",
+      "tools/forevereden_transport.cjs": "bdccbbb1a71e43e634b8313328df18cc6f5f9d62788575768131df9118a17cbf"
+    },
+    "active_server": {
+      "tools/forevereden_device_listener.cjs": "c0cff18744e2ee3302ea7a9cdf64010c86f2b2e70bf5b6c2e076a74871f57332",
+      "tools/forevereden_mobile_server.cjs": "16467e7538fd1ec5c73d39c4960f3f02a7e5348f6bec7a94faf86021687d82ec",
+      "tools/forevereden_transport.cjs": "bdccbbb1a71e43e634b8313328df18cc6f5f9d62788575768131df9118a17cbf",
+      "tools/forevereden_lottery_3_17_0.bin": "9f40334a99bcb90d6b57ffe882960e514afedcf8dc82eff94f80c7f817807224",
+      "tools/forevereden_rewards_3_17_0.bin": "0a1eca9c4668ac8168287079b7c00795757e1611af387ff7b3d046f8a8d22e1f",
+      "data/forevereden-evidence/network-action-inventory.json": "d0dd1d6eec07c7d8a32df142e1e0b4a4329b2742f2d1b32f54486477b6605c57"
+    },
+    "launcher_source": {
+      "android/forevereden-launcher/app/build.gradle.kts": "a3a175fcd86ba1a9789832be6886cf8d7537f3726667d7910f6bc81aba572d28",
+      "android/forevereden-launcher/app/src/main/AndroidManifest.xml": "3ed1b1e355677fba198db769e61aaa9c00b6e12d4352c3eb8e59cd5a7856cd9d",
+      "android/forevereden-launcher/app/src/main/assets/runtime/main.cjs": "a7cc9be3b3d81f52b8821b0200afc958c3da3aad042114f951ea4cb0c302f824",
+      "android/forevereden-launcher/app/src/main/cpp/native-lib.cpp": "7b029995862a54565d32750887631e88cf9d30645b53cf49e4d665da33592175",
+      "android/forevereden-launcher/app/src/main/java/dev/forevereden/launcher/NodeMobileBridge.java": "295b572c64603e0f39a57b0e30a31ef9c6b0d81fe8257e4856cc8e9d1e708bdb",
+      "android/forevereden-launcher/app/src/main/kotlin/dev/forevereden/launcher/MainActivity.kt": "e5e90bfc0321f47846e201069faa669aaa3534c51fb26572b666207f9784a8c5",
+      "android/forevereden-launcher/app/src/main/kotlin/dev/forevereden/launcher/NodeListenerService.kt": "85b92128e70768e6d8a7d0e0c69597c2c524fded02ebe120392594db9bc44db3"
+    },
+    "routed_routes": [
+      "battle/continue",
+      "battle/subscription/continue",
+      "battle_rush/reward",
+      "cat_diary/reward",
+      "dungeon/complete",
+      "dungeon/ticket/issue",
+      "friends_invitation/common/confirm",
+      "friends_invitation/common/initialize",
+      "friends_invitation/guest/initialize",
+      "gift/receive",
+      "incentive/adcolony/issue",
+      "incentive/battlecontinue/issue",
+      "incentive/dailybonus/issue",
+      "incentive/rewardtap/issue",
+      "incentive/treasurebox/issue",
+      "lottery/draw",
+      "matching_user/game_user_id",
+      "pack_product/acquire",
+      "payment_point/history",
+      "pc_costume/acquire",
+      "quest/close",
+      "serial_code/consume",
+      "serial_code/user_data/import",
+      "star_library/level_reward",
+      "star_library/mission_reward",
+      "star_library/score_attack_reward",
+      "subscription_ticket/detail",
+      "user/game_user_id_for_eu",
+      "user/login",
+      "user/migration/confirm",
+      "user/migration/reserve",
+      "user/migration/status",
+      "user/migration/status_reset",
+      "user/update_meta",
+      "user_data/confirm",
+      "user_data/delete",
+      "user_data/pull",
+      "user_data/push"
+    ],
+    "non_stub_routes": [
+      "battle/continue",
+      "dungeon/ticket/issue",
+      "lottery/draw",
+      "matching_user/game_user_id",
+      "quest/close",
+      "user/game_user_id_for_eu",
+      "user/login",
+      "user/migration/status",
+      "user/migration/status_reset",
+      "user/update_meta",
+      "user_data/confirm",
+      "user_data/pull",
+      "user_data/push"
+    ],
+    "required_untraced_routes": [
+      "battle_rush/reward",
+      "cat_diary/reward",
+      "dungeon/complete",
+      "gift/receive",
+      "pack_product/acquire",
+      "pc_costume/acquire",
+      "star_library/level_reward",
+      "star_library/mission_reward",
+      "star_library/score_attack_reward"
+    ],
+    "supported_routes": [
+      "matching_user/game_user_id",
+      "user/login",
+      "user/update_meta",
+      "user_data/confirm",
+      "user_data/pull",
+      "user_data/push",
+      "user/migration/status_reset"
+    ],
+    "publisher_migration": "disabled",
+    "content_generation": "ec741d3cc2f29b867892b1ed16a7a59b40e3968d",
+    "content_master_sha256": "18c811dabc2a3184c81155a54a234dce64ab23e2eebac4ae1cdfde2ee76386eb",
+    "limitations": [
+      "untraced routes fail closed with HTTP 503; route recognition is not protocol support",
+      "quest/close is implemented only for exact gem-only rewards and rejects every other reward shape",
+      "excluded publisher services are not advertised locally"
+    ],
+    "resource_routes_source_runtime_id": "fed54047824caeab97b7c667e7d9e2d4dd34ddc6cfc589cfa39dbb48293811cd",
+    "resource_routes": {
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.1": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.1.json",
+        "bytes": 18547306,
+        "sha256": "72c7e6f87394cdb8d200eecf4928682b69d7a3ba014aa40d7288ca8055ac6e41"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.1": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.1.json",
+        "bytes": 370,
+        "sha256": "829f8e4eb84652a35ad25fc0fcd4a0200bc5923d4dfeb2378b087f71ac23e405"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.2": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.2.json",
+        "bytes": 2885811,
+        "sha256": "d6fc2f5308ed08c864be53e6f42de225428ba1eef0667c2919059917fb2d29d0"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.2": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.2.json",
+        "bytes": 370,
+        "sha256": "1a27c14b050845e4ec890d046fb2b163e7eb07c0698e4f22064a13982d87f483"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.3": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.3.json",
+        "bytes": 1079112,
+        "sha256": "fd57f32b8452b94a56f38febc47f7899c48a647809700201bbf44a47917707af"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.3": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.3.json",
+        "bytes": 370,
+        "sha256": "a6eade748d9c0246ae169b8cd0abadf8e75956e03b2af5e6e47ed72dfe11064c"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.4": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.4.json",
+        "bytes": 820582,
+        "sha256": "f977ac1b6b2e62b97730831e8f4e397b1e6cc55ff00de86f1ec883dd2a80785e"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.4": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.4.json",
+        "bytes": 370,
+        "sha256": "4d921a5ac8e01d1a8925b45be0da1df4ae99d0241fc13bfc2eb4fde2d95f1dfd"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.5": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.5.json",
+        "bytes": 1562995,
+        "sha256": "83471a0b4f0bf7cb6ee8149fbb6325f9c7a60953cea7a9fbb8ea74fc5027da5b"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.5": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.5.json",
+        "bytes": 370,
+        "sha256": "a35c9b1b67c2719b976ef4759e7d7bd3f6e88c1d5f357a6fce6ac34d80cefbbd"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.6": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.6.json",
+        "bytes": 184824,
+        "sha256": "71a7423b77a5d3f42380bcb1b51eefaba2849a3c5c0d4601e9e0e4bf82c63a8c"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.6": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.6.json",
+        "bytes": 370,
+        "sha256": "04b038bd7c9791234c77dc2a2026545d91052c05e0ba268255c7c85d95652bc7"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.7": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.7.json",
+        "bytes": 483631,
+        "sha256": "580448ede874226039837902084182a31dc8ee4239d4fbdd747d9543862938ad"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.7": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.7.json",
+        "bytes": 370,
+        "sha256": "d48297b79bb68801253876d26c1f2ddeb73314151ed8934adecc641b53aa4a45"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.8": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.8.json",
+        "bytes": 694301,
+        "sha256": "6856ad21fb1007631668d44f81a824e1553e013726b43f9abe08c89672ed14a9"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.8": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.8.json",
+        "bytes": 370,
+        "sha256": "bade3560bd030dc72c60f8bf06420c140b9a22152e21dd83ed96bab5dac695d9"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.9": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.9.json",
+        "bytes": 336198,
+        "sha256": "3ace88efe28305679602c9655acb2ac625bafcd8713e5df69a3356362cf159cf"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.9": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.9.json",
+        "bytes": 370,
+        "sha256": "c15c1f039657c5dc8f3bd702bc4fdaa5b486c11b9875de4e427e8f5123787d0a"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.10": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.10.json",
+        "bytes": 99611,
+        "sha256": "c6bdaebd2d998d26330b523f76156a5b9e3c2f4f15ad219eee69bc2d19a4d059"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.10": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.10.json",
+        "bytes": 372,
+        "sha256": "e700d3a40c7135554ed07e2be42fbd7bf1adaa72d9991a46e8e3e1c7540515bc"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.11": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.11.json",
+        "bytes": 236007,
+        "sha256": "ca6232dd5d4876dd55e7fb78472856f268ab25d3543e0be717e285fac8ff7844"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.11": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.11.json",
+        "bytes": 372,
+        "sha256": "9a1eddb7eafcaef64e76fcdf56268645558972e7c9ab3f3e24d2cdd921214763"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.12": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.12.json",
+        "bytes": 128834,
+        "sha256": "d5ccc3b6ec729f55579650f8a819985b59eaedfd4393e9ad60121d4a91e94ff6"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.12": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.12.json",
+        "bytes": 372,
+        "sha256": "0aee70b129bdb0963ccd6b6c76926ac9d44a10b311ebaa40dec1eb39137adad2"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.13": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.13.json",
+        "bytes": 180028,
+        "sha256": "2b11c95ea3ebc44aa847cd1af0aaaac91c1e2c6b1ac4ff9984930e50adb17c32"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.13": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.13.json",
+        "bytes": 372,
+        "sha256": "322d100eb1952b3c9998ab394e4fe5ace25fbf612070bc596ab2f1871dabf4af"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.14": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.14.json",
+        "bytes": 373938,
+        "sha256": "8374482354a4f77da849f7b4e6d737eaee6f1931ff4fdeec5f598d4a12db9573"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.14": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.14.json",
+        "bytes": 372,
+        "sha256": "dfe539e965be52254d2b176377e3b7bf8a54d29b669f6299e5ce17455eb67080"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.15": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.15.json",
+        "bytes": 243038,
+        "sha256": "8ed0205a2837627e868af430c63b2d940ae251d2cfe1e2a85ab8f1484c631109"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.15": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.15.json",
+        "bytes": 372,
+        "sha256": "a59189d1eae6163a93d1380964fed06827a76d128a79fb856f0a73b6180fd580"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/project.manifest.16": {
+        "path": "data/forevereden-evidence/private-resources/project.manifest.16.json",
+        "bytes": 232971,
+        "sha256": "80bc777596c98f4868d3df784dc392de708502346c1a0734ab4ac4103969d977"
+      },
+      "/content/ec741d3cc2f29b867892b1ed16a7a59b40e3968d/version.manifest.16": {
+        "path": "data/forevereden-evidence/private-resources/version.manifest.16.json",
+        "bytes": 372,
+        "sha256": "adaccedf0723af04e386e4115b86b86124c6c903bc45fb0ad7b08f296a3e366e"
+      }
+    }
+  }
+}

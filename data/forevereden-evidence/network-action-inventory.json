@@ -1,0 +1,932 @@
+{
+  "client": "Another Eden Global 3.17.0 / 699 ARM64",
+  "libapp_sha256": "2789c0f6bb570d168a14d836a36a3e3fc372c60c63a8e79730dc9c67bc78a1dc",
+  "queue_function": "0x3000da8",
+  "actions": [
+    {
+      "action": "battle/continue",
+      "kind": "queued",
+      "string_va": "0x13c1216",
+      "reference": "0x39676f0",
+      "entry_function": "0x3967674",
+      "call_path": [
+        "0x3967674",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "action callback reads no JSON fields; billing refresh is invoked at 0x39673a8",
+      "state_contract": "atomically debit exact master consume cost; replay must not debit twice"
+    },
+    {
+      "action": "battle/subscription/continue",
+      "kind": "queued",
+      "string_va": "0x1470f67",
+      "reference": "0x2d3f524",
+      "entry_function": "0x2d3f4a4",
+      "call_path": [
+        "0x2d3f4a4",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "subscription service is not advertised"
+    },
+    {
+      "action": "battle_rush/reward",
+      "kind": "queued",
+      "string_va": "0x14a0d3f",
+      "reference": "0x23125d8",
+      "entry_function": "0x23120dc",
+      "call_path": [
+        "0x23120dc",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "stageId",
+        "courseId",
+        "missionIds"
+      ],
+      "request_field_references": [
+        "0x2312404",
+        "0x2312484",
+        "0x231254c"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x2313c44 reads no action-specific JSON fields",
+      "state_contract": "UNTRACED: exact UserBattleRush claim rows and reward delivery remain to be recovered"
+    },
+    {
+      "action": "card_key/subscription/recovery",
+      "kind": "queued",
+      "string_va": "0x13c61ee",
+      "reference": "0x2b87f88",
+      "entry_function": "0x2b87d18",
+      "call_path": [
+        "0x2b87d18",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "excluded_subscription",
+      "evidence": "Only reachable from subscription dungeon-key recovery; subscriptions are not advertised locally.",
+      "request_fields": [
+        "cardKeyType"
+      ],
+      "request_field_references": [
+        "0x2b87f10"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "subscription service is not advertised"
+    },
+    {
+      "action": "cat_diary/reward",
+      "kind": "queued",
+      "string_va": "0x14c0823",
+      "reference": "0x31ca518",
+      "entry_function": "0x31ca394",
+      "call_path": [
+        "0x31ca394",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "lotteryDt",
+        "slotNo",
+        "step"
+      ],
+      "request_field_references": [
+        "0x31ca3f8",
+        "0x31ca43c",
+        "0x31ca484"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x31cbad4 and caller callback 0x2a1e8a8 read no action-specific JSON fields",
+      "state_contract": "UNTRACED: exact UserCatDiary claim counters and reward delivery remain to be recovered"
+    },
+    {
+      "action": "dungeon/complete",
+      "kind": "queued",
+      "string_va": "0x13d2671",
+      "reference": "0x318f4c8",
+      "entry_function": "0x318f378",
+      "call_path": [
+        "0x318f378",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "dungeonId"
+      ],
+      "request_field_references": [
+        "0x318f4d8"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; call site 0x3277094 supplies an empty callback",
+      "state_contract": "UNTRACED: exact roguelike UserDungeon completion transition and rewards remain to be recovered"
+    },
+    {
+      "action": "dungeon/ticket/issue",
+      "kind": "queued",
+      "string_va": "0x1460c68",
+      "reference": "0x3967a00",
+      "entry_function": "0x39678d0",
+      "call_path": [
+        "0x39678d0",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "id",
+        "num"
+      ],
+      "request_field_references": [
+        "0x396797c",
+        "0x39679c0"
+      ],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "callback 0x3967c40 reads userDungeonTicket.dungeonTicketId and gamelibConsume.acquireAmount",
+      "state_contract": "atomically debit exact consume cost and increase the selected UserDungeonTicket amount"
+    },
+    {
+      "action": "friends_invitation/common/confirm",
+      "kind": "queued",
+      "string_va": "0x140c7dd",
+      "reference": "0x31c39dc",
+      "entry_function": "0x31c38bc",
+      "call_path": [
+        "0x31c38bc",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "masterFriendsInvitationId"
+      ],
+      "request_field_references": [
+        "0x31c393c"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "publisher social service is outside local single-player play"
+    },
+    {
+      "action": "friends_invitation/common/initialize",
+      "kind": "queued",
+      "string_va": "0x145d9a7",
+      "reference": "0x31c4160",
+      "entry_function": "0x31c4040",
+      "call_path": [
+        "0x31c4040",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "masterFriendsInvitationId"
+      ],
+      "request_field_references": [
+        "0x31c40c0"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "publisher social service is outside local single-player play"
+    },
+    {
+      "action": "friends_invitation/guest/initialize",
+      "kind": "queued",
+      "string_va": "0x1485c49",
+      "reference": "0x31c44fc",
+      "entry_function": "0x31c438c",
+      "call_path": [
+        "0x31c438c",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "masterFriendsInvitationId",
+        "invitationCode"
+      ],
+      "request_field_references": [
+        "0x31c4410",
+        "0x31c445c"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "publisher social service is outside local single-player play"
+    },
+    {
+      "action": "gift/receive",
+      "kind": "queued",
+      "string_va": "0x14af03e",
+      "reference": "0x373e4c0",
+      "entry_function": "0x373e268",
+      "call_path": [
+        "0x373e268",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "userId",
+        "giftIds"
+      ],
+      "request_field_references": [
+        "0x373e374",
+        "0x373e3b4"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x3744444 reads no action-specific JSON fields",
+      "state_contract": "UNTRACED: atomically mark each UserGift claimed and materialize every typed content row exactly once"
+    },
+    {
+      "action": "incentive/adcolony/issue",
+      "kind": "queued",
+      "string_va": "0x13c55ca",
+      "reference": "0x279ef08",
+      "entry_function": "0x279eda8",
+      "call_path": [
+        "0x279eda8",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "advertising service is not advertised"
+    },
+    {
+      "action": "incentive/battlecontinue/issue",
+      "kind": "queued",
+      "string_va": "0x13f79e2",
+      "reference": "0x2d39660",
+      "entry_function": "0x2d395e4",
+      "call_path": [
+        "0x2d395e4",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "advertising service is not advertised"
+    },
+    {
+      "action": "incentive/dailybonus/issue",
+      "kind": "queued",
+      "string_va": "0x14865c3",
+      "reference": "0x3364990",
+      "entry_function": "0x336490c",
+      "call_path": [
+        "0x336490c",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "advertising service is not advertised"
+    },
+    {
+      "action": "incentive/rewardtap/issue",
+      "kind": "queued",
+      "string_va": "0x1433eb7",
+      "reference": "0x2f68830",
+      "entry_function": "0x2f68560",
+      "call_path": [
+        "0x2f68560",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "advertising service is not advertised"
+    },
+    {
+      "action": "incentive/treasurebox/issue",
+      "kind": "queued",
+      "string_va": "0x1415335",
+      "reference": "0x2ccd520",
+      "entry_function": "0x2ccd4e8",
+      "call_path": [
+        "0x2ccd4e8",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "id"
+      ],
+      "request_field_references": [
+        "0x2ccd530"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "advertising service is not advertised"
+    },
+    {
+      "action": "lottery/draw",
+      "kind": "queued",
+      "string_va": "0x13e6785",
+      "reference": "0x34f4008",
+      "entry_function": "0x34f3e3c",
+      "call_path": [
+        "0x34f3e3c",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "id",
+        "lotteryPCExId",
+        "lotteryPCExIds",
+        "lotteryTicketId"
+      ],
+      "request_field_references": [
+        "0x34f4018",
+        "0x34f4064",
+        "0x34f40a0",
+        "0x34f40e0"
+      ],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "callback reads userPC[].stock.id",
+      "state_contract": "atomically debit banner cost or ticket and persist draw progress; replay must not draw twice"
+    },
+    {
+      "action": "matching_user/game_user_id",
+      "kind": "queued",
+      "string_va": "0x13dccb0",
+      "reference": "0x34a5020",
+      "entry_function": "0x34a4fa4",
+      "call_path": [
+        "0x34a4fa4",
+        "0x3002934",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "captured response supplies game_user_id and aesIv",
+      "state_contract": "issue fixed local identity and IV; no profile mutation"
+    },
+    {
+      "action": "pack_product/acquire",
+      "kind": "queued",
+      "string_va": "0x142a3eb",
+      "reference": "0x2f7d3f8",
+      "entry_function": "0x2f7d324",
+      "call_path": [
+        "0x2f7d324",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "packProductId"
+      ],
+      "request_field_references": [
+        "0x2f7d408"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x2f7d86c reads no action-specific JSON fields",
+      "state_contract": "UNTRACED: exact UserPackProduct entitlement and typed contents remain to be recovered"
+    },
+    {
+      "action": "payment_point/history",
+      "kind": "queued",
+      "string_va": "0x140c52c",
+      "reference": "0x310b9b4",
+      "entry_function": "0x310b87c",
+      "call_path": [
+        "0x310b87c",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "paymentPointCardId",
+        "pageNo"
+      ],
+      "request_field_references": [
+        "0x310b8dc",
+        "0x310b920"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "publisher payment history is not needed by local storage"
+    },
+    {
+      "action": "pc_costume/acquire",
+      "kind": "queued",
+      "string_va": "0x13c6dac",
+      "reference": "0x2f7b95c",
+      "entry_function": "0x2f7b888",
+      "call_path": [
+        "0x2f7b888",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "pcCostumeProductId"
+      ],
+      "request_field_references": [
+        "0x2f7b96c"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x2f7bdd4 reads no action-specific JSON fields",
+      "state_contract": "UNTRACED: exact UserPCCostumeProduct/UserPCCostume mutation and typed contents remain to be recovered"
+    },
+    {
+      "action": "quest/close",
+      "kind": "queued",
+      "string_va": "0x14a5960",
+      "reference": "0x37af5a4",
+      "entry_function": "0x37af570",
+      "call_path": [
+        "0x37af570",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "id"
+      ],
+      "request_field_references": [
+        "0x37af5b4"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "partial_gem_only_rejected_otherwise",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; callback 0x37b60c4 reads no action-specific fields and refreshes billing",
+      "state_contract": "PARTIAL: state 4 to 5 and exact gem-only reward are atomic; non-gem rewards are rejected"
+    },
+    {
+      "action": "serial_code/consume",
+      "kind": "queued",
+      "string_va": "0x14d40cd",
+      "reference": "0x2d4e094",
+      "entry_function": "0x2d4df04",
+      "call_path": [
+        "0x2d4df04",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "serialCode"
+      ],
+      "request_field_references": [
+        "0x2d4e008"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "publisher serial-code service is not locally reproducible"
+    },
+    {
+      "action": "serial_code/user_data/import",
+      "kind": "queued",
+      "string_va": "0x147103d",
+      "reference": "0x2d4b4f8",
+      "entry_function": "0x2d4b364",
+      "call_path": [
+        "0x2d4b364",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "serialCode"
+      ],
+      "request_field_references": [
+        "0x2d4b46c"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "publisher serial-code service is not locally reproducible"
+    },
+    {
+      "action": "star_library/level_reward",
+      "kind": "queued",
+      "string_va": "0x1492be7",
+      "reference": "0x38f2370",
+      "entry_function": "0x38f2254",
+      "call_path": [
+        "0x38f2254",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "levelIds"
+      ],
+      "request_field_references": [
+        "0x38f22e4"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x38f3290 reads no action-specific JSON fields",
+      "state_contract": "UNTRACED: exact UserStarLibraryLevel claim state and UserGift creation remain to be recovered"
+    },
+    {
+      "action": "star_library/mission_reward",
+      "kind": "queued",
+      "string_va": "0x14e0b18",
+      "reference": "0x36f94b4",
+      "entry_function": "0x36f92ec",
+      "call_path": [
+        "0x36f92ec",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "missionIds",
+        "bookId"
+      ],
+      "request_field_references": [
+        "0x36f93d8",
+        "0x36f9420"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; callback 0x2c4973c reads stored UserGift.senderId, not response JSON",
+      "state_contract": "UNTRACED: exact mission claim state and UserGift creation remain to be recovered"
+    },
+    {
+      "action": "star_library/score_attack_reward",
+      "kind": "queued",
+      "string_va": "0x13ef737",
+      "reference": "0x33182e0",
+      "entry_function": "0x33181a4",
+      "call_path": [
+        "0x33181a4",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "scoreAttackRewardIds"
+      ],
+      "request_field_references": [
+        "0x331824c"
+      ],
+      "requirement": "required_gameplay",
+      "semantic_status": "untraced_rejected",
+      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; callback 0x2c4aa5c reads stored UserGift.senderId, not response JSON",
+      "state_contract": "UNTRACED: exact score claim state and UserGift creation remain to be recovered"
+    },
+    {
+      "action": "subscription_ticket/detail",
+      "kind": "queued",
+      "string_va": "0x147e141",
+      "reference": "0x371ee18",
+      "entry_function": "0x371eca0",
+      "call_path": [
+        "0x371eca0",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "ticketId",
+        "condForGettingTickets"
+      ],
+      "request_field_references": [
+        "0x371ecd8",
+        "0x371ed20"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "subscription service is not advertised"
+    },
+    {
+      "action": "user/game_user_id_for_eu",
+      "kind": "special",
+      "evidence": "Uses the separate EU bootstrap HTTP path at 0x301c3fc.",
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "captured bootstrap response supplies game_user_id",
+      "state_contract": "return fixed local identity; no profile mutation"
+    },
+    {
+      "action": "user/login",
+      "kind": "queued",
+      "string_va": "0x13dcccb",
+      "reference": "0x34a51a4",
+      "entry_function": "0x34a5124",
+      "call_path": [
+        "0x34a5124",
+        "0x3002934",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "captured login response; UserStatus is consumed before profile pull",
+      "state_contract": "create/reuse bounded local capability without importing official credentials"
+    },
+    {
+      "action": "user/migration/confirm",
+      "kind": "queued",
+      "string_va": "0x13db515",
+      "reference": "0x2d6160c",
+      "entry_function": "0x2d614ec",
+      "call_path": [
+        "0x2d614ec",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "userId"
+      ],
+      "request_field_references": [
+        "0x2d6158c"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "account migration is replaced by local profile storage"
+    },
+    {
+      "action": "user/migration/reserve",
+      "kind": "queued",
+      "string_va": "0x13e6169",
+      "reference": "0x335fad0",
+      "entry_function": "0x335f968",
+      "call_path": [
+        "0x335f968",
+        "0x301325c",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "userId",
+        "saveType"
+      ],
+      "request_field_references": [
+        "0x335f9e0",
+        "0x335fa24"
+      ],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "account migration is replaced by local profile storage"
+    },
+    {
+      "action": "user/migration/status",
+      "kind": "special",
+      "evidence": "Compared inline by the generic request dispatcher at 0x3012b48.",
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "inline dispatcher reads status; local terminal state is status=0",
+      "state_contract": "report no pending publisher migration; no migration state exists locally"
+    },
+    {
+      "action": "user/migration/status_reset",
+      "kind": "queued",
+      "string_va": "0x1453d24",
+      "reference": "0x34930ec",
+      "entry_function": "0x34930b8",
+      "call_path": [
+        "0x34930b8",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "callback 0x34999e4 branches on success/failure and reads no response body fields",
+      "state_contract": "clear only the client startup migration check; no profile migration"
+    },
+    {
+      "action": "user/update_meta",
+      "kind": "queued",
+      "string_va": "0x1449fab",
+      "reference": "0x34a53a4",
+      "entry_function": "0x34a52a8",
+      "call_path": [
+        "0x34a52a8",
+        "0x3002a78",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "is32bit"
+      ],
+      "request_field_references": [
+        "0x34a532c"
+      ],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "captured response code=0; no durable state mutation",
+      "state_contract": "validate client metadata; no durable profile mutation"
+    },
+    {
+      "action": "user_data/confirm",
+      "kind": "queued",
+      "string_va": "0x14b6ecf",
+      "reference": "0x30c677c",
+      "entry_function": "0x30c6754",
+      "call_path": [
+        "0x30c6754",
+        "0x3000c98",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "captured JSON operation/done acknowledgement shape",
+      "state_contract": "advance ordered queue state only after durable reply persistence"
+    },
+    {
+      "action": "user_data/delete",
+      "kind": "queued",
+      "string_va": "0x13aa2d8",
+      "reference": "0x2d5e17c",
+      "entry_function": "0x2d5e148",
+      "call_path": [
+        "0x2d5e148",
+        "0x30129d8",
+        "0x3012b48",
+        "0x3002800",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [],
+      "request_field_references": [],
+      "requirement": "excluded",
+      "semantic_status": "not_implemented",
+      "exclusion_reason": "profile deletion is owned by the local profile manager"
+    },
+    {
+      "action": "user_data/pull",
+      "kind": "queued",
+      "string_va": "0x13b29e1",
+      "reference": "0x38f1ff8",
+      "entry_function": "0x38f1f24",
+      "call_path": [
+        "0x38f1f24",
+        "0x38f1e78",
+        "0x30c7868",
+        "0x3002710",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "tables",
+        "consistentRead",
+        "recovery"
+      ],
+      "request_field_references": [
+        "0x30ca278",
+        "0x30ca2c0",
+        "0x30ca308"
+      ],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "MessagePack data/dataTokens profile payload consumed by 0x30ca580",
+      "state_contract": "read the committed profile snapshot without mutation"
+    },
+    {
+      "action": "user_data/push",
+      "kind": "queued",
+      "string_va": "0x1448599",
+      "reference": "0x30c88c0",
+      "entry_function": "0x30c7868",
+      "call_path": [
+        "0x30c7868",
+        "0x3002710",
+        "0x3000da8"
+      ],
+      "local_support": "routed",
+      "request_fields": [
+        "deltas",
+        "checksums",
+        "dataTokens",
+        "operations",
+        "scripts",
+        "badges",
+        "giftIds",
+        "surplus"
+      ],
+      "request_field_references": [
+        "0x30c85ac",
+        "0x30c85ec",
+        "0x30c862c",
+        "0x30c866c",
+        "0x30c86ac",
+        "0x30c86ec",
+        "0x30c872c",
+        "0x30c876c"
+      ],
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "JSON operation/done acknowledgement plus refreshed tokens consumed by 0x30e1988",
+      "state_contract": "validate and atomically commit authenticated table deltas/tokens; exact replay returns the stored reply"
+    }
+  ]
+}

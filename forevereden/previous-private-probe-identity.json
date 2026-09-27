@@ -1,0 +1,133 @@
+{
+  "runtime_id": "262332fac1696244acbc1922022e5e5ef5d58f4d7366fc54357222662bddf873",
+  "generation": "data\\forevereden-evidence\\private-probe\\262332fac1696244",
+  "identity": {
+    "project": "ForeverEden",
+    "purpose": "local routing probe, not a gameplay server",
+    "parent_runtime_id": "8998efbb85a1df8986587cbe03c8d162d38c9e8133afb6c2047fc898708aa45f",
+    "package": "games.fed.anothereden",
+    "endpoint": "http://127.0.0.1:28765",
+    "api_format": "http://127.0.0.1:28765/{}/private",
+    "sdk_identity_patch": {
+      "getter_offset": 64217004,
+      "getter_before": "01200091e00308aae31c1614",
+      "local_user_id_sha256": "45e57b51a090f18dfe3d547bb82db053953786c00466c1c4189f7a33285dc25c",
+      "segment_file_offset": 76234752,
+      "segment_virtual_address": 76791808,
+      "segment_bytes": 16384
+    },
+    "billing_catalog_patch": {
+      "methods": [
+        "a0.a(setup)",
+        "a0.a(restoredPurchases)",
+        "e1.onSuccess(catalog)",
+        "PaymentUtil.a(country)",
+        "Shop.r.onSuccess(orderCatalog)",
+        "Shop.submit(localSuccess)",
+        "RequestUrl.<init>(localBase)",
+        "SignedRequest.onPostRequest(localTrust)"
+      ],
+      "behavior": "loopback billing service with local catalog and fulfillment"
+    },
+    "apks": {
+      "games.wfs.anothereden.apk": {
+        "bytes": 73811476,
+        "sha256": "6aac7303ca194a47f4a498d2459dc4f7d453f04bdce2da0ff3f6474535f835a3",
+        "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
+      },
+      "AssetPack1.apk": {
+        "bytes": 113332371,
+        "sha256": "34f7c1d34d5a98f6b76e83f6e8f2c9b626e207d8a37806906c69f60c2e74383b",
+        "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
+      },
+      "config.arm64_v8a.apk": {
+        "bytes": 24253690,
+        "sha256": "12e97c6e6d9d6c2b70fa6f120b11cfa4318093cd587a1f63f4071553fc8f8eb7",
+        "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
+      },
+      "config.en.apk": {
+        "bytes": 41107,
+        "sha256": "7e9eaf4792e40fa500b25374612324add080083e1589cabcec78b53c83295cf6",
+        "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
+      },
+      "config.mdpi.apk": {
+        "bytes": 125971,
+        "sha256": "d188226e8486b3a7953ae474c1163441649800a20df215b21de3a14c929a66d4",
+        "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
+      }
+    },
+    "changes": [
+      {
+        "apk": "games.wfs.anothereden.apk",
+        "member": "AndroidManifest.xml",
+        "before_sha256": "5ecd183b3d8bfba97534418e6956dfb73f64ee045118fc28f530b0db6361c6c7",
+        "after_sha256": "6d8f2b03c2d176066834a4ff16424d9ea59d18e9a922fef64a79f6d91ccc1011"
+      },
+      {
+        "apk": "games.wfs.anothereden.apk",
+        "member": "classes5.dex",
+        "before_sha256": "b79958973f31bebe12b9d271f45c427c5eba1df7d8146ae1ebefd62b58c492d4",
+        "after_sha256": "107763f274b94c6f924fd0c479b9228c052d2dcaa6ca7764ba839b0ef563bd60"
+      },
+      {
+        "apk": "games.wfs.anothereden.apk",
+        "member": "resources.arsc",
+        "before_sha256": "985644ed197a3271f42c2b65fd9783b3ac36adeda189276834c57071d4d5b4ba",
+        "after_sha256": "636418ce426d9548dd01a4359592163c09259ccb1aa5b6b70cb0369121108c7b"
+      },
+      {
+        "apk": "AssetPack1.apk",
+        "member": "AndroidManifest.xml",
+        "before_sha256": "b6ea1e31d273d7dbef3826097d5ba750cf576a32a6bac8669003d581134874e2",
+        "after_sha256": "148796b70ed512677b3b49f72eece913905b503e48eff839d19a4d9790539990"
+      },
+      {
+        "apk": "config.arm64_v8a.apk",
+        "member": "AndroidManifest.xml",
+        "before_sha256": "2efb10f2d5a04f96ca55b987061d95cc66ea65097c2e2d921ea398b4a87d19df",
+        "after_sha256": "78de6cfd89fc761d7af4e4d02ab48f14230a2cb5773b81c0751b01340f5e5341"
+      },
+      {
+        "apk": "config.arm64_v8a.apk",
+        "member": "lib/arm64-v8a/libapp.so",
+        "before_sha256": "2789c0f6bb570d168a14d836a36a3e3fc372c60c63a8e79730dc9c67bc78a1dc",
+        "after_sha256": "ee8c59b7de5d65b8b9a44d872bc229019d9d1760c7a43c5a335eec9ad4eaa0a5"
+      },
+      {
+        "apk": "config.en.apk",
+        "member": "AndroidManifest.xml",
+        "before_sha256": "83cc758a055fabaaa24ed8be113a7a34b76472e3a431d2b5c26ef053953a639b",
+        "after_sha256": "e39d6c3cc230f8b3af6fd15dca90e62b1929d7872b4188914843ca8d98d8799d"
+      },
+      {
+        "apk": "config.en.apk",
+        "member": "resources.arsc",
+        "before_sha256": "b7fcb2d0052982b9a7410de243c2164bbb8f7fe9b35df483bd606e2454cc113f",
+        "after_sha256": "51ec9f932d88fb5376493b2e3c68acfd1267b1bc8c2235afd8d68c1bf6275794"
+      },
+      {
+        "apk": "config.mdpi.apk",
+        "member": "AndroidManifest.xml",
+        "before_sha256": "83def831523b304054e0637bbf0eca3bc6fb7da267e3a146f2084ad46e2b7109",
+        "after_sha256": "f183562dec4054b6f185672b36fbd7fc11d29843a829babd63a34c90430a4477"
+      },
+      {
+        "apk": "config.mdpi.apk",
+        "member": "resources.arsc",
+        "before_sha256": "e7f21194c72557ebe4ca8eef982bf70c238447a00878e638d876a8412c18f359",
+        "after_sha256": "4831d3b9576ff073aed26acdea474321cb3af2e878a7e82df8f8a1aaa6057c97"
+      }
+    ],
+    "tool_sha256": "fbaacb5f76ed033b80ac8a330af3a2f903d805190bd880c21eb2db993f2c8218",
+    "removed_signing_metadata": [
+      "original JAR signatures",
+      "original APK signing block",
+      "stamp-cert-sha256"
+    ],
+    "server_behavior": "HTTP 503 only; game request schemas UNKNOWN",
+    "active_mods": [
+      "private-billing-catalog"
+    ],
+    "original_account_data_copied": false
+  }
+}

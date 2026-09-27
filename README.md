@@ -2,6 +2,89 @@
 
 A parallel asset pre-seeder for **ANOTHER EDEN** (Steam, app 1252600).
 
+ForeverEden preservation work now starts with the original Android 3.17.0
+ARM64 client on the Surface. The original client has downloaded its resources
+and rendered the opening story in an isolated MuMuPlayerARM Android 12 instance.
+A separate private client now accepts local login, resource metadata and an
+encrypted profile pull, loads the captured Mayor's House checkpoint and supports
+movement there. Its profile is an offline, sanitized copy of an original-client
+capture; the private path never
+contacts the official account service. The Android launcher can also capture a
+profile without root: after Android's one-time VPN and user-CA consent screens,
+an app-scoped `VpnService` routes only the original client to a local TLS bridge,
+requests one normal client-signed full pull, strips official identity/session
+credentials and adds the resulting 207-table profile to its User Manager. It
+never invokes account transfer or migration. The server recognizes 38 of the 39
+actions found in the exact ARM64 client, but recognition is not support: only 13
+currently have non-stub semantics, and `quest/close` is still limited to exact
+gem-only rewards. Every other recognized action now fails closed with HTTP 503.
+Subscription-only key recovery stays unreachable because local subscriptions
+are not advertised.
+Login, profile pull/push, local billing, paid battle continuation, dungeon-key
+purchase and Dreams draws have dedicated behavior;
+the other gameplay reward routes have only their exact request fields recovered
+and remain rejected until their response reads, state mutation, persistence and
+retry behavior are traced. Dreams draws spend local Chronos Stones and use the exact normal/guaranteed
+layouts and weighted `lotteryPCEx` pools for all 1,682 drawable 3.17.0 banners.
+Local tickets are bounded by the selected profile; key purchase and battle
+continuation debit the exact original 3.17.0 consume rows (20/40 and 50 Chronos
+Stones), and draws select from the full original pools. Specialized server-owned
+reward and account effects that
+cannot be proven from client saves remain uncertified rather than being counted
+as complete.
+See [LOCAL_LOGIN_REPORT.md](forevereden/LOCAL_LOGIN_REPORT.md) for the captured
+starter profile, SQLite server, tests and explicit pairing-mode limitations.
+
+Start the local ForeverEden listener from this repository with Node.js 24:
+
+```powershell
+npm run listen
+```
+
+No `npm install` is needed. Start the ForeverEden MuMu instance first. The command
+automatically connects ADB, imports the selected User Manager profile and its
+existing local state into a profile-specific SQLite database, installs the guest
+loopback reverse, starts the host listener at `127.0.0.1:28765`, and launches the
+private client. Press Ctrl+C to stop the listener and remove the reverse. Starting
+the private client from the Android launcher itself remains available as a
+standalone on-device JSON-backed mode. Its User Manager can create and select
+local profiles, reset with a recovery copy, restore the latest backup, and
+export/import a bounded profile-and-state backup.
+Permanent asset preloading and the older temporary resource
+setup is described in [LOCAL_LOGIN_REPORT.md](forevereden/LOCAL_LOGIN_REPORT.md#reproduce-the-local-login).
+
+See [forevereden/README.md](forevereden/README.md)
+for the frozen-client launcher, runtime identity, evidence and capability ledger.
+Private movement, the captured quest/save flow, area transitions, treasure/profile deltas,
+local purchases and their saves are implemented. Full server-owned combat and
+publisher-only specialized reward semantics are intentionally outside the local
+single-player scope. The Steam-specific
+blocker and measurements below are historical; see
+[REPOSITORY_REVIEW.md](REPOSITORY_REVIEW.md) for their verification limits.
+
+## Necessary private-server status
+
+The frozen 3.17.0 client path is playable for the tested local single-player
+flows, but packet support is incomplete. Profile creation/selection/backup works, 207-table
+saves are atomic and replay-safe, and the real client has completed area,
+battle, quest, treasure, Dreams, dungeon entry/exit and restart flows. A
+dungeon-exit reconnect loop was traced to locally advertised subscriptions;
+subscriptions now report unavailable and the same saved profile restarts into
+Spacetime Rift normally. SQLite stores run `PRAGMA quick_check` before use and
+malformed JSON stores fail closed. The packaged launcher contains the exact
+consume-ID key protocol and nested response shape expected by the frozen client.
+
+Nine necessary gameplay reward actions remain untraced and are rejected rather
+than acknowledged. Publisher migration, social/friends, ads, serial codes, official payment
+history/subscriptions, remote authentication, and a duplicate server-side
+ordinary-battle simulator are not necessary for this local server. Their
+terminal compatibility exists only for the two migration-status checks used by
+startup; excluded publisher-service actions are not claimed or acknowledged.
+
+The Android download investigation and exact-manifest resource preloader are
+documented in [forevereden/DOWNLOAD_INVESTIGATION.md](forevereden/DOWNLOAD_INVESTIGATION.md).
+It preserves the signed APK and uses the isolated emulator's existing parallel curl.
+
 ## The problem
 
 The game's in-game updater is Cocos2d-x v3.13 `AssetsManagerEx` (confirmed from

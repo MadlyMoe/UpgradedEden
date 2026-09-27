@@ -1,0 +1,7 @@
+{
+  "name": "forevereden",
+  "private": true,
+  "scripts": {
+    "listen": "node tools/forevereden_device_listener.cjs"
+  }
+}

@@ -5,5 +5,23 @@ data/manifests/
 # Filesystem snapshots are machine-specific (contain local user paths)
 data/snapshots/
 
+# Local preservation inputs, derived binaries and machine evidence
+*.apk
+*.xapk
+data/frozen-client/
+data/apk-investigation/
+data/apk-comparison/
+data/repo-review/
+data/forevereden-evidence/
+data/forevereden-freeze-result.json
+
+# ForeverEden Android build products and locally generated capture credentials
+android/forevereden-launcher/.gradle/
+android/forevereden-launcher/app/.cxx/
+android/forevereden-launcher/app/build/
+android/forevereden-launcher/local.properties
+android/forevereden-launcher/app/src/main/assets/runtime/capture-*
+hs_err_pid*.log
+
 __pycache__/
 *.pyc

@@ -1,0 +1,1618 @@
+{
+  "runtime_id": "fff7bbd4b9a60d74e518184483d0264bc36b80841a3d922795188743049ede9f",
+  "identity": {
+    "project": "ForeverEden",
+    "schema": 1,
+    "client": {
+      "package": "games.wfs.anothereden",
+      "version_name": "3.17.0",
+      "version_code": 699,
+      "abi": "arm64-v8a",
+      "minimum_api": 24,
+      "source_xapk_sha256": "9593f4b56fefe6bb3a9627dd509abd7e23459404050aac6ad6c3600823bd04ff",
+      "signer_certificate_sha256": "c71f2ed143755c587e2d719a762c87bf5512d134693e4ceee545874dfb4af697",
+      "apks": {
+        "games.wfs.anothereden.apk": {
+          "bytes": 73782867,
+          "sha256": "e1aa6314b09172008d2fa9344a416d8607a7bb64bd0365dbe01a4d70cf195afb"
+        },
+        "AssetPack1.apk": {
+          "bytes": 113340825,
+          "sha256": "b8f9987ef5e194500d36deca9cc0783e2d4fb9d9f9d811541618dc0dddfeb3a8"
+        },
+        "config.arm64_v8a.apk": {
+          "bytes": 22951424,
+          "sha256": "03a0f1ccf66b949bf7b83ec3c700c05cf53ea72cad45aeb4d1cca9832f80ed95"
+        },
+        "config.en.apk": {
+          "bytes": 45465,
+          "sha256": "7dad6b88afd6dc56674e2e239587c6c5240a83580785c438f8f7e7eb6024f7dc"
+        },
+        "config.mdpi.apk": {
+          "bytes": 134425,
+          "sha256": "dc63d14d505978029b6aebf3acc65f80c2e23ae3533ddf27d1a8d52319541d2d"
+        }
+      },
+      "authoritative_members": {
+        "assets/manifests/bundled/android/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94764,
+          "sha256": "185499c7d172c63e0cc3ed660322a6ed9e209208ff2343f82e1d0bf8e24037dd"
+        },
+        "assets/manifests/bundled/android/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 676,
+          "sha256": "f4902f3c85ac6cd81f0b7c26d55d34b758564c14a8f95744242acc9d1b967515"
+        },
+        "assets/manifests/bundled/android/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 843,
+          "sha256": "87fa3b073d7e6fce7d632f28c8be2b619566258da2aea8cd92ae5bc2a3e5109a"
+        },
+        "assets/manifests/bundled/android/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1064,
+          "sha256": "38309382b8eafbf30ad30999af64fd60bdae44e2d07b5f686dfd408204e563c7"
+        },
+        "assets/manifests/bundled/android/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1030,
+          "sha256": "9c29555e06486e2baa311b846509366e0e39b6855b30ed5676d5ed636abfe884"
+        },
+        "assets/manifests/bundled/android/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1234,
+          "sha256": "108c33ab89b13f4613fc8b3191f6064aa3ccc45fd41374bd081f1012236f2a29"
+        },
+        "assets/manifests/bundled/android/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1489,
+          "sha256": "8234bd2ed70370080bdef0ebc8ccd1632b9f6c3fc5f461f58098bf1798749856"
+        },
+        "assets/manifests/bundled/android/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1693,
+          "sha256": "583fd2ffe5b9ff1658155a5d75545c1064183dd894ff324b9d7243b55f762733"
+        },
+        "assets/manifests/bundled/android/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1897,
+          "sha256": "0aabde12925a8ad51c68f746d6d27494914fe5dcc03d0b86946f517e40fb35c5"
+        },
+        "assets/manifests/bundled/android/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4977,
+          "sha256": "d5813abb3734bdb314d1225ce5a58ebbc21a944de3b9fff08249569bae154f51"
+        },
+        "assets/manifests/bundled/android/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1118,
+          "sha256": "e1bf25c308678b705c982b0860b26a4b02845a7fc873c2d760a8963b911bae22"
+        },
+        "assets/manifests/bundled/android/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 931,
+          "sha256": "2e6310c48d19b2d565da33bf26a07a236f758be55601627e4ee7461ad201a458"
+        },
+        "assets/manifests/bundled/android/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3447,
+          "sha256": "33ca3f07ec565fc859d4603cabad3c9fb5e10ad6f9cc198452a39e0bee97d7c9"
+        },
+        "assets/manifests/bundled/android/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1062,
+          "sha256": "a8c70fa8fbf19ab5c7add982d9a2af3a242a5fb9dccdbe1ce3540c73bf18ab6f"
+        },
+        "assets/manifests/bundled/android/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1096,
+          "sha256": "f8d0de23dc894c67227a3aabb9d9312e7afa51e6f9a057907a28a6be7ac243c9"
+        },
+        "assets/manifests/bundled/android/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1810,
+          "sha256": "5b281164b139d99c9e0564f07b177c38f513818e5603a5d5e6b8de0f88a41758"
+        },
+        "assets/manifests/bundled/android/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1334,
+          "sha256": "efd9b559e004b6c08fd24a6e0f5ec44ab6260b9e2b8defd3372de0f70780edcd"
+        },
+        "assets/manifests/bundled/android-ap/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94764,
+          "sha256": "873c5da46b4247ebd40d5c7e1ac986277119022250c3ed01b3f1033c1d5e3573"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 676,
+          "sha256": "57cbd209c058c08b603d1eb37f63b10fd76277b5b1cf18e671313b0e838ea028"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 842,
+          "sha256": "beb2af24ab4bf50d5619f9eceeb552444faa272d0a6c471cb3c8430911ba5848"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1063,
+          "sha256": "d38c34ff2ae7358d9e0625fa29952572d4634bbf8acbb308cbc4b7d44bd7f54b"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1029,
+          "sha256": "483fce2260a518224f6fbacaac4979e7f88cde5dd33219f9e89fef87733657a7"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1233,
+          "sha256": "b8289220f823929e4c4a2313e9208c6c043c7872c98f96c34cb831ca6a00ae71"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1488,
+          "sha256": "32c34bdbfd0f41bdc359d9d7b605c49750f32bf863b6110b06885adb770f9f71"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1692,
+          "sha256": "a42f8950c76fb256308a7128b0d25f2e575417b1ced417de26176dd73d8af844"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1896,
+          "sha256": "82697f3525b7724a8a8b1c02fda780443dc4b97e9c7cf50c723657db7a49d27d"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4977,
+          "sha256": "f9c32dd51bd617db5423fe5a8f8b87400a9a7d56ec540e8225e1ef40e8438f98"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1118,
+          "sha256": "09a2f1e0c126a26196b1880c38362b48f62afe85e1bea287c1bc1d28880ccdf2"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 931,
+          "sha256": "bdd09998818d716bbe27add678f13ebe8dfb8f93544fbc9a61e716fb98d478e4"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3447,
+          "sha256": "aa59ca54cb13c4ccb0a41e318415d275a7e38165f97cbf6a9c00213b78d6134e"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1061,
+          "sha256": "01e206c80e8e9e569e913bb2826f6b1122b23adaf614262884831ecff4918263"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1095,
+          "sha256": "714132984a4cc7189915c939c8c78ddc2b7fa55277973a684600aed68d91cee7"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1809,
+          "sha256": "c8b78dd4b74b168f39d0cf83e155de76e78419ddb02555b780c5eadca8ce16ea"
+        },
+        "assets/manifests/bundled/android-ap/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1333,
+          "sha256": "913aca9156c98514d288f26560a9e72a221596cb33c7d2759143154bb5e07724"
+        },
+        "assets/manifests/bundled/android-eu/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94764,
+          "sha256": "7c3b93b28d4433b9a07381186d4333a042a7c174b2e9d0911277f45e2b12f991"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 676,
+          "sha256": "8cbf166ae0907da27920292335b1db73e7705012eef118ebf141c76982316aa5"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 842,
+          "sha256": "cc82b17b2c9e56f77d66189a0b93c8e149d87a61d7de9120af12aa74bbfab877"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1063,
+          "sha256": "fe443ff60f28792fafa7f92c3996836ba99f447fbb1ef5801781110eb3c429dd"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1029,
+          "sha256": "753834e4dab6a13ff4cfe1bbe71d8fca485c8f2adacb8eb0233ad4cca87f349a"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1233,
+          "sha256": "07143d879b9de95e6bc271eec5f187cb2dd8deb91aceb3c749b638aaa1cb4e0b"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1488,
+          "sha256": "3077d9298a70e89f5ffa68b62de7de5c31da0173f3fb67b65facc9b7918bc73f"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1692,
+          "sha256": "2806b63ff755c7dbefa4f164b036036cb2fae63c4a817e55ce39f28298ce4327"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1896,
+          "sha256": "414d6ed78cd77be6a0850b0b672f3ab27c6c6a77681470414669a47754d17492"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4977,
+          "sha256": "0aa465f5e208802d4aa62a1f7a41197f259a2721f06c1ff82649c159d530d74e"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1118,
+          "sha256": "524bbcebc7dcd3b770e6ca05501f6ff4a61bb7b4ab60d1cd5ee0090261f9dfba"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 931,
+          "sha256": "5079dc6197b84b9d16da85e1547f70816840adbf284a46c6d13e6697f8afb2df"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3447,
+          "sha256": "df71302fae591ac8cf757290bd0dae1da7f13e51ff781f7fef135270f150a66c"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1061,
+          "sha256": "57c3deb653bda98bedfb380a1149a1a53345c4d4519fb1b033571467d595635c"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1095,
+          "sha256": "6b26bf1f368842ddb2e71e227f011ecb6fa08578d9fc6db517ce7c5c5d43f99a"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1809,
+          "sha256": "5345bf7d42bbc0cedf504cddc80dfa434e5e90db44d8e99dd3fed88cf3f5f80c"
+        },
+        "assets/manifests/bundled/android-eu/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1333,
+          "sha256": "008861516460de4597b4f7ab4bda758e91969c1903325bb9d3f3bb4668b2222e"
+        },
+        "assets/manifests/bundled/android-us/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94759,
+          "sha256": "86944ebf5eb23d3af5e9220c47048615aca904a9bc2973a94bb2967121dc4a87"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 676,
+          "sha256": "0f73871824ad55f728c975eb9fc5782780fd5fe4febfdb9dcf75f4677bac8051"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 842,
+          "sha256": "6d708579039ed0931fec021b19601597dfdbb6ab9b48156acf3207544b05c3f5"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1063,
+          "sha256": "37e0a90309be782c83d37e0c766d137594731467d30c50c9cfbf1d91ce446d2c"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1029,
+          "sha256": "e525df3df27b56f60e41899a3cf5915ab6b75716c8d7b0cc491ff7273e9ad30f"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1233,
+          "sha256": "6fbf1b784b1749421e840b672b96bc7866324dd5c218ce568b811e66beadd101"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1488,
+          "sha256": "3f9e21f261ca71edc80180348834426832b3e88a32055640774bd9ce08369c77"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1692,
+          "sha256": "a64d29a15df187828526536196af30907c8790603b899466fd513f131ff24461"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1896,
+          "sha256": "b754adeefa2455b7b5d2c09f780f8b797b7bdaf12a92ba6583ef2ad380abfeb6"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4977,
+          "sha256": "687597f43f218a462b33995c042ced88e53f95dd3f7f12bc61b5386e78eee402"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1118,
+          "sha256": "64974f7ba75220c7d57f13ccd41943a96732166360c2071770a8249afb05f1fd"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 931,
+          "sha256": "8b7d4d0dc96ace4cb1b934cb92d6daf858790da8e053809249c472caaf4a4b94"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3447,
+          "sha256": "7bebb8f5c5e9e643699782bd56965182c4bf64d49fef4a65f5371f5ac8d9fb36"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1061,
+          "sha256": "acc6ce86edba8c1de5fe087d6c0bca8e579a2d995f6aab0aa73e17491203e9dc"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1095,
+          "sha256": "c561b58ba639b2df9cede5ee6046a76e7ce1636176578d1c85b2c5f157e08bf7"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1809,
+          "sha256": "fa3a42dd85864f64f95b6f438361072719ea09e6733f6a8cbe73dc978a518311"
+        },
+        "assets/manifests/bundled/android-us/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1333,
+          "sha256": "8870dafe7bd1a04f4bcb8ac113b07374d422946ab75ba8b68029aa31577d8cd7"
+        },
+        "assets/manifests/bundled/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 389,
+          "sha256": "b57236aaa7fc6ea8d12514560040a11926a0695f9d04264dcb6dfbdf10987b32"
+        },
+        "assets/manifests/bundled/dds/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "52bf15f08856dae36cdf519e66771649e01444dbfd7a32e993ba1bf9591f0cb5"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "ade82c3d6c95240fa115a93c9099491d1d9762cd7d88ca883ea9c4d7b71e6e0e"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 835,
+          "sha256": "d3828a1540462601da0e5c30a15ff0f2417c204c93259cbe43efb58b2aa93920"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1056,
+          "sha256": "82f50538e0efe0c71995b7c7ff4b1e7ce693b27479c81773aac5a2eebfe6e5d7"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1022,
+          "sha256": "45e0e38d3adf1c65ccf654c9ec6d149cc3abda880107b51a5edff571bd462355"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1226,
+          "sha256": "791ae7dac3b6fc9efeaeb7ac1eaafed275160b61bad125ec4522e53ba7fc937e"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1481,
+          "sha256": "9a8efd1bff63f2589bd63fd2ab89a3d3c5cfa29d506f65397e509b894f359d97"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1685,
+          "sha256": "62c67e1f7089a10ef44d45911d23fc8fa74fc274ea03fe06c3b9fb1a5b705d2b"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1889,
+          "sha256": "f870bbeedf67fcc29cc4e61b61aebd8e1504d90e46f171c8a50f34c4884b039e"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "c8e66a2308d6e6bba208ea88af9ed1f725b7bac87b98ae9c7116165208ac884c"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "703cb99988ecd368c891734541d70ee236a51eee3b6b6dfca0be9b674d2c88ab"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "3dd7cc4367f93807582cb99ad871b3e69196a2864c7483f6341b34197d5f89e0"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "6f09824d1caf920aa8583e4dd959cf1157fa0b38ee244711fe2f39550bd4e6b2"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1054,
+          "sha256": "d226f6fd80d74b2d420ed4891d241d4e0ae8afa4ef154da969dddc7ff46e8ccd"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1088,
+          "sha256": "30046d0dca03289d1f0600e23341f62c2eff523bfe8bb6137216a5aee3ddef48"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1802,
+          "sha256": "772e33a86ed9c309664f7524dbdc862bcf81d2d9ca9a13a6541dbead8457f0d1"
+        },
+        "assets/manifests/bundled/dds/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1326,
+          "sha256": "d0b49ef616c716d196bf982129d05c6d844a9f0e743d4ec75402346044e24a5f"
+        },
+        "assets/manifests/bundled/dds-ap/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "b1ffbd00f9f39e58f68daeaef1f63f0798e9824e28ed5e2a059623bb1e268de0"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "d2ee34cfb6977d319c9c6e8710a3c3cd83a819f8045a82e44249d46e073d7bda"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 833,
+          "sha256": "7ec0a3146ab431ed3b8fd2c18f601789d04fc441c00e69a238ec1f429f3bba05"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "f63aa7b08c4ad0d7b8e6f4aaa023b0c7b46228e1e34d598a0f453999106d746e"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "0b4563f4333d4d27cadfefac2c02066117a36f6e36dda6bf58d9b43293d5f000"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "277e4686eec8d233f4483d2e8cd0e9aa9c5f0e307b68d400b60e97b424065a41"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "869fb74a936fd5ce156863daa3123bb8387ea3a1c6a736dd17244442bbcb450d"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "c650905d1eaded8b51ba4666a699175fe73144a62ec7860314054c0a45b8e400"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "6fb63f8dc960a30c6d636268ac2c53a76e3a37c7994296f91cb914d60d0405fd"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "be6b67631bb046c57a8d8801cc36a96904929afd929e358de2a920b98eae4be4"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1109,
+          "sha256": "910a709759e9764705b74e24beb2b8b51ec3d11b51576255b60d982541fad0a4"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "de52ad7299f8ab0ccb57deb405f305064e752a91a2ccdf9ef9c4dd8c68121533"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "fc3fd6ed346cfcf6d27ac44949af45a48f4543743e10b0fc0057d18afe718249"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "047d3c88fd7aa9429c787aa49dc4528507082285aadc2fd570a804a20e88d467"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "cc9c78f07fc42c5ff9e4c1d93bf4160a9fbf7993fe322e0bfb2fdabb7f240ab3"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "c3f6a6609578bc1ef3c125e661872c72aa70251cb85b2eb773747e68df14f0d4"
+        },
+        "assets/manifests/bundled/dds-ap/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "1b59fd88874d9a5b7e84e055854afc9ad95919b711af3f62f19136e0f563da2f"
+        },
+        "assets/manifests/bundled/dds-eu/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "7a34c9486450b5b2fc1e1b9dfed93c39f3459f9a39866ae5e44debc67d43f9b1"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "0fdeccf8363f739e1d9b69bfcb2ec5e4542de26acdb3ca8714f724589330c581"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 833,
+          "sha256": "f5311aaee01e3df00f32c15b914c4f4d18479089389f999c6f5298225d7cd94e"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "d426a29570421e98400d1befedf4b4a5a8c6fb06d12ce06c6d5c3e49e74a1e52"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "82ec05836fa4a166051d45816ebb6253dca36dd19672520bdceff38cf35cbab0"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "f781a971737dc28ff8e1187c3e4c3cfc25f9d9c75a96a5492984fc347ae31ea9"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "60c6b36441f87cdc7bd8ce4a0e0b382cd394362949e5ec956e2f2580001cffe7"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "b68d84dce57a4a7fed3e092a0ca1239ee4b35c8f05fbb0d9bf89ffeb1873c392"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "df28a58ff34a835e36c5afb1f3d7864139e6c64d9c9e89f4b7e35e1b7733989f"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "f77d53c18ba982b29d4bd2e96bde4451cfa8c3b611441aa2abc27b2e51994c54"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1109,
+          "sha256": "6f89ca088eeef2575a06d43056f3877cba1624842dba7f49ba8f7fc957033605"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "9d8fcbae96be390ea8ade87571aa51e6dc87e5c2d3a8fa0f08ccb8c0f2dbb82e"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "19fd47efe39e7f8c7d8e07ed96543f457677b8ba0c0dae90664b5545583e5987"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "c620ba83e1b9e88fed8a3dd11d6f1e5ee92e7c709897710df27a78d49cce83b0"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "43800376eec859f47db80d48c1c7b7e0d77a10cfb15e84070d4b8c982f676222"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "a8670b6ef93eb25193f9af85cc758f0a46389e319e2fd44f3f67786f5e39e736"
+        },
+        "assets/manifests/bundled/dds-eu/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "0bbce61075bb436722a3818b458c45a9e30e2fe4537a91eaeaa70ca4e55c21b4"
+        },
+        "assets/manifests/bundled/dds-us/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "52bf15f08856dae36cdf519e66771649e01444dbfd7a32e993ba1bf9591f0cb5"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "705bd4ea3701f7586ac8a8c612db5b6db578b9e00cb2315dbf349f16b8bc6055"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 833,
+          "sha256": "8a95dde1fb9ba86dd2991c0b817b01bbacc09cba09ffe4b9b45143b6f563e8d5"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "8578846b5932dfaf525180645ffacba90c772a0fb09bff3d6223101558c45be5"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "b4f9014215abb1d805e5e32905c2eabe94550daa61b234d412cfa0d604673a73"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "6a744452c05467c46ec5273666512f086b468dc0fa33ff632055f20bf532c5c6"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "39b22f10a26ed403384a8e820b4a277745bd4eb3b4fe695f6068cf6769f38a68"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "1b993c89d2688e321600b5da6269d44342a847fa6e683ac22f94db9460330cca"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "2707bd68859d4837271b294ed4520155a9e878b4f5333c40a1a1597ac929ec13"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "ddabdc0223190dfeac4b9f8cde6676a942ea2a540d5808d0828fe5d8253d6458"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1109,
+          "sha256": "a5dfc9d92dd3257fe1fd662f7c42e1bafceb72c8bf60a10379863a54792874e6"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "6af158db08985b757eb7744c5bc1509643b0f7bfab9dec154dcd656d65391957"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "dfb3545005c4ef888fd18c5d6d62fe13c22e8821506d87609f5234126f788355"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "a1f9f3696f77db12922f7d36aeafe508d2c52132edffc057e82d23a567f0a7f5"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "5aae3057a8a329dac17220f451903a827d09226c53d2c8a7061c712bc18b4453"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "06786e4c644a7721ee7116eb025a424c516a07e2d699c28b5da859c202ca70f2"
+        },
+        "assets/manifests/bundled/dds-us/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "549d280b11b47580b6bd20691ab9da22f5f7a3b33739aa8c04ce94b33b6a378d"
+        },
+        "assets/manifests/bundled/pkm/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "32d2b3a4a221eedf0f26142d5d1c7746e60604616d71474d78d2237a2abd61ce"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "342317cd7069ef048251cc6c64e871fb3fb536aa77711cf2fffe6933cec2d452"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 835,
+          "sha256": "f62702918453c8f1ba475fe9f0fde7f8793cb741bd5d3899d2116d052cbb8a60"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1056,
+          "sha256": "62a63b9b1d4f4b72fe0b6d7e711956ed50b9be8da69763ddb6bae94f970dafe4"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1022,
+          "sha256": "48797e5fceb1bb97d187b8306404227156913903da69fc37979fdb0b7fe4d4c7"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1226,
+          "sha256": "fc777c4e7f54537fb602d637c170e89d766662b4bc919e23ced7bbdf002e31e0"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1481,
+          "sha256": "64892a40b33310d095828a78d4d6c2a1adca42f61ca01409c29af927210b3e25"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1685,
+          "sha256": "9efc688cf6898a89d03b316a62b29de3e289dcd639abb9d2b446e88594c9e2cd"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1889,
+          "sha256": "3852d96cfb33dd0b031108ce99befee597e3278c5cb3c5eb573cc6628ae6d246"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "2cca204759a08398d19cff9ea4b602b4cc7aa65e844f78974028fd22b970adeb"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "c83e58ce19e32959ed2821a56b97ab84d6d780f0c39b7828cadd0bcecdc29139"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "a2a4ae851d7abbfbf446319bcb4d8cc6dbaf2f709ba9280b77f2bf301170ff0d"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "3a6cfaf5c4e635f0a2b49ea25053e4698997ff307519cd5d8a187313136207b0"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1054,
+          "sha256": "208381f7903e790458df3b530f2ccb8f75403610b44a774ab51fe04c5b1a96a8"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1088,
+          "sha256": "5278f6315dc23e2439d91ca2eabdf13aeb603d5c9ec72b04b150587d4906bdab"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1802,
+          "sha256": "4b4297e9f9d00ad7297afb631273716f178f408277e6e2c472709a1332d77033"
+        },
+        "assets/manifests/bundled/pkm/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1326,
+          "sha256": "217443879db8716fc0966b971472b1ae932752fece8e9691b57494ff2de8c146"
+        },
+        "assets/manifests/bundled/pkm-ap/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "516a0a221b93d683041fdfa555ea8cbb89545afc42e1fdc7902eda19d5a5c388"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "4c16e0894896329cc98d779aa4d06e820bf966dafef8b51e7cc00aba8139ca7d"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 833,
+          "sha256": "59584cd2588306c9f4e9cd8f2481e205c7b2820b28cbeebb2e07b37c8c6f859b"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "146f7434edc1e1ad977c31f92e70a281c848280f182ddfec67b6b3ab13c90a5d"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "e0f61fe471d0549dc512c7e459c47f4296cabf1eea794e206931189e5c6ca60e"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "40c28e4e07f6d39a2737bd54462daedbfb789907cdab853fc488a7987709576b"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "b47f1a7ac81f4c18f5699618a633c4a5a8c231333dce2f95dcd780704b353050"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "320fb0fbdde3ae7e7d8c7896c437b168922ecd5983d4d2dee1c1d6b1d16294ac"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "246ca206c52463b5f3ba056791f980086c5054085518ee9ebdd6232d8ed71cc7"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "7451f63d667e20edda050b0e3f35dff7096890b465f43c0d4dfb2c584068c039"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1109,
+          "sha256": "33d13e97e7a53fdaa6650e235e3c83d1996d9b400d31fb703844e868302233ea"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "a0f48bab2ba0eb27c04b302911b0128c08b0153ab3d4e148d1fd6dd7fdac4bee"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "ea8afba7823cf9279610148622dbd45ea049aed4e26f84afd37cb8fa78bac92f"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "62f210602f51187223e385145a749246cb2fd91a5e2ca43915dce86a8e030555"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "ccb6ca6713d4683b893ad30e955e4eaa235c56c526a05f4f78733d87560ed828"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "96a2ff8a8faf887643799c6b36134178ea973d15634f8cb5db9754f5c0c548c1"
+        },
+        "assets/manifests/bundled/pkm-ap/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "f5a033275bb948cd4916431ebc556e8d35a790e260765fef432f971252b954a1"
+        },
+        "assets/manifests/bundled/pkm-eu/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "bd5831eaa75be08aaffb3a69250f1c9d75c83228eb95c1bc7c8e44c788f0e70e"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "b1ecf4134e4af7f6c5352a06224e80bc386430eb92a8483c2d5215e3822dd6f5"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 833,
+          "sha256": "3e751635c8c440531ac0fa99ae5bc14003dfa1f2bf875fcc6ee29d635a1840cd"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "8d5ca561b25e92611a62603048f9dcc511c4f020e5c7537e7ba6cfe6800c5618"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "5b4cad3918bfd18c4256e6c8b03fb684bb06529767908fc22ce3f10ebd57a2f3"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "738016b78e91334c18731b442f876d943c5db54798f2a589eac36df49c05f272"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "8b9a945c66073164f40d49065c25cebae22c40255123665a65033211c819b4e0"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "05576812999da443e41b29f313bb3bc9631d15d2a56b07683762df5f68ad00de"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "d6ee0647bf17240cda460569c8409bfebde8e43cb1ef10f9aafc9040ee79cb51"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "e857ca85c757dbd79fb8aaf295570ef826f60be9d3c3f6c337fc1673e2cc7c10"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1109,
+          "sha256": "fa971e85943e98ac1ddcfe459c47ab6a74562a3f43b7e39674226562a69386f9"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "09d6970127cf88b9a1d1a822e1afe0a963094cf76d8aae5a855c4944b026e311"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "8ab0c4cb36c8673c0472cdef2bb5f08eb6b82c771c61256bc7f7d21c6c8d8a1a"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "0528db35a50d8c9d96d83e506e009f9f8ee93cfb2629971d8d3b1873d9e91a30"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "f78b49c71bc83da90dbd922e107348bec0ca0a35f0267dab5e1e850ffd3438fe"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "bbb0862500392fe66ecae3614646d902c0d43cc1ecef09a46c32b25f1140096b"
+        },
+        "assets/manifests/bundled/pkm-eu/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "8961323fc0ec503667292ab643ea8930a1eab9ee805040bc7d4fc857ad2b6b33"
+        },
+        "assets/manifests/bundled/pkm-us/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "ecd74a288005bc4e5416dddbb31312ef9ba5e64c9cb4501d6fbfb6e72a0c1375"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "03a4ef94e4623c1269ceba880622302e7b457aeaef59c974867a40d3bf0211ff"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 833,
+          "sha256": "8a1e545899dea624506b1fc02420fe1d44f6c7f67183ef3ee46442d1b08c329b"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "660b5213deeec9126378e547649c839502842d4c7aec78528a378698954c35f7"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "9dd0957c41b27b340a7398e77e2917e42f6c8f37b4fde8674cb097cdbdecc2bc"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "526cd7f7d69e65d18c143d3dd23e02bc6557982938321bd985e330547d8ed810"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "742e8eb3029da8bb4a34e4add31416737568f8c5735eb1c2527ecdd2aec83242"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "013674748fa44e51de179c257e203ddadeab60f8b255be48ac84d7cf40317917"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "9864e491123083b6ac53f6a76f2aae53d5aff9a999ef8eca9e2439954e966b50"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "89b37053922407c203ae184e7d3b676a3bd2e227bdbcbe262b069db4cc77b6a7"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1109,
+          "sha256": "4240075daff6ff5c765022167e28825fcbe66f878ed4a050ae5a46841a3bdb62"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "6e4f9dea8e8b275613f6eeeb3c914f064452c6f206a9ab2fcb1ef4276b990e74"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "11462c5af25674ed9bf6f366d9bef13895425d06092aa98e09acf5edb1ac1695"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "dbda2f5eb4db5d10ee8fe3b0567ae055ab9cc6699b7ca96e60c99b36512e85a1"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "884177e5824b397f8d9f63d75c7531ba977d40bab14c0e0c37e49a99672ffc08"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "3a3c4220618a4f7f88f97507b7227d1304d7129389e3562f19eab090fc617a8e"
+        },
+        "assets/manifests/bundled/pkm-us/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "54295a226c565949bf6eb40b402784dae1a67fd069dfe06677756ad690fa083a"
+        },
+        "assets/manifests/bundled/png/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "21491781677ca2ad8acae701180072df34b824e9af7be5419035ac20a5008361"
+        },
+        "assets/manifests/bundled/png/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "05a70f55bfe306288288f726657f70e6a5ac6c34a77682cb3fc70260402d3166"
+        },
+        "assets/manifests/bundled/png/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 835,
+          "sha256": "63b7ac123a7ebd7e1e5e1cda9a66b4f31cefa41c7d2c69a2da313f548df04f5f"
+        },
+        "assets/manifests/bundled/png/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1056,
+          "sha256": "6ccc3c445c0c59a075ab117311451be19e5ad736398b559ad365b29295a27f22"
+        },
+        "assets/manifests/bundled/png/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1022,
+          "sha256": "a90f9fffed9a649b73fd1410450506ec661c277cd3d76329818d22c338121195"
+        },
+        "assets/manifests/bundled/png/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1226,
+          "sha256": "3ae812e1e74a8c200644a56639e584b016cab9e3ade6ffe50cd30c6ca3fb9140"
+        },
+        "assets/manifests/bundled/png/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1481,
+          "sha256": "17862a6dbf8b1714065206a929031446df49d8fe383a66bd7a6b76e97c077911"
+        },
+        "assets/manifests/bundled/png/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1685,
+          "sha256": "f638820d45da424bbdac270c3daff2dcea2fdc6243fe5491a2583a0b8229c0c1"
+        },
+        "assets/manifests/bundled/png/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1889,
+          "sha256": "b3fb9fd1f7e637071000b2fd3b26288aaf728ac0595806321cbf3f6501b1f54d"
+        },
+        "assets/manifests/bundled/png/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "e1d4fce4cef7139896975be0af0c8fe27d19d9877431f6a5a97229fa44d3693a"
+        },
+        "assets/manifests/bundled/png/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "b8bd9e3c17faa836413d99564417705ce353b9a5b0ad3e3e7c92abd0b34f42c6"
+        },
+        "assets/manifests/bundled/png/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "e584748b5eaaecf3ea0a44abc117d88a8e953e32aa21ba619c9b1adcc350e809"
+        },
+        "assets/manifests/bundled/png/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "4dc3c9a53f783cf60caf88498bbf313ae81c80092125ae175da056b1fe17ad4c"
+        },
+        "assets/manifests/bundled/png/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1054,
+          "sha256": "b81a9013624e4cd156469de2794e326a0e57239421377223c15dd48b21f5b226"
+        },
+        "assets/manifests/bundled/png/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1088,
+          "sha256": "b9f9b04d0720640bed91ea8fd52250285f7302c262b8765452a64b4802be4d8e"
+        },
+        "assets/manifests/bundled/png/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1802,
+          "sha256": "efd73755d9ea995bfa1a1776a4885af78de14381d3a2846493472a1c85066962"
+        },
+        "assets/manifests/bundled/png/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1326,
+          "sha256": "28c99a0fb903ff700d0c5d9733beb4778d9bdcc3c20ca214fc28f6cbf3404eab"
+        },
+        "assets/manifests/bundled/png-ap/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "62a884344b1943c2e442b0f43decdfcdf529d050eb9c306643fc4eb82ff788de"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "f570260013aaa0650f896d08168a7482c87a8049cc1fd7dbd4cf9219fb37518a"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 834,
+          "sha256": "79a9bed09a1363ff9851baef6b2a897a39319f0eeb24c11fc64d988fa2775931"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "ecde6fa4fd912686a6009bd49278028b6ae14500275aa60e4b2da81ca71ae8b4"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "e34ee6bb8377b2e69766b096a9039de0190180b80421556f4d90509914795ada"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "b6985873bfb5edd869c4733b690da2e200cadba444f4265167b1a0fb190ca9db"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "b3eb92979e88840be468b9a70cb85dcdb30d10c7e8edc8d4e1aa34c4f8b4a238"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "b3eede9b8951f211d73e0216caaccc6ddedcb18df852b10d042f4c1be04431fa"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "bef588aa38a830a004ff72ca629e036f81ea33de5c10d696f1bfc01fe44238b4"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "487cb5851714f720eabbd8a0e585449690a0dd37ceb7e26824815ebcb775f4f1"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "6af1c33211affeedff68ece45e2f99a050371c0c6c33cf4bfb5e3e48de9499a4"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "1a6e9e48e74f39af7bb7f2b117426e32eb44cf2b5342b962bcf7a9445f29107d"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "5b29cebec3659bd4833125b01fe7e19d23d2f0f6bb53981c570727bfbc691f5a"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "d0fe4e4f7e1cd14c611d790219ffdd19c4c7e5ea6d1814744925745a658b87cd"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "213888e9bd35c6913ef6b915669e25bec21a0bd8b8d61a5a3e20f498f3ef021b"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "bb45fff1436f1075f76912764a79dde94b8e5fdc4b05dcffedac1bd3c47de8b0"
+        },
+        "assets/manifests/bundled/png-ap/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "0bae616eb064b415d2b2b09ab9509aec21fa173fdda7bad09910b090181665b5"
+        },
+        "assets/manifests/bundled/png-eu/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "2df999b30697e1a82dcbcb0230265ee3e6da695a974daec74f08eec3ecb9e686"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "b6dd97e468a31697a2cccf72ce664c9c3ccc5b26d140db9e5acc0e4b765551fa"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 834,
+          "sha256": "51a1ebee47f58ca9ec2ca58540d65661d6ba9972a870660e8b54c1c81e1c399b"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "f5cdb8c4cfdf9e625e327fe535e23e091efca2ec74eb3b9ac2dd8a3f068c2463"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "cb943b404ce41ec49c5290660ae70ba37f811915abc718429f5071287b162d11"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "a5e5e1752d96e298fd35888d14299a00216a04819ad23659a553ad84ef4417fd"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "178e4db45aef07b8f722ec8f76375480752bde309e76815e0d3b3bf2db1b1aae"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "6f23ce9a2d3c72c203fec0ab406ecf7dac1b53938587c862e4d71669e18f0ae6"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "58ab8838e5e0fb5acd2ee627f5937b967da88c10c2488f5ee681e88da8d3f9f6"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "61a1f8d3db6e258eb822fdb422daeb4c093bd0287bf586d6fcd9193b9dc9322b"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "4b5fcd344d5dbe23960c94d86ab87ecf4bfe5b1e1609670b2029f5ff87ca5f7f"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "e6e963a6ff094124ef615eb1af88bc893aba10d4c410fe6b2eb3f6a5da675145"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "23bd90d94f2acbafeaaf3b3604c3df5e964f41f3ac3a23d5ad77a34c7a20dbd2"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "a2bde9ad848ca53562bdba50c2216cc280b08e2149c82e1dc903b6a42dae2a84"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "f0d6be947f4c952731ca04ae144f98593dcf3cabc393fc3e491a93d166820ae6"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "17257c5e810d424aea30ce5cdd605a2270d47205594d3f1842e02cc5c344ad15"
+        },
+        "assets/manifests/bundled/png-eu/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "56dc66568faff7ff53e344f65bfb6992560915f4cc95c79617e2f592778add56"
+        },
+        "assets/manifests/bundled/png-us/bundled.manifest": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 94692,
+          "sha256": "21491781677ca2ad8acae701180072df34b824e9af7be5419035ac20a5008361"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "fb5b73f3dd92de9e5f2031fef39a54dbe43132053ff10ee5b1c9f82e76cdc593"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 834,
+          "sha256": "79f009db6806343a4536495b489b755daa3d46d6541776dcd988ffa31590bd98"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1055,
+          "sha256": "829733e2afd82dfda142b2b8ba929b3e2b590e4f0ad769ffe3d0819f1d836bf8"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1021,
+          "sha256": "5dd37a45057b02bfafd24a5645ffc6232f2d5014d363f7c6eb7f7b504ede78e2"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1225,
+          "sha256": "e727c0d1218843b7804315bba928ce75a4fc90c9f6691fe217759d46aa9acc9c"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1480,
+          "sha256": "ee3496eb4b1f3c50c65528d727478b1ebad02f33c74a0d3e7d012c3b318db858"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1684,
+          "sha256": "01d88328dcceb3e7ed84d8a1d6cf74dbe9b2fcb61b4f8c1949a201b3188e8e52"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1888,
+          "sha256": "4e5a7596afbbc0f003da890ddaa4c24c3a3ab94fcd9a266af31cf4292a34d89b"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "7ac7f1da40ea8a8d5bbcb7a0c41b61fe16685197f4f70e154645ed42e791c385"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "7a6a38d24c385913cde879394154f6523a4eb620b9033ca3713ce62629ae6261"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "28892180a9e66dc769cef38055392863c088dc0c972b8f3ea16b303cb030d943"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "47f62c463e0b61d5f1258a9f2f079b8ec880acdadac4ced94a273a1f7549ad5a"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1053,
+          "sha256": "0a07e6633b9fa8e2b421cd557d35717971a291b6b17f9d8f306fad46fad29189"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1087,
+          "sha256": "67d5d80b74c53bb3e5fec54b00feb660bbe50b27054f78f70746510556107322"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1801,
+          "sha256": "d50aa118a1ac9a621eaea9eecca47029e5d1d97ceb3e99e5a4525aefd0a06a59"
+        },
+        "assets/manifests/bundled/png-us/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1325,
+          "sha256": "d480073bc24b9075a805a92489c69a7f768e7acf8cb8ccf78a79dbc049ed64b7"
+        },
+        "assets/manifests/phase.manifest.1": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 668,
+          "sha256": "05a70f55bfe306288288f726657f70e6a5ac6c34a77682cb3fc70260402d3166"
+        },
+        "assets/manifests/phase.manifest.10": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 835,
+          "sha256": "63b7ac123a7ebd7e1e5e1cda9a66b4f31cefa41c7d2c69a2da313f548df04f5f"
+        },
+        "assets/manifests/phase.manifest.11": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1056,
+          "sha256": "6ccc3c445c0c59a075ab117311451be19e5ad736398b559ad365b29295a27f22"
+        },
+        "assets/manifests/phase.manifest.12": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1022,
+          "sha256": "a90f9fffed9a649b73fd1410450506ec661c277cd3d76329818d22c338121195"
+        },
+        "assets/manifests/phase.manifest.13": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1226,
+          "sha256": "3ae812e1e74a8c200644a56639e584b016cab9e3ade6ffe50cd30c6ca3fb9140"
+        },
+        "assets/manifests/phase.manifest.14": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1481,
+          "sha256": "17862a6dbf8b1714065206a929031446df49d8fe383a66bd7a6b76e97c077911"
+        },
+        "assets/manifests/phase.manifest.15": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1685,
+          "sha256": "f638820d45da424bbdac270c3daff2dcea2fdc6243fe5491a2583a0b8229c0c1"
+        },
+        "assets/manifests/phase.manifest.16": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1889,
+          "sha256": "b3fb9fd1f7e637071000b2fd3b26288aaf728ac0595806321cbf3f6501b1f54d"
+        },
+        "assets/manifests/phase.manifest.2": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 4969,
+          "sha256": "e1d4fce4cef7139896975be0af0c8fe27d19d9877431f6a5a97229fa44d3693a"
+        },
+        "assets/manifests/phase.manifest.3": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1110,
+          "sha256": "b8bd9e3c17faa836413d99564417705ce353b9a5b0ad3e3e7c92abd0b34f42c6"
+        },
+        "assets/manifests/phase.manifest.4": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 923,
+          "sha256": "e584748b5eaaecf3ea0a44abc117d88a8e953e32aa21ba619c9b1adcc350e809"
+        },
+        "assets/manifests/phase.manifest.5": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3439,
+          "sha256": "4dc3c9a53f783cf60caf88498bbf313ae81c80092125ae175da056b1fe17ad4c"
+        },
+        "assets/manifests/phase.manifest.6": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1054,
+          "sha256": "b81a9013624e4cd156469de2794e326a0e57239421377223c15dd48b21f5b226"
+        },
+        "assets/manifests/phase.manifest.7": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1088,
+          "sha256": "b9f9b04d0720640bed91ea8fd52250285f7302c262b8765452a64b4802be4d8e"
+        },
+        "assets/manifests/phase.manifest.8": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1802,
+          "sha256": "efd73755d9ea995bfa1a1776a4885af78de14381d3a2846493472a1c85066962"
+        },
+        "assets/manifests/phase.manifest.9": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 1326,
+          "sha256": "28c99a0fb903ff700d0c5d9733beb4778d9bdcc3c20ca214fc28f6cbf3404eab"
+        },
+        "assets/master/master_data_bundled.enc": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3071488,
+          "sha256": "502aa3b254e14678188d92c9b6dc3a2671ff41f636b1b47cdbee2006119781ec"
+        },
+        "classes.dex": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 8936680,
+          "sha256": "50fe92163aaff1fc89afa95b8b209f4297eafa3fa67ccb5f2af4563c3b006be9"
+        },
+        "classes2.dex": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 8467956,
+          "sha256": "fd00e14183f041459874faa464335fb2b5a3d9f284235d564b5db841a5508fd7"
+        },
+        "classes3.dex": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 8971120,
+          "sha256": "45eff3219dfff048125d387bd19a6832039292a879f2847ee78b29fd03f6de18"
+        },
+        "classes4.dex": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 9282628,
+          "sha256": "16bbceca22b99ae6e522908b1d90ae64b37c879019a00a57089177141a41a2fc"
+        },
+        "classes5.dex": {
+          "apk": "games.wfs.anothereden.apk",
+          "bytes": 3281516,
+          "sha256": "b79958973f31bebe12b9d271f45c427c5eba1df7d8146ae1ebefd62b58c492d4"
+        },
+        "assets/lua.zip": {
+          "apk": "AssetPack1.apk",
+          "bytes": 113325756,
+          "sha256": "f026c13545cebcdada2b98b57553e837c87e00726c2aad46c48d093aeb501e04"
+        },
+        "lib/arm64-v8a/libapminsighta.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 102256,
+          "sha256": "b1a70dabf68e95e1910bb080dbe1c78ae628a0bf7332f7ba41db23d9bbe282c0"
+        },
+        "lib/arm64-v8a/libapminsightb.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 124352,
+          "sha256": "c36885b7189dc5173627ff9afb5a49cb94420b9b98341536b4476b792babab61"
+        },
+        "lib/arm64-v8a/libapp.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 76220624,
+          "sha256": "2789c0f6bb570d168a14d836a36a3e3fc372c60c63a8e79730dc9c67bc78a1dc"
+        },
+        "lib/arm64-v8a/libapplovin-native-crash-reporter.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 860200,
+          "sha256": "ecf2a7327be482870f4c791392a50cecfeaabb2c76a7224898e9713a18c4c36a"
+        },
+        "lib/arm64-v8a/libbuffer_pgl.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 9000,
+          "sha256": "d416381c202993e4a03fd6ae0c5b407f1531f61fc45f518ad5b7f4620d5a2133"
+        },
+        "lib/arm64-v8a/libcrashlytics-common.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 755864,
+          "sha256": "db3c33bc6e1c0d049466280c32bd7419f9708f53ca8f5f95d584ef281996918f"
+        },
+        "lib/arm64-v8a/libcrashlytics-handler.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 185960,
+          "sha256": "810521d2e125c4f87a8bd5fa70e73877dd832494acac9e9f86734258f359935f"
+        },
+        "lib/arm64-v8a/libcrashlytics-trampoline.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 4848,
+          "sha256": "811584e54eed37e92c84beb6c66c12bc6cfaa864c53db2bbb96878d95b516d60"
+        },
+        "lib/arm64-v8a/libcrashlytics.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 195568,
+          "sha256": "cad4bd6e1a6fb97cea9d02ac3f2c9c0e90c62064f7b018cf26b0a806e1489b6e"
+        },
+        "lib/arm64-v8a/libfile_lock_pgl.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 6312,
+          "sha256": "d14096b150b4b2f21263fdb4f1c61eea3fcd76804c776de2395b13dfbe1d8ca0"
+        },
+        "lib/arm64-v8a/libnms.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 299528,
+          "sha256": "63da06a1e2c518c9a2355eda0db2490858ae018741bd57bf151a6d4b9c5f6594"
+        },
+        "lib/arm64-v8a/libpglarmor.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 68600,
+          "sha256": "c590266c06f99a194ff209b9c32036191903f0cbe3421919df540851b3bb958c"
+        },
+        "lib/arm64-v8a/libsigner.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 1131240,
+          "sha256": "47a6f1900ebd86c2e3ba3a49020ff8fe3d79784bab4c80c0ed4aa18fd0d2ee90"
+        },
+        "lib/arm64-v8a/libtobEmbedPagEncrypt.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 8304,
+          "sha256": "d1a8cbbcd4982679b44c5e8cb5480526c8f50b484f744f4e18b49585792bc255"
+        },
+        "lib/arm64-v8a/libtt_ugen_layout.so": {
+          "apk": "config.arm64_v8a.apk",
+          "bytes": 440672,
+          "sha256": "6356784adf27dac5d18cd14a052d4ab9c161fb74eb4df3d4107d00f2549edeb2"
+        }
+      }
+    },
+    "generation": "android-3.17.0-699-9593f4b56fef",
+    "active_mods": [],
+    "patches": [],
+    "launcher": {
+      "path": "tools/forevereden_client.py",
+      "sha256": "f4706255542fb988f46bb7d7d3c4db929d98e0e512166961ed902b5345183315",
+      "compatibility_version": 1
+    },
+    "server": {
+      "schema_version": null,
+      "compatibility_version": null,
+      "status": "NOT_IMPLEMENTED"
+    },
+    "protocol": {
+      "status": "UNKNOWN",
+      "definitions": null,
+      "serializers": null
+    },
+    "content": {
+      "authority": "Original APK payloads pinned above",
+      "downloaded_generation": null,
+      "decoded_gameplay_tables": "UNKNOWN"
+    }
+  }
+}
