@@ -389,8 +389,10 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   assert.equal(response.status, 200);
   const drawReplay = Buffer.from(response.body), drawRequestId = requestId, drawSequence = sequence;
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
-  const drawOperation = operation(value, 1000, { lotteryId: 175993342, limitedLotteryTickets: [], lotteryTicketId: 0,
+  const drawOperation = operation(value, 1000, { lotteryId: 175993342, drawCount: 10, limitedLotteryTickets: [], lotteryTicketId: 0,
     userPC: value.userPC });
+  assert.deepEqual({ lotteryId: value.lotteryId, drawCount: value.drawCount, limitedLotteryTickets: value.limitedLotteryTickets,
+    lotteryTicketId: value.lotteryTicketId }, { lotteryId: 175993342, drawCount: 10, limitedLotteryTickets: [], lotteryTicketId: 0 });
   assert.equal(value.userPC.length, 10);
   assert.ok(value.userPC.slice(0, 9).every(item => normalPool.some(stock => stock[0] === item.stock.id)));
   assert.ok(guaranteedPool.some(stock => stock[0] === value.userPC[9].stock.id));

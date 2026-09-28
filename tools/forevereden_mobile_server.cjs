@@ -415,8 +415,8 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       requireValue(stocks.length === count, 'Invalid 3.17.0 lottery layout');
       const userPC = stocks.map(stock => ({ stock: { id: stock[0] } }));
       state.lottery.draws += count;
-      const parameters = { lotteryId: value.id, limitedLotteryTickets: [], lotteryTicketId: value.lotteryTicketId, userPC };
-      response = { code: 0, userPC, operations: [issueOperation(1000, parameters)] };
+      const parameters = { lotteryId: value.id, drawCount: count, limitedLotteryTickets: [], lotteryTicketId: value.lotteryTicketId, userPC };
+      response = { code: 0, ...parameters, operations: [issueOperation(1000, parameters)] };
       log(JSON.stringify({ event: 'private-lottery-draw', lottery_id: value.id, count, cost,
         stock_ids: userPC.map(result => result.stock.id), rarities: stocks.map(stock => stock[2]),
         duplicates: stocks.map(stock => ownedPCs.has(stock[1])) }));
