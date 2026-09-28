@@ -26,10 +26,12 @@ SDK state and sanitized profile use one fixed local-only identity. Its bounded
 gameplay saves commit and replay after restart; live testing completed a quest,
 changed areas and persisted the resulting tables. The untouched official package then still loaded the
 same official checkpoint, proving the two accounts coexist without transfer or
-migration. The listener recognizes 38 disassembled action names, but only 13 have
-non-stub semantics; nine necessary gameplay reward routes are rejected until their
-full contracts are traced. `quest/close` currently supports only exact gem-only
-rewards and rejects every other reward shape. Paid battle continuation costs 50 Chronos Stones. Dungeon-key
+migration. The listener recognizes 38 disassembled action names, but only 18 have
+non-stub semantics; four necessary gameplay routes are rejected until their full
+state contracts are traced. Quest close, gift receive, Battle Rush and the three
+Star Library reward paths now return the exact frozen-client operation types and
+parameter fields, retain those operations across restart, and remove them only
+after a matching client acknowledgement. Paid battle continuation costs 50 Chronos Stones. Dungeon-key
 purchase accepts the client's original `gamelibConsume` ID, debits its exact
 20/40-stone row, persists the acquired key amount and returns the nested ticket
 fields decoded by the callback. Dreams draws spend local Chronos Stones and use the exact
@@ -92,7 +94,7 @@ remaining proposed gameplay boundary.
 
 | State / decision | Sole proposed authority | Current status |
 |---|---|---|
-| Transport, routing, sessions, scoped capabilities | One bounded server process | 38 actions recognized; 13 non-stub, nine necessary gameplay actions fail closed pending semantic traces, and excluded services are not implemented; private capability, bounds, ordering, replay and rollback tested |
+| Transport, routing, sessions, scoped capabilities | One bounded server process | 38 actions recognized; 18 non-stub, four necessary gameplay actions fail closed pending complete state contracts, and excluded services are not implemented; private capability, bounds, ordering, operation redelivery, replay and rollback tested |
 | Profile, inventory, progress, consumed claims, schema revision | Selected local profile store | All 207 tables, metadata and queued replies persist atomically; User Manager supports create/select/reset/restore/export/import; SQLite corruption fails closed |
 | Immutable gameplay definitions | Exact-build content generation | Packaged and completed-download master buffers/selected fields recovered; five treasure records compared across both, full gameplay schema remains partial |
 | Combat and ordinary reward decisions | Original frozen client using original data; server validates and commits its authenticated deltas | Real battle, quest, treasure and dungeon deltas accepted and retained; exact catalogs validate server-facing reward and Dreams identifiers |

@@ -123,7 +123,8 @@ def prepare(capture, migrate_database=False):
     active_files = ('tools/forevereden_device_listener.cjs','tools/forevereden_mobile_server.cjs',
         'tools/forevereden_transport.cjs','tools/forevereden_lottery_3_17_0.bin',
         'tools/forevereden_rewards_3_17_0.bin',
-        'data/forevereden-evidence/network-action-inventory.json')
+        'data/forevereden-evidence/network-action-inventory.json',
+        'data/forevereden-evidence/required-packet-semantics.json')
     launcher_files = ('android/forevereden-launcher/app/build.gradle.kts',
         'android/forevereden-launcher/app/src/main/AndroidManifest.xml',
         'android/forevereden-launcher/app/src/main/assets/runtime/main.cjs',
@@ -141,7 +142,7 @@ def prepare(capture, migrate_database=False):
         launcher_source={name:client.digest(client.ROOT/name) for name in launcher_files},
         routed_routes=[row['action'] for row in inventory['actions'] if row.get('local_support') == 'routed'],
         non_stub_routes=[row['action'] for row in inventory['actions']
-            if row.get('semantic_status') in ('implemented_non_stub', 'partial_gem_only_rejected_otherwise')],
+            if row.get('semantic_status') == 'implemented_non_stub'],
         required_untraced_routes=[row['action'] for row in inventory['actions']
             if row.get('semantic_status') == 'untraced_rejected'],
         supported_routes=['matching_user/game_user_id','user/login','user/update_meta','user_data/confirm','user_data/pull','user_data/push','user/migration/status_reset'],
@@ -149,7 +150,8 @@ def prepare(capture, migrate_database=False):
         content_generation='ec741d3cc2f29b867892b1ed16a7a59b40e3968d',
         content_master_sha256='18c811dabc2a3184c81155a54a234dce64ab23e2eebac4ae1cdfde2ee76386eb',
         limitations=['untraced routes fail closed with HTTP 503; route recognition is not protocol support',
-            'quest/close is implemented only for exact gem-only rewards and rejects every other reward shape',
+            'operation-backed rewards remain pending until user_data/push supplies the matching id and verifier',
+            'ticket-funded lottery is rejected until the exact ticket-row transition is proven',
             'excluded publisher services are not advertised locally'])
     result=dict(runtime_id=client.identity_digest(identity),identity=identity)
     resource_file = OUT.parent/'private-resources/routes.json'

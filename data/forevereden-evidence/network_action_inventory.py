@@ -94,14 +94,12 @@ REQUEST_FIELD_REFERENCES = {
 }
 
 REQUIRED_UNTRACED = {
-    'battle_rush/reward', 'cat_diary/reward', 'dungeon/complete', 'gift/receive',
-    'pack_product/acquire', 'pc_costume/acquire', 'star_library/level_reward',
-    'star_library/mission_reward', 'star_library/score_attack_reward',
+    'cat_diary/reward', 'dungeon/complete', 'pack_product/acquire', 'pc_costume/acquire',
 }
-PARTIAL = {'quest/close'}
 NON_STUB = {
-    'battle/continue', 'dungeon/ticket/issue', 'lottery/draw',
-    'matching_user/game_user_id', 'quest/close', 'user/game_user_id_for_eu',
+    'battle/continue', 'battle_rush/reward', 'dungeon/ticket/issue', 'gift/receive', 'lottery/draw',
+    'matching_user/game_user_id', 'quest/close', 'star_library/level_reward', 'star_library/mission_reward',
+    'star_library/score_attack_reward', 'user/game_user_id_for_eu',
     'user/login', 'user/migration/status', 'user/migration/status_reset',
     'user/update_meta', 'user_data/confirm', 'user_data/pull', 'user_data/push',
 }
@@ -127,52 +125,52 @@ EXCLUDED = {
 
 COMMON_USER_DATA = 'common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8'
 RESPONSE_CONTRACTS = {
-    'battle/continue': 'action callback reads no JSON fields; billing refresh is invoked at 0x39673a8',
-    'battle_rush/reward': f'{COMMON_USER_DATA}; wrapper 0x2313c44 reads no action-specific JSON fields',
+    'battle/continue': 'operation type 4000 has an empty handler; billing refresh is invoked at 0x39673a8',
+    'battle_rush/reward': 'operation type 18000 consumes GiveItems[].itemId, amount, missionId and stageId',
     'cat_diary/reward': f'{COMMON_USER_DATA}; wrapper 0x31cbad4 and caller callback 0x2a1e8a8 read no action-specific JSON fields',
     'dungeon/complete': f'{COMMON_USER_DATA}; call site 0x3277094 supplies an empty callback',
-    'dungeon/ticket/issue': 'callback 0x3967c40 reads userDungeonTicket.dungeonTicketId and gamelibConsume.acquireAmount',
-    'gift/receive': f'{COMMON_USER_DATA}; wrapper 0x3744444 reads no action-specific JSON fields',
-    'lottery/draw': 'callback reads userPC[].stock.id',
+    'dungeon/ticket/issue': 'operation type 3000 reads userDungeonTicket.dungeonTicketId and gamelibConsume.acquireAmount',
+    'gift/receive': 'operation type 2000 consumes exact UserGift rows and their typed contents',
+    'lottery/draw': 'operation type 1000 reads lotteryId, lotteryTicketId, limitedLotteryTickets and userPC[].stock.id',
     'matching_user/game_user_id': 'captured response supplies game_user_id and aesIv',
     'pack_product/acquire': f'{COMMON_USER_DATA}; wrapper 0x2f7d86c reads no action-specific JSON fields',
     'pc_costume/acquire': f'{COMMON_USER_DATA}; wrapper 0x2f7bdd4 reads no action-specific JSON fields',
-    'quest/close': f'{COMMON_USER_DATA}; callback 0x37b60c4 reads no action-specific fields and refreshes billing',
-    'star_library/level_reward': f'{COMMON_USER_DATA}; wrapper 0x38f3290 reads no action-specific JSON fields',
-    'star_library/mission_reward': f'{COMMON_USER_DATA}; callback 0x2c4973c reads stored UserGift.senderId, not response JSON',
-    'star_library/score_attack_reward': f'{COMMON_USER_DATA}; callback 0x2c4aa5c reads stored UserGift.senderId, not response JSON',
+    'quest/close': 'operation type 5000 reads quest.id and original questReward[].id, then refreshes billing',
+    'star_library/level_reward': 'operation type 22000 consumes UserGift and levelIds',
+    'star_library/mission_reward': 'operation type 21000 consumes UserGift and missionIds',
+    'star_library/score_attack_reward': 'operation type 23000 consumes UserGift and scoreAttackRewardIds',
     'user/game_user_id_for_eu': 'captured bootstrap response supplies game_user_id',
     'user/login': 'captured login response; UserStatus is consumed before profile pull',
     'user/migration/status': 'inline dispatcher reads status; local terminal state is status=0',
     'user/migration/status_reset': 'callback 0x34999e4 branches on success/failure and reads no response body fields',
     'user/update_meta': 'captured response code=0; no durable state mutation',
-    'user_data/confirm': 'captured JSON operation/done acknowledgement shape',
+    'user_data/confirm': 'returns durable pending operations with id/type/parameters/token/signature',
     'user_data/pull': 'MessagePack data/dataTokens profile payload consumed by 0x30ca580',
     'user_data/push': 'JSON operation/done acknowledgement plus refreshed tokens consumed by 0x30e1988',
 }
 STATE_CONTRACTS = {
     'battle/continue': 'atomically debit exact master consume cost; replay must not debit twice',
-    'battle_rush/reward': 'UNTRACED: exact UserBattleRush claim rows and reward delivery remain to be recovered',
+    'battle_rush/reward': 'issue exact master GiveItems once per stage; client operation mutates Battle Rush rows and the following push persists them',
     'cat_diary/reward': 'UNTRACED: exact UserCatDiary claim counters and reward delivery remain to be recovered',
     'dungeon/complete': 'UNTRACED: exact roguelike UserDungeon completion transition and rewards remain to be recovered',
-    'dungeon/ticket/issue': 'atomically debit exact consume cost and increase the selected UserDungeonTicket amount',
-    'gift/receive': 'UNTRACED: atomically mark each UserGift claimed and materialize every typed content row exactly once',
-    'lottery/draw': 'atomically debit banner cost or ticket and persist draw progress; replay must not draw twice',
+    'dungeon/ticket/issue': 'atomically debit exact consume cost, issue type 3000 and persist the client UserDungeonTicket delta on acknowledgement',
+    'gift/receive': 'issue each pending exact UserGift once; type 2000 applies typed contents and the acknowledged push persists state=1',
+    'lottery/draw': 'atomically debit gem banner cost and issue type 1000; ticket-funded draws remain rejected until their ticket row is exact',
     'matching_user/game_user_id': 'issue fixed local identity and IV; no profile mutation',
     'pack_product/acquire': 'UNTRACED: exact UserPackProduct entitlement and typed contents remain to be recovered',
     'pc_costume/acquire': 'UNTRACED: exact UserPCCostumeProduct/UserPCCostume mutation and typed contents remain to be recovered',
-    'quest/close': 'PARTIAL: state 4 to 5 and exact gem-only reward are atomic; non-gem rewards are rejected',
-    'star_library/level_reward': 'UNTRACED: exact UserStarLibraryLevel claim state and UserGift creation remain to be recovered',
-    'star_library/mission_reward': 'UNTRACED: exact mission claim state and UserGift creation remain to be recovered',
-    'star_library/score_attack_reward': 'UNTRACED: exact score claim state and UserGift creation remain to be recovered',
+    'quest/close': 'issue exact original quest reward IDs; type 5000 applies every reward and the acknowledged push persists state 4 to 5',
+    'star_library/level_reward': 'type 22000 creates exact original UserGift rows; acknowledged client deltas preserve level state flow',
+    'star_library/mission_reward': 'type 21000 creates exact original UserGift rows; acknowledged client deltas preserve mission state flow',
+    'star_library/score_attack_reward': 'type 23000 creates exact original UserGift rows; acknowledged client deltas preserve score state flow',
     'user/game_user_id_for_eu': 'return fixed local identity; no profile mutation',
     'user/login': 'create/reuse bounded local capability without importing official credentials',
     'user/migration/status': 'report no pending publisher migration; no migration state exists locally',
     'user/migration/status_reset': 'clear only the client startup migration check; no profile migration',
     'user/update_meta': 'validate client metadata; no durable profile mutation',
-    'user_data/confirm': 'advance ordered queue state only after durable reply persistence',
+    'user_data/confirm': 'redeliver durable pending operations after restart until the client acknowledges them',
     'user_data/pull': 'read the committed profile snapshot without mutation',
-    'user_data/push': 'validate and atomically commit authenticated table deltas/tokens; exact replay returns the stored reply',
+    'user_data/push': 'atomically commit authenticated table deltas and {id,verifier} acknowledgements; return dones and exact replay',
 }
 
 
@@ -268,9 +266,6 @@ def main():
             entry['requirement'] = 'excluded'
             entry['semantic_status'] = 'not_implemented'
             entry['exclusion_reason'] = EXCLUDED[action]
-        elif action in PARTIAL:
-            entry['requirement'] = 'required_gameplay'
-            entry['semantic_status'] = 'partial_gem_only_rejected_otherwise'
         else:
             entry['requirement'] = 'required_runtime'
             entry['semantic_status'] = 'implemented_non_stub'
@@ -287,8 +282,7 @@ def main():
     assert len(result['actions']) == 39
     assert sum(entry['local_support'] == 'routed' for entry in result['actions']) == 38
     assert set(by_action) == set(REQUEST_FIELDS)
-    assert set(by_action) == REQUIRED_UNTRACED | PARTIAL | NON_STUB | set(EXCLUDED)
-    assert PARTIAL < NON_STUB
+    assert set(by_action) == REQUIRED_UNTRACED | NON_STUB | set(EXCLUDED)
     assert set(RESPONSE_CONTRACTS) == set(STATE_CONTRACTS) == REQUIRED_UNTRACED | NON_STUB
     OUT.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(f"{queued_count} queue-backed actions; {len(result['actions'])} total actions")

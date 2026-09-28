@@ -28,15 +28,19 @@ python data/forevereden-evidence/network_action_inventory.py
 Machine output: `data/forevereden-evidence/network-action-inventory.json`.
 Three slash-formatted strings (`agree_policy/version`, `daily_bonus/ad_received`
 and `encryption/aes_iv`) are storage keys and are excluded by name. The current
-listener refuses to equate that inventory with support. Thirteen actions have
-non-stub local semantics; `quest/close` is partial and accepts only exact gem-only
-rewards. Nine necessary gameplay reward actions remain untraced and return HTTP
-503. The implemented routes use bounded encrypted transport, authentication,
+listener refuses to equate that inventory with support. Eighteen actions have
+non-stub local semantics. Four necessary gameplay actions still lack a complete
+state contract and return HTTP 503. The implemented routes use bounded encrypted transport, authentication,
 sequence and exact-replay checks. The implemented runtime actions include
 stateful semantics: `matching_user/game_user_id`, `user/game_user_id_for_eu`,
 `user/login`, `user/update_meta`, `user_data/confirm`, `user_data/pull`,
 `user_data/push`, `user/migration/status_reset`, `battle/continue`,
-`dungeon/ticket/issue`, and `lottery/draw`. `battle/continue` debits the original
+`dungeon/ticket/issue`, `lottery/draw`, `quest/close`, `gift/receive`,
+`battle_rush/reward`, and all three `star_library/*_reward` paths. These gameplay
+responses issue the exact frozen-client operation type and parameter fields;
+pending operations persist across restart, `user_data/confirm` redelivers them,
+and `user_data/push` removes them only for an exact `{id, verifier}` record while
+returning `dones[].id`. `battle/continue` debits the original
 `CONSUME_BATTLE_CONTINUE` value of 50. The ticket endpoint accepts the original
 consume ID rather than a ticket ID; exact master rows supply cost,
 `dungeonTicketId` and `acquireAmount`, including green-key x2 at 40 stones.
@@ -47,28 +51,24 @@ all 1,682 rows with source pool IDs use their own weighted normal and guaranteed
 `lotteryPCEx` groups. The rolled rarity keeps the source odds; selection inside
 that rarity is restricted to profile-owned characters to avoid requesting absent
 character assets. The 1,670 expired metadata rows with zero pool IDs are rejected.
-No other action receives a success body. The earlier `code: 0` fallback was
+No untraced action receives a success body. The earlier `code: 0` fallback was
 disproved by the repeated `quest/close` reconnect loop: an action-specific
-callback may read no fields while the common UserData listener still requires
-updated `data` and `dataTokens`. Every untraced action now fails closed.
+callback may read no fields while the common response listener still dispatches
+`operations` and later requires `dones` to retire them. Every untraced action now
+fails closed.
 
 ### Necessary packets still being traced
 
-These are the nine remaining local-gameplay packets. Their request builders and
+These are the four remaining local-gameplay packets. Their request builders and
 response consumers are traced; they are not implemented because their complete
 durable mutation is not yet proved.
 
 | Action | Exact request | Frozen-client response path | Missing proof before implementation |
 |---|---|---|---|
-| `battle_rush/reward` | `stageId`, `courseId`, `missionIds` | Wrapper `0x2313c44`; common `data`/`dataTokens` store | Exact `UserBattleRush*` claim rows and reward delivery |
 | `cat_diary/reward` | `lotteryDt`, `slotNo`, `step` | Wrapper `0x31cbad4`; caller `0x2a1e8a8`; common store | Exact `UserCatDiary*` counters and reward delivery |
 | `dungeon/complete` | `dungeonId` | Empty action callback at `0x3277094`; common store | Exact roguelike `UserDungeon` transition and rewards |
-| `gift/receive` | `userId`, `giftIds` | Wrapper `0x3744444`; common store | Gift state transition and exact typed-content materialization |
 | `pack_product/acquire` | `packProductId` | Wrapper `0x2f7d86c`; common store | Entitlement row, limits, cost and exact typed contents |
 | `pc_costume/acquire` | `pcCostumeProductId` | Wrapper `0x2f7bdd4`; common store | Product/costume rows, limits, cost and exact typed contents |
-| `star_library/level_reward` | `levelIds` | Wrapper `0x38f3290`; common store | Level claim transition and exact `UserGift` creation |
-| `star_library/mission_reward` | `missionIds`, `bookId` | Callback `0x2c4973c` reads stored `UserGift.senderId` | Mission claim transition and exact `UserGift` creation |
-| `star_library/score_attack_reward` | `scoreAttackRewardIds` | Callback `0x2c4aa5c` reads stored `UserGift.senderId` | Score claim transition and exact `UserGift` creation |
 
 The machine ledger also pins each request-key reference, for example
 `battle_rush/reward` at `0x2312404`, `0x2312484`, `0x231254c`, and regenerates
@@ -81,6 +81,13 @@ known profile tables; applies all deltas atomically; persists table overrides;
 and replays an identical encrypted reply. Known composite identities are
 explicit. Other user tables may use `_id` or their conventional table-name ID
 field when that field is present and unique in the submitted rows.
+
+The 2026-09-27 post-quest reconnect was not an operation acknowledgement: the
+device log showed `operations: 0` and rejected sequence 1267 because the
+`StarLibraryUpdateState` delta included `UserStarLibraryMissionStatus` without a
+known row identity. That table is now keyed by `userId` and `missionId`. The
+unchanged on-device profile retried sequence 1267 successfully, completed confirm
+and profile pull, and rendered the dungeon again.
 
 Live testing passed the former disconnect points: `CatDiary`, `Blocking`,
 `UiClosed`, `ExplorerScheduled`, `AreaChanged`, and several `EventDone` saves.
@@ -96,9 +103,10 @@ The private APK, SDK and sanitized profile share a fixed local-only identity.
 The real private client loaded the captured checkpoint without a network dialog
 and accepted movement, quest completion and area-transition input.
 The untouched official package then still loaded the same official checkpoint.
-Specialized reward, gift, migration and other publisher action effects remain
-UNKNOWN. Paid battle continuation, dungeon-key purchase, Dreams and local billing
-are implemented; subscriptions are deliberately reported unavailable. See `LOCAL_LOGIN_REPORT.md`;
+Cat Diary reward, roguelike completion, pack and costume state effects remain
+UNKNOWN. Quest, gift, Battle Rush, Star Library, paid battle continuation,
+dungeon-key purchase, Dreams and local billing use traced client operations;
+subscriptions are deliberately reported unavailable. See `LOCAL_LOGIN_REPORT.md`;
 observations below are retained as history.
 
 The private client accepts local game-ID/login responses, resource metadata and
@@ -525,10 +533,11 @@ integer, `type` as a 32-bit integer, `parameters`, string `token`, and unsigned
 32-bit `signature`. The processor dispatches by operation type; its unknown-type
 path is fatal. On a push response, `0x30d027c` iterates `dones`; `0x2fe667c`
 uses each entry's `id` to remove a matching tracked operation, returning false
-if none is found. Exact operation authorization, receipt generation, persistence
-and replay guarantees are still unverified. The later authorized capture
-recovered an original pending gift operation, which is not imported as a
-private pending operation. No generic save success is sent.
+if none is found. The local server mirrors that lifecycle: each operation is
+durable before reply, confirm redelivers it after restart, and push atomically
+commits its table deltas and returns `dones` before removing it. The later
+authorized capture recovered an original pending gift operation, which is not
+imported as a private pending operation. No generic save success is sent.
 
 These findings constrain the local server: it must derive authorized changes
 from committed state and recovered rules, then reproduce the required checksum,

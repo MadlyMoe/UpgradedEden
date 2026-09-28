@@ -15,16 +15,17 @@ an app-scoped `VpnService` routes only the original client to a local TLS bridge
 requests one normal client-signed full pull, strips official identity/session
 credentials and adds the resulting 207-table profile to its User Manager. It
 never invokes account transfer or migration. The server recognizes 38 of the 39
-actions found in the exact ARM64 client, but recognition is not support: only 13
-currently have non-stub semantics, and `quest/close` is still limited to exact
-gem-only rewards. Every other recognized action now fails closed with HTTP 503.
+actions found in the exact ARM64 client, but recognition is not support: 18
+currently have non-stub semantics. Four necessary gameplay routes remain rejected
+with HTTP 503 until their complete state contracts are recovered.
 Subscription-only key recovery stays unreachable because local subscriptions
 are not advertised.
 Login, profile pull/push, local billing, paid battle continuation, dungeon-key
-purchase and Dreams draws have dedicated behavior;
-the other gameplay reward routes have only their exact request fields recovered
-and remain rejected until their response reads, state mutation, persistence and
-retry behavior are traced. Dreams draws spend local Chronos Stones and use the exact normal/guaranteed
+purchase, Dreams draws, quest close, gift receive, Battle Rush rewards and the
+three Star Library reward paths have dedicated behavior. Their exact client
+operation types and parameter fields are pinned from the frozen binary; issued
+operations survive restart and are removed only after the matching client save
+acknowledgement. Dreams draws spend local Chronos Stones and use the exact normal/guaranteed
 layouts and weighted `lotteryPCEx` pools for all 1,682 drawable 3.17.0 banners.
 Local tickets are bounded by the selected profile; key purchase and battle
 continuation debit the exact original 3.17.0 consume rows (20/40 and 50 Chronos
@@ -73,9 +74,15 @@ subscriptions now report unavailable and the same saved profile restarts into
 Spacetime Rift normally. SQLite stores run `PRAGMA quick_check` before use and
 malformed JSON stores fail closed. The packaged launcher contains the exact
 consume-ID key protocol and nested response shape expected by the frozen client.
+The later quest-clear loop was a different failure: save sequence 1267 carried a
+`StarLibraryUpdateState` delta for `UserStarLibraryMissionStatus`, whose composite
+row identity was missing. The shared save path now keys it by `userId` and
+`missionId`; the same retained device state retried sequence 1267 successfully and
+loaded back into the dungeon without resetting the profile.
 
-Nine necessary gameplay reward actions remain untraced and are rejected rather
-than acknowledged. Publisher migration, social/friends, ads, serial codes, official payment
+Four necessary gameplay actions remain incomplete and are rejected rather than
+acknowledged: Cat Diary reward, roguelike dungeon completion, pack acquisition
+and costume acquisition. Publisher migration, social/friends, ads, serial codes, official payment
 history/subscriptions, remote authentication, and a duplicate server-side
 ordinary-battle simulator are not necessary for this local server. Their
 terminal compatibility exists only for the two migration-status checks used by

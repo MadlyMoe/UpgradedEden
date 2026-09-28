@@ -20,7 +20,8 @@ const ACTIONS = new Set([
   'user_data/confirm','user_data/delete','user_data/pull','user_data/push',
 ]);
 const SEMANTIC_ROUTES = new Set([
-  'battle/continue','dungeon/ticket/issue','lottery/draw','matching_user/game_user_id','quest/close',
+  'battle/continue','battle_rush/reward','dungeon/ticket/issue','gift/receive','lottery/draw','matching_user/game_user_id','quest/close',
+  'star_library/level_reward','star_library/mission_reward','star_library/score_attack_reward',
   'user/game_user_id_for_eu','user/login','user/migration/status','user/migration/status_reset','user/update_meta',
   'user_data/confirm','user_data/pull','user_data/push',
 ]);
@@ -36,10 +37,12 @@ const LIMITS = { plaintext: 16 * 1024 * 1024, ciphertext: 4 * 1024 * 1024 };
 const SAVE_KEYS = {
   UserAreaEnemy: ['userId','areaObjectId'], UserCatDiary: ['userId','termId'], UserGameManual: ['userId','gameManualId'],
   UserDungeonTicket: ['userId','dungeonTicketId'], UserEnvironmentChangeGroup: ['userId','groupId','tableId','tableIndex'],
+  UserGift: ['userId','id'], UserLimitedLotteryTicket: ['userId','lotteryTicketId'],
   UserEquipmentSpecie: ['userId','equipmentId'], UserFreeze: ['userId'], UserGlobalFlag: ['userId','globalFlagId'],
   UserInfo: ['userId'], UserKeyItem: ['userId','keyItemId'], UserMigratoryEnemy: ['userId','migratoryEnemyId'],
   UserOrdealAchievementStock: ['userId','id'], UserPC: ['userId','pcId'], UserPCJobSet: ['userId','pcId'],
   UserPCStyle: ['userId','pcStyleId'], UserParty: ['userId','id'], UserStoryStep: ['userId','storyStepId'],
+  UserPCCostumeProduct: ['userId','costumeProductId'], UserStarLibraryMissionStatus: ['userId','missionId'],
   UserSystemFlag: ['userId','systemFlagId'],
   UserItemToken: ['userId','consumer','value'], UserMaterial: ['userId','materialId'], UserRandomSeed: ['userId','consumer'],
   UserTreasure: ['userId','treasureId'],
@@ -128,7 +131,8 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
     throw new Error('Invalid mobile runtime inputs');
   if (Boolean(statePath) === Boolean(database)) throw new Error('Choose one profile store');
   const freshState = () => ({ version: 1, user_id: seed.user_id, capability: crypto.randomBytes(16).toString('hex'),
-    aes_iv: crypto.randomBytes(8).toString('hex'), device_hash: null, last_sequence: '-1', meta: {}, tables: {}, replies: {} });
+    aes_iv: crypto.randomBytes(8).toString('hex'), device_hash: null, last_sequence: '-1', meta: {}, tables: {}, replies: {},
+    next_operation_id: 1, pending_operations: {}, claims: {} });
   const validState = state => state.version === 1 && state.user_id === seed.user_id &&
     typeof state.capability === 'string' && state.capability.length === 32 &&
     typeof state.aes_iv === 'string' && Buffer.byteLength(state.aes_iv) === 16 &&
@@ -183,6 +187,11 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
   }
   if (!validState(state)) throw new Error('Invalid mobile server state');
   state.tables ??= {};
+  state.next_operation_id ??= 1; state.pending_operations ??= {}; state.claims ??= {};
+  if (!Number.isSafeInteger(state.next_operation_id) || state.next_operation_id < 1 ||
+      !state.pending_operations || Array.isArray(state.pending_operations) || typeof state.pending_operations !== 'object' ||
+      !state.claims || Array.isArray(state.claims) || typeof state.claims !== 'object')
+    throw new Error('Invalid mobile operation state');
   state.billing ??= { charge: 0, free: 0, subscriptions: {}, orders: {}, transactions: [] };
   state.lottery ??= { draws: 0, used_tickets: {} }; state.lottery.used_tickets ??= {};
   if (![state.billing.charge, state.billing.free].every(Number.isSafeInteger) || state.billing.charge < 0 || state.billing.free < 0 ||
@@ -213,7 +222,41 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
     return value;
   };
   const snapshot = () => ({ ...state, meta: structuredClone(state.meta), billing: structuredClone(state.billing),
-    lottery: structuredClone(state.lottery), replies: structuredClone(state.replies) });
+    lottery: structuredClone(state.lottery), replies: structuredClone(state.replies),
+    pending_operations: structuredClone(state.pending_operations), claims: structuredClone(state.claims) });
+  const pendingOperations = () => Object.values(state.pending_operations).sort((a, b) => a.id - b.id);
+  function issueOperation(type, parameters) {
+    requireValue(Number.isSafeInteger(type) && type > 0 && pendingOperations().length < 128, 'Operation queue exhausted');
+    const operation = { id: state.next_operation_id++, type, parameters,
+      token: crypto.randomBytes(16).toString('hex'), signature: crypto.randomInt(1, 0x100000000) };
+    state.pending_operations[operation.id] = operation;
+    return operation;
+  }
+  function operationGift(row) {
+    requireValue(row && Number.isSafeInteger(row.id) && row.id > 0 && row.state === 0 && Array.isArray(row.contents) &&
+      row.contents.every(item => Number.isSafeInteger(item.id) && Number.isSafeInteger(item.itemId) && item.itemId > 0 &&
+        Number.isSafeInteger(item.amount) && item.amount > 0), 'Gift unavailable');
+    return { userId: state.user_id, id: row.id, senderType: row.senderType, senderId: row.senderId,
+      title: row.title, message: row.message, contents: row.contents.map(item => ({ id: item.id, itemId: item.itemId,
+        amount: item.amount, paramType: item.paramType ?? 0, value: item.value ?? 0 })),
+      giftAcquiredType: row.giftAcquiredType, receiveType: row.receiveType, startAt: row.startAt, expireAt: row.expireAt,
+      state: row.state, createdAt: row.createdAt, securityToken: row.securityToken ?? '',
+      userOdealAchievementId: row.userOdealAchievementId ?? 0 };
+  }
+  function createStarGift(label, senderId) {
+    const source = REWARD_CATALOG.gift_details[label];
+    requireValue(source && source.contents.length && source.contents.every(item => Number.isSafeInteger(item.item_id) && item.item_id > 0),
+      'Gift contents unavailable');
+    if (!Number.isSafeInteger(state.next_gift_id)) {
+      const rows = table('UserGift'), gifts = rows ? (Array.isArray(rows) ? rows : [rows]) : [];
+      state.next_gift_id = Math.max(0x100000000, ...gifts.map(gift => gift.id).filter(Number.isSafeInteger)) + 1;
+    }
+    const now = Math.floor(Date.now() / 1000);
+    return { userId: state.user_id, id: state.next_gift_id++, senderType: 2, senderId, title: source.title,
+      message: source.message, contents: source.contents.map((item, id) => ({ id, itemId: item.item_id, amount: item.amount,
+        paramType: 0, value: 0 })), giftAcquiredType: 20, receiveType: 10, startAt: 0, expireAt: 0, state: 0,
+      createdAt: now, securityToken: '', userOdealAchievementId: 0 };
+  }
   function consumeGems(cost) {
     requireValue(Number.isSafeInteger(cost) && cost >= 0 && state.billing.charge + state.billing.free >= cost,
       'Insufficient Chronos Stones');
@@ -263,7 +306,8 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
     } else if (action === 'user/update_meta') {
       const value = JSON.parse(body); requireValue(value && Object.keys(value).length === 1 && [0,1].includes(value.is32bit), 'Unsupported metadata');
       state.meta = value; response = { code: 0 };
-    } else if (action === 'user_data/confirm') { empty(); response = { code: 0, dataTokens: allTokens, migrators: [], operations: [] }; }
+    } else if (action === 'user_data/confirm') { empty(); response = { code: 0, dataTokens: allTokens,
+      migrators: [], operations: pendingOperations() }; }
     else if (action === 'user/migration/status_reset') { empty(); response = { code: 0 }; }
     else if (action === 'user_data/push') {
       const value = JSON.parse(body);
@@ -277,9 +321,18 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
         operations: Array.isArray(value?.operations) ? value.operations.length : null,
         gifts: Array.isArray(value?.giftIds) ? value.giftIds.length : null, surplus: Array.isArray(value?.surplus) ? value.surplus.length : null }));
       requireValue(sameKeys(value, ['badges','checksums','dataTokens','deltas','giftIds','operations','scripts','surplus']) &&
-        Array.isArray(value.deltas) && value.deltas.length >= 1 && value.deltas.length <= 32 && Array.isArray(value.giftIds) && value.giftIds.length === 0 &&
-        Array.isArray(value.operations) && value.operations.length === 0 && Array.isArray(value.surplus) && value.surplus.length === 0,
+        Array.isArray(value.deltas) && value.deltas.length <= 32 && Array.isArray(value.giftIds) && value.giftIds.length === 0 &&
+        Array.isArray(value.operations) && value.operations.length <= 128 && Array.isArray(value.surplus) && value.surplus.length === 0 &&
+        value.deltas.length + value.operations.length > 0,
       'Unsupported save envelope');
+      const operationAcks = value.operations.map(item => {
+        requireValue(sameKeys(item, ['id','verifier']) && Number.isSafeInteger(item.id) && item.id > 0 &&
+          typeof item.verifier === 'string' && item.verifier.length >= 1 && item.verifier.length <= 1024 &&
+          state.pending_operations[item.id],
+        'Unknown operation acknowledgement');
+        return item.id;
+      });
+      requireValue(new Set(operationAcks).size === operationAcks.length, 'Duplicate operation acknowledgement');
       const mutations = value.deltas.map(delta => {
         requireValue(sameKeys(delta, ['deleteItems','putItems','signature','trigger']) && delta.signature === 0 &&
           typeof delta.trigger === 'string' && /^[A-Za-z][A-Za-z0-9_]{0,63}$/.test(delta.trigger) &&
@@ -331,9 +384,11 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       const responseTokenNames = [...mutationNames];
       if (mutationNames.includes('UserItemToken')) responseTokenNames.push('ItemTokens');
       if (mutationNames.includes('UserRandomSeed')) responseTokenNames.push('RandomSeeds');
+      for (const id of operationAcks) delete state.pending_operations[id];
       response = { code: 0, triggers: mutations.map(item => item.delta.trigger), putItems: putCounts,
         deleteItems: Object.keys(deleteCounts).length ? deleteCounts : [], data,
-        operations: [], dones: [], dataTokens: Object.fromEntries(responseTokenNames.map(name => [name, nextTokens[name]])) };
+        operations: pendingOperations(), dones: operationAcks.map(id => ({ id })),
+        dataTokens: Object.fromEntries(responseTokenNames.map(name => [name, nextTokens[name]])) };
     } else if (action === 'user_data/pull') {
       const value = JSON.parse(body);
       requireValue(value && Object.keys(value).sort().join(',') === 'consistentRead,recovery,tables' && Array.isArray(value.tables) &&
@@ -348,7 +403,7 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       response = { data, dataTokens, recovery: false }; contentType = seed.pull_content_type ?? 'application/x-msgpack';
     } else if (action === 'battle/continue') {
       empty(); const cost = REWARD_CATALOG.consume.battle_continue; consumeGems(cost);
-      response = { code: 0 };
+      response = { code: 0, operations: [issueOperation(4000, {})] };
       log(JSON.stringify({ event: 'private-battle-continue', cost }));
     } else if (action === 'lottery/draw') {
       const value = body.length ? JSON.parse(body) : null;
@@ -356,22 +411,12 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
         Number.isSafeInteger(value.id) && value.id > 0 && Number.isSafeInteger(value.lotteryPCExId) && value.lotteryPCExId >= 0 &&
         Array.isArray(value.lotteryPCExIds) && value.lotteryPCExIds.length <= 10 &&
         value.lotteryPCExIds.every(id => Number.isSafeInteger(id) && id > 0) &&
-        Number.isSafeInteger(value.lotteryTicketId) && value.lotteryTicketId >= 0, 'Unsupported lottery draw');
+        value.lotteryTicketId === 0, 'Unsupported lottery draw');
       const banner = LOTTERY_CATALOG.banners[value.id];
       requireValue(banner, 'Unknown 3.17.0 lottery banner');
       const [bannerCost, , count, normalCount, normalGroup, guaranteedCount, guaranteedGroup] = banner;
-      const cost = value.lotteryTicketId ? 0 : bannerCost;
+      const cost = bannerCost;
       consumeGems(cost);
-      if (value.lotteryTicketId) {
-        const ticketRows = ['UserLotteryTicket','UserLimitedLotteryTicket'].flatMap(name => {
-          const value = table(name); return value ? (Array.isArray(value) ? value : [value]) : [];
-        });
-        const ticket = ticketRows.find(row => row?.lotteryTicketId === value.lotteryTicketId);
-        const available = Array.isArray(ticket?.details) ? ticket.details.length : ticket?.amount;
-        const key = String(value.lotteryTicketId), used = state.lottery.used_tickets[key] ?? 0;
-        requireValue(Number.isSafeInteger(available) && available > used, 'Lottery ticket unavailable');
-        state.lottery.used_tickets[key] = used + 1;
-      }
       const selectors = [value.lotteryPCExId, ...value.lotteryPCExIds].filter(Boolean);
       const ownedPCs = new Set((table('UserPC') ?? []).map(pc => pc.pcId));
       let selectorIndex = 0;
@@ -392,7 +437,8 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       requireValue(stocks.length === count, 'Invalid 3.17.0 lottery layout');
       const userPC = stocks.map(stock => ({ stock: { id: stock[0] } }));
       state.lottery.draws += count;
-      response = { code: 0, userPC };
+      const parameters = { lotteryId: value.id, limitedLotteryTickets: [], lotteryTicketId: value.lotteryTicketId, userPC };
+      response = { code: 0, userPC, operations: [issueOperation(1000, parameters)] };
       log(JSON.stringify({ event: 'private-lottery-draw', lottery_id: value.id, count, cost,
         stock_ids: userPC.map(result => result.stock.id), rarities: stocks.map(stock => stock[2]),
         duplicates: stocks.map(stock => ownedPCs.has(stock[1])) }));
@@ -400,49 +446,89 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       const value = JSON.parse(body), keys = CLIENT_SAVE_ACTIONS[action];
       requireValue(sameKeys(value, keys), 'Unsupported action body');
       for (const [name, item] of Object.entries(value)) {
-        if (name.endsWith('Ids')) requireValue(Array.isArray(item) && item.length >= 1 && item.length <= 100 &&
+        if (name.endsWith('Ids')) requireValue(Array.isArray(item) &&
+          item.length >= (action === 'battle_rush/reward' && name === 'missionIds' ? 0 : 1) && item.length <= 100 &&
           item.every(id => Number.isSafeInteger(id) && id > 0) && new Set(item).size === item.length, 'Invalid action identifiers');
         else if (name === 'userId') requireValue(item === state.user_id, 'User identity mismatch');
         else requireValue(Number.isSafeInteger(item) && item >= 0 && (name === 'slotNo' ? item < 4 : true), 'Invalid action identifier');
       }
       if (action === 'gift/receive') {
         const gifts = table('UserGift'), rows = gifts ? (Array.isArray(gifts) ? gifts : [gifts]) : [];
-        requireValue(value.giftIds.every(id => rows.some(gift => gift.id === id && gift.state === 0)), 'Gift unavailable');
+        const selected = value.giftIds.map(id => rows.find(gift => gift.id === id));
+        requireValue(selected.every(Boolean) && !pendingOperations().some(operation => operation.type === 2000 &&
+          operation.parameters.UserGift.some(gift => value.giftIds.includes(gift.id))), 'Gift unavailable');
+        const operationGifts = selected.map(operationGift);
+        state.billing.free += operationGifts.flatMap(gift => gift.contents)
+          .reduce((sum, item) => sum + (item.itemId === REWARD_CATALOG.currency_gem_id ? item.amount : 0), 0);
+        response = { code: 0, operations: [issueOperation(2000, { UserGift: operationGifts })] };
       } else if (action === 'quest/close') {
-        const quests = structuredClone(table('UserQuest') ?? []), quest = quests.find(row => row.questId === value.id);
+        const quests = table('UserQuest') ?? [], quest = quests.find(row => row.questId === value.id);
         const rewards = REWARD_CATALOG.quests[value.id];
-        requireValue(quest?.state === 4 && rewards?.length && rewards.every(([label, amount]) =>
-          label === 'currency.gem' && Number.isSafeInteger(amount) && amount > 0), 'Quest reward unavailable');
-        const gems = rewards.reduce((sum, [, amount]) => sum + amount, 0);
-        quest.state = 5; state.billing.free += gems;
-        nextTables = { ...state.tables, UserQuest: quests }; dirtyTables = ['UserQuest'];
-        response = { code: 0, data: { UserQuest: quests },
-          dataTokens: { UserQuest: hash(JSON.stringify(quests), 'md5') } };
-        log(JSON.stringify({ event: 'private-quest-close', quest_id: value.id, free_gems: gems }));
+        requireValue(quest?.state === 4 && rewards?.length && rewards.every(([id, label, amount]) =>
+          Number.isSafeInteger(id) && id > 0 && typeof label === 'string' && label && Number.isSafeInteger(amount) && amount > 0),
+        'Quest reward unavailable');
+        const parameters = { quest: { id: value.id }, questReward: rewards.map(([id]) => ({ id })) };
+        state.billing.free += rewards.reduce((sum, [, label, amount]) => sum + (label === 'currency.gem' ? amount : 0), 0);
+        response = { code: 0, operations: [issueOperation(5000, parameters)] };
+        log(JSON.stringify({ event: 'private-quest-close', quest_id: value.id, reward_ids: parameters.questReward.map(item => item.id) }));
       } else if (action === 'dungeon/complete') {
         requireValue(REWARD_CATALOG.dungeons.includes(value.dungeonId), 'Dungeon unavailable');
       } else if (action === 'dungeon/ticket/issue') {
         const consume = REWARD_CATALOG.consume.dungeon_tickets[value.id];
         requireValue(consume && value.num >= 1, 'Dungeon ticket unavailable');
         const [unitCost, ticketId, unitAmount] = consume, amount = unitAmount * value.num;
-        const rows = structuredClone(table('UserDungeonTicket') ?? []), ticket = rows.find(row => row.dungeonTicketId === ticketId);
+        const rows = table('UserDungeonTicket') ?? [], ticket = rows.find(row => row.dungeonTicketId === ticketId);
         requireValue(Number.isSafeInteger(amount) && amount > 0 && ticket &&
           ticket.amount + amount <= REWARD_CATALOG.dungeon_tickets[ticketId][0], 'Dungeon ticket unavailable');
-        consumeGems(unitCost * value.num); ticket.amount += amount;
-        nextTables = { ...state.tables, UserDungeonTicket: rows }; dirtyTables = ['UserDungeonTicket'];
-        response = { code: 0, userDungeonTicket: { dungeonTicketId: ticketId }, gamelibConsume: { acquireAmount: amount } };
+        consumeGems(unitCost * value.num);
+        const parameters = { userDungeonTicket: { dungeonTicketId: ticketId }, gamelibConsume: { acquireAmount: amount } };
+        response = { code: 0, ...parameters, operations: [issueOperation(3000, parameters)] };
       } else if (action === 'battle_rush/reward') {
         const stage = REWARD_CATALOG.battle_rush[value.stageId];
-        requireValue(stage && stage[0] === value.courseId && value.missionIds.every(id => stage[2].some(mission => mission[0] === id)),
+        const stages = table('UserBattleRushStage') ?? [], courses = table('UserBattleRushCourse') ?? [];
+        const claim = `battle_rush:${value.stageId}`;
+        requireValue(stage && stage[0] === value.courseId && stages.some(row => row.battleRushStageId === value.stageId) &&
+          courses.some(row => row.battleRushCourseId === value.courseId) && !state.claims[claim] &&
+          value.missionIds.every(id => stage[2].some(mission => mission[0] === id)),
           'Battle Rush reward unavailable');
+        const GiveItems = [{ itemId: stage[1][1], amount: stage[1][2], missionId: 0, stageId: value.stageId },
+          ...value.missionIds.map(id => {
+            const mission = stage[2].find(row => row[0] === id);
+            return { itemId: mission[2], amount: mission[3], missionId: id, stageId: value.stageId };
+          })];
+        state.claims[claim] = true;
+        state.billing.free += GiveItems.reduce((sum, item) =>
+          sum + (item.itemId === REWARD_CATALOG.currency_gem_id ? item.amount : 0), 0);
+        response = { code: 0, operations: [issueOperation(18000, { GiveItems })] };
       } else if (action === 'star_library/level_reward') {
-        requireValue(value.levelIds.every(id => REWARD_CATALOG.star_library.levels[id]), 'Star Library level unavailable');
+        const rows = table('UserStarLibraryLevel') ?? [], gifts = table('UserGift') ?? [];
+        requireValue(value.levelIds.every(id => REWARD_CATALOG.star_library.levels[id] &&
+          rows.some(row => row.starLibraryLevelId === id && row.state === 1) &&
+          !gifts.some(gift => gift.senderType === 2 && gift.senderId === id)) &&
+          !pendingOperations().some(operation => operation.type === 22000 &&
+            operation.parameters.levelIds.some(id => value.levelIds.includes(id))), 'Star Library level unavailable');
+        const UserGift = value.levelIds.map(id => createStarGift(REWARD_CATALOG.star_library.levels[id][0], id));
+        response = { code: 0, operations: [issueOperation(22000, { UserGift, levelIds: value.levelIds })] };
       } else if (action === 'star_library/mission_reward') {
-        requireValue(value.missionIds.every(id => REWARD_CATALOG.star_library.missions[id]?.[0].includes(value.bookId)),
+        const rows = table('UserStarLibraryMissionStatus') ?? [], gifts = table('UserGift') ?? [];
+        requireValue(value.missionIds.every(id => REWARD_CATALOG.star_library.missions[id]?.[0].includes(value.bookId) &&
+          rows.some(row => row.missionId === id && row.bookId === value.bookId && [3,4].includes(row.state)) &&
+          !gifts.some(gift => gift.senderType === 2 && gift.senderId === id)) &&
+          !pendingOperations().some(operation => operation.type === 21000 &&
+            operation.parameters.missionIds.some(id => value.missionIds.includes(id))),
           'Star Library mission unavailable');
+        const UserGift = value.missionIds.map(id => createStarGift(REWARD_CATALOG.star_library.missions[id][1], id));
+        response = { code: 0, operations: [issueOperation(21000, { UserGift, missionIds: value.missionIds })] };
       } else if (action === 'star_library/score_attack_reward') {
-        requireValue(value.scoreAttackRewardIds.every(id => REWARD_CATALOG.star_library.scores[id]),
+        const rows = table('UserStarLibraryScoreAttackReward') ?? [], gifts = table('UserGift') ?? [];
+        requireValue(value.scoreAttackRewardIds.every(id => REWARD_CATALOG.star_library.scores[id] &&
+          rows.some(row => row.starLibraryScoreAttackRewardId === id && row.state === 1) &&
+          !gifts.some(gift => gift.senderType === 2 && gift.senderId === id)) &&
+          !pendingOperations().some(operation => operation.type === 23000 &&
+            operation.parameters.scoreAttackRewardIds.some(id => value.scoreAttackRewardIds.includes(id))),
           'Star Library score reward unavailable');
+        const UserGift = value.scoreAttackRewardIds.map(id => createStarGift(REWARD_CATALOG.star_library.scores[id][0], id));
+        response = { code: 0, operations: [issueOperation(23000, { UserGift, scoreAttackRewardIds: value.scoreAttackRewardIds })] };
       } else if (action === 'pack_product/acquire') {
         requireValue(REWARD_CATALOG.pack_products[value.packProductId], 'Pack product unavailable');
       } else if (action === 'pc_costume/acquire') {

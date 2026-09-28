@@ -21,7 +21,7 @@
       "request_field_references": [],
       "requirement": "required_runtime",
       "semantic_status": "implemented_non_stub",
-      "response_contract": "action callback reads no JSON fields; billing refresh is invoked at 0x39673a8",
+      "response_contract": "operation type 4000 has an empty handler; billing refresh is invoked at 0x39673a8",
       "state_contract": "atomically debit exact master consume cost; replay must not debit twice"
     },
     {
@@ -68,10 +68,10 @@
         "0x2312484",
         "0x231254c"
       ],
-      "requirement": "required_gameplay",
-      "semantic_status": "untraced_rejected",
-      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x2313c44 reads no action-specific JSON fields",
-      "state_contract": "UNTRACED: exact UserBattleRush claim rows and reward delivery remain to be recovered"
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "operation type 18000 consumes GiveItems[].itemId, amount, missionId and stageId",
+      "state_contract": "issue exact master GiveItems once per stage; client operation mutates Battle Rush rows and the following push persists them"
     },
     {
       "action": "card_key/subscription/recovery",
@@ -176,8 +176,8 @@
       ],
       "requirement": "required_runtime",
       "semantic_status": "implemented_non_stub",
-      "response_contract": "callback 0x3967c40 reads userDungeonTicket.dungeonTicketId and gamelibConsume.acquireAmount",
-      "state_contract": "atomically debit exact consume cost and increase the selected UserDungeonTicket amount"
+      "response_contract": "operation type 3000 reads userDungeonTicket.dungeonTicketId and gamelibConsume.acquireAmount",
+      "state_contract": "atomically debit exact consume cost, issue type 3000 and persist the client UserDungeonTicket delta on acknowledgement"
     },
     {
       "action": "friends_invitation/common/confirm",
@@ -275,10 +275,10 @@
         "0x373e374",
         "0x373e3b4"
       ],
-      "requirement": "required_gameplay",
-      "semantic_status": "untraced_rejected",
-      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x3744444 reads no action-specific JSON fields",
-      "state_contract": "UNTRACED: atomically mark each UserGift claimed and materialize every typed content row exactly once"
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "operation type 2000 consumes exact UserGift rows and their typed contents",
+      "state_contract": "issue each pending exact UserGift once; type 2000 applies typed contents and the acknowledged push persists state=1"
     },
     {
       "action": "incentive/adcolony/issue",
@@ -412,8 +412,8 @@
       ],
       "requirement": "required_runtime",
       "semantic_status": "implemented_non_stub",
-      "response_contract": "callback reads userPC[].stock.id",
-      "state_contract": "atomically debit banner cost or ticket and persist draw progress; replay must not draw twice"
+      "response_contract": "operation type 1000 reads lotteryId, lotteryTicketId, limitedLotteryTickets and userPC[].stock.id",
+      "state_contract": "atomically debit gem banner cost and issue type 1000; ticket-funded draws remain rejected until their ticket row is exact"
     },
     {
       "action": "matching_user/game_user_id",
@@ -530,10 +530,10 @@
       "request_field_references": [
         "0x37af5b4"
       ],
-      "requirement": "required_gameplay",
-      "semantic_status": "partial_gem_only_rejected_otherwise",
-      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; callback 0x37b60c4 reads no action-specific fields and refreshes billing",
-      "state_contract": "PARTIAL: state 4 to 5 and exact gem-only reward are atomic; non-gem rewards are rejected"
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "operation type 5000 reads quest.id and original questReward[].id, then refreshes billing",
+      "state_contract": "issue exact original quest reward IDs; type 5000 applies every reward and the acknowledged push persists state 4 to 5"
     },
     {
       "action": "serial_code/consume",
@@ -603,10 +603,10 @@
       "request_field_references": [
         "0x38f22e4"
       ],
-      "requirement": "required_gameplay",
-      "semantic_status": "untraced_rejected",
-      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; wrapper 0x38f3290 reads no action-specific JSON fields",
-      "state_contract": "UNTRACED: exact UserStarLibraryLevel claim state and UserGift creation remain to be recovered"
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "operation type 22000 consumes UserGift and levelIds",
+      "state_contract": "type 22000 creates exact original UserGift rows; acknowledged client deltas preserve level state flow"
     },
     {
       "action": "star_library/mission_reward",
@@ -630,10 +630,10 @@
         "0x36f93d8",
         "0x36f9420"
       ],
-      "requirement": "required_gameplay",
-      "semantic_status": "untraced_rejected",
-      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; callback 0x2c4973c reads stored UserGift.senderId, not response JSON",
-      "state_contract": "UNTRACED: exact mission claim state and UserGift creation remain to be recovered"
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "operation type 21000 consumes UserGift and missionIds",
+      "state_contract": "type 21000 creates exact original UserGift rows; acknowledged client deltas preserve mission state flow"
     },
     {
       "action": "star_library/score_attack_reward",
@@ -655,10 +655,10 @@
       "request_field_references": [
         "0x331824c"
       ],
-      "requirement": "required_gameplay",
-      "semantic_status": "untraced_rejected",
-      "response_contract": "common listener 0x30e1988 stores response data/dataTokens through UserData::storeJson 0x30cb6f8; callback 0x2c4aa5c reads stored UserGift.senderId, not response JSON",
-      "state_contract": "UNTRACED: exact score claim state and UserGift creation remain to be recovered"
+      "requirement": "required_runtime",
+      "semantic_status": "implemented_non_stub",
+      "response_contract": "operation type 23000 consumes UserGift and scoreAttackRewardIds",
+      "state_contract": "type 23000 creates exact original UserGift rows; acknowledged client deltas preserve score state flow"
     },
     {
       "action": "subscription_ticket/detail",
@@ -839,8 +839,8 @@
       "request_field_references": [],
       "requirement": "required_runtime",
       "semantic_status": "implemented_non_stub",
-      "response_contract": "captured JSON operation/done acknowledgement shape",
-      "state_contract": "advance ordered queue state only after durable reply persistence"
+      "response_contract": "returns durable pending operations with id/type/parameters/token/signature",
+      "state_contract": "redeliver durable pending operations after restart until the client acknowledges them"
     },
     {
       "action": "user_data/delete",
@@ -926,7 +926,7 @@
       "requirement": "required_runtime",
       "semantic_status": "implemented_non_stub",
       "response_contract": "JSON operation/done acknowledgement plus refreshed tokens consumed by 0x30e1988",
-      "state_contract": "validate and atomically commit authenticated table deltas/tokens; exact replay returns the stored reply"
+      "state_contract": "atomically commit authenticated table deltas and {id,verifier} acknowledgements; return dones and exact replay"
     }
   ]
 }

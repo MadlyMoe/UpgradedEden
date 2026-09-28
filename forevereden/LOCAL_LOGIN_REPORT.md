@@ -44,15 +44,24 @@ after restart. Token-consuming saves receive fresh nonzero item-token and random
 seed signatures in the original response shape. Live saves now cover roaming,
 quest completion, area transition, cat-diary initialization and UI closure.
 The listener recognizes 38 exact-build action names, but no longer treats route
-recognition as protocol support. Thirteen have non-stub semantics; nine necessary
-gameplay reward routes and all excluded service routes fail closed instead of
-receiving `code: 0`. Dreams draws spend local Chronos Stones and return actual
+recognition as protocol support. Eighteen have non-stub semantics; four necessary
+gameplay routes and all excluded service routes fail closed instead of receiving
+`code: 0`. Operation-backed routes persist the exact client envelope and require
+the matching `{id, verifier}` save acknowledgement before returning `dones`.
+Dreams draws spend local Chronos Stones and return actual
 3.17.0 `lotteryPCEx` keys in the recovered `userPC[].stock.id` shape. The
 runtime carries all 1,334 referenced pools and all 1,682 drawable banner layouts,
 including 9+1 and 8+2 guarantees. It preserves each pool's rarity weights and
 chooses a profile-owned character inside that rarity so the installed assets can
-render the result. Battle, reward,
-migration and deletion effects remain explicitly unimplemented.
+render the result. Cat Diary reward, roguelike dungeon completion, pack purchase,
+costume purchase, publisher migration and deletion remain explicitly unimplemented.
+
+The 2026-09-27 quest-clear reconnect was traced on the retained device state to
+save sequence 1267, trigger `StarLibraryUpdateState`: it contained no operations,
+but its `UserStarLibraryMissionStatus` rows had no registered composite identity.
+After adding `userId` plus `missionId`, the same queued request committed, confirm
+and profile pull completed, and the client loaded the dungeon again without a
+profile reset.
 
 Original-rule checks now execute **26 isolated ARM64 cases**: ten environment
 timer/index cases, three roaming selections, six roaming reset guards and seven

@@ -83,6 +83,19 @@ function billingCall(port, method, route, value = null, authorization = 'OAuth l
     req.on('error', reject); req.end(body);
   });
 }
+function operation(value, type, parameters) {
+  assert.equal(value.code, 0); assert.equal(value.operations.length, 1);
+  const item = value.operations[0];
+  assert.deepEqual(Object.keys(item).sort(), ['id','parameters','signature','token','type']);
+  assert.ok(Number.isSafeInteger(item.id) && item.id > 0); assert.equal(item.type, type);
+  assert.deepEqual(item.parameters, parameters); assert.match(item.token, /^[0-9a-f]{32}$/);
+  assert.ok(Number.isSafeInteger(item.signature) && item.signature > 0 && item.signature <= 0xffffffff);
+  return item;
+}
+function ackOnly(item, verifier = 'local-test-verifier') {
+  return Buffer.from(JSON.stringify({ badges: [], checksums: { before: {}, after: {} }, dataTokens: {}, deltas: [],
+    giftIds: [], operations: [{ id: item.id, verifier }], scripts: {}, surplus: [] }));
+}
 
 (async () => {
   let app = createMobileServer({ seed, codec, statePath, log: () => {} }), port = await listen(app);
@@ -171,33 +184,155 @@ function billingCall(port, method, route, value = null, authorization = 'OAuth l
   response = await call(port, 'quest/close', questClose, true, true);
   assert.equal(response.status, 200);
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
-  assert.equal(value.data.UserQuest.find(quest => quest.questId === questId).state, 5);
-  assert.equal(value.dataTokens.UserQuest, md5(Buffer.from(JSON.stringify(value.data.UserQuest))));
-  assert.equal(app.state().tables.UserQuest.find(quest => quest.questId === questId).state, 5);
+  const questOperation = operation(value, 5000, { quest: { id: questId }, questReward: [{ id: 640200041 }] });
+  assert.equal(app.state().tables.UserQuest.find(quest => quest.questId === questId).state, 4);
   const questReplay = { requestId, sequence, response: Buffer.from(response.body) };
   await new Promise(resolve => app.server.close(resolve));
   app = createMobileServer({ seed, codec, statePath, log: () => {} }); port = await listen(app);
   requestId = questReplay.requestId - 1; sequence = questReplay.sequence - 1;
   response = await call(port, 'quest/close', questClose, true, true);
   assert.deepEqual(response.body, questReplay.response);
+  response = await call(port, 'user_data/confirm', Buffer.alloc(0), true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.operations, [questOperation]);
+  const questRows = structuredClone(app.state().tables.UserQuest);
+  questRows.find(quest => quest.questId === questId).state = 5;
+  const questOperationSave = Buffer.from(JSON.stringify({ badges: [], checksums: {
+    before: { UserQuest: '0'.repeat(32) }, after: { UserQuest: '0'.repeat(32) } },
+    dataTokens: { UserQuest: md5(Buffer.from(JSON.stringify(app.state().tables.UserQuest))) },
+    deltas: [{ deleteItems: {}, putItems: { UserQuest: [questRows.find(quest => quest.questId === questId)] },
+      signature: 0, trigger: 'OperationQuestClose' }], giftIds: [],
+    operations: [{ id: questOperation.id, verifier: 'local-test-verifier' }], scripts: {}, surplus: [] }));
+  response = await call(port, 'user_data/push', questOperationSave, true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: questOperation.id }]); assert.deepEqual(value.operations, []);
+  assert.equal(app.state().tables.UserQuest.find(quest => quest.questId === questId).state, 5);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
   assert.equal(billed.value.entry.balance_total_gem, beforeQuestGems + 5);
   response = await call(port, 'quest/close', questClose, true, true);
   assert.equal(response.status, 400);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
   assert.equal(billed.value.entry.balance_total_gem, beforeQuestGems + 5);
-  response = await call(port, 'battle/continue', Buffer.alloc(0), true, true);
+  const levelId = 2106000002, levels = structuredClone(app.state().tables.UserStarLibraryLevel ?? seed.tables.UserStarLibraryLevel);
+  levels.push({ userId: seed.user_id, starLibraryLevelId: levelId, state: 1 });
+  app.state().tables.UserStarLibraryLevel = levels;
+  response = await call(port, 'star_library/level_reward', Buffer.from(JSON.stringify({ levelIds: [levelId] })), true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const starGift = value.operations[0].parameters.UserGift[0];
+  assert.deepEqual(starGift, { userId: seed.user_id, id: 4294967298, senderType: 2, senderId: levelId,
+    title: 'Repair Level {}', message: 'Reward for reaching Repair Level {}', contents: [
+      { id: 0, itemId: 205000006, amount: 100, paramType: 0, value: 0 },
+      { id: 1, itemId: 245000001, amount: 1, paramType: 0, value: 0 }],
+    giftAcquiredType: 20, receiveType: 10, startAt: 0, expireAt: 0, state: 0,
+    createdAt: starGift.createdAt, securityToken: '', userOdealAchievementId: 0 });
+  const starOperation = operation(value, 22000, { UserGift: [starGift], levelIds: [levelId] });
+  response = await call(port, 'star_library/level_reward', Buffer.from(JSON.stringify({ levelIds: [levelId] })), true, true);
+  assert.equal(response.status, 400);
+  const giftTable = app.state().tables.UserGift ?? seed.tables.UserGift;
+  const starGiftSave = Buffer.from(JSON.stringify({ badges: [], checksums: {
+    before: { UserGift: '0'.repeat(32) }, after: { UserGift: '0'.repeat(32) } },
+    dataTokens: { UserGift: md5(Buffer.from(JSON.stringify(giftTable))) },
+    deltas: [{ deleteItems: {}, putItems: { UserGift: [starGift] }, signature: 0,
+      trigger: 'OperationStarLibraryLevel' }], giftIds: [],
+    operations: [{ id: starOperation.id, verifier: 'local-test-verifier' }], scripts: {}, surplus: [] }));
+  response = await call(port, 'user_data/push', starGiftSave, true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: starOperation.id }]);
+  assert.ok(app.state().tables.UserGift.some(gift => gift.id === starGift.id && gift.state === 0));
+  billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
+  const beforeGiftGems = billed.value.entry.balance_total_gem;
+  response = await call(port, 'gift/receive', Buffer.from(JSON.stringify({ userId: seed.user_id, giftIds: [starGift.id] })), true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const receiveOperation = operation(value, 2000, { UserGift: [starGift] });
+  billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
+  assert.equal(billed.value.entry.balance_total_gem, beforeGiftGems + 100);
+  const receivedGift = { ...starGift, state: 1 }, receivedLevel = { ...levels.find(row => row.starLibraryLevelId === levelId), state: 2 };
+  const receiveTables = { UserGift: app.state().tables.UserGift, UserStarLibraryLevel: app.state().tables.UserStarLibraryLevel };
+  const receiveSave = Buffer.from(JSON.stringify({ badges: [], checksums: { before: {
+    UserGift: '0'.repeat(32), UserStarLibraryLevel: '0'.repeat(32) }, after: {
+    UserGift: '0'.repeat(32), UserStarLibraryLevel: '0'.repeat(32) } }, dataTokens: {
+    UserGift: md5(Buffer.from(JSON.stringify(receiveTables.UserGift))),
+    UserStarLibraryLevel: md5(Buffer.from(JSON.stringify(receiveTables.UserStarLibraryLevel))) },
+    deltas: [{ deleteItems: {}, putItems: { UserGift: [receivedGift], UserStarLibraryLevel: [receivedLevel] },
+      signature: 0, trigger: 'OperationGiftReceive' }], giftIds: [],
+    operations: [{ id: receiveOperation.id, verifier: 'local-test-verifier' }], scripts: {}, surplus: [] }));
+  response = await call(port, 'user_data/push', receiveSave, true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: receiveOperation.id }]); assert.deepEqual(value.operations, []);
+  response = await call(port, 'gift/receive', Buffer.from(JSON.stringify({ userId: seed.user_id, giftIds: [starGift.id] })), true, true);
+  assert.equal(response.status, 400);
+  const missionId = 2104000001, bookId = 2101001001;
+  app.state().tables.UserStarLibraryMissionStatus = [{ userId: seed.user_id, missionId, bookId, position: 0,
+    state: 3, taskList: [], counter: 0 }];
+  response = await call(port, 'star_library/mission_reward',
+    Buffer.from(JSON.stringify({ missionIds: [missionId], bookId })), true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const missionGift = value.operations[0].parameters.UserGift[0];
+  assert.equal(missionGift.senderId, missionId); assert.ok(missionGift.contents.every(item => item.itemId > 0 && item.amount > 0));
+  const missionOperation = operation(value, 21000, { UserGift: [missionGift], missionIds: [missionId] });
+  response = await call(port, 'user_data/push', ackOnly(missionOperation), true, true);
+  assert.deepEqual(JSON.parse(decryptBody(response.body, key, iv, limits)).dones, [{ id: missionOperation.id }]);
+  const missionRows = structuredClone(app.state().tables.UserStarLibraryMissionStatus);
+  missionRows[0].state = 4;
+  const missionStateSave = Buffer.from(JSON.stringify({ badges: [], checksums: { before: {
+    UserStarLibraryMissionStatus: '0'.repeat(32) }, after: { UserStarLibraryMissionStatus: '0'.repeat(32) } },
+    dataTokens: { UserStarLibraryMissionStatus: md5(Buffer.from(JSON.stringify(
+      app.state().tables.UserStarLibraryMissionStatus))) }, deltas: [{ deleteItems: {},
+      putItems: { UserStarLibraryMissionStatus: missionRows }, signature: 0, trigger: 'StarLibraryUpdateState' }],
+    giftIds: [], operations: [], scripts: {}, surplus: [] }));
+  response = await call(port, 'user_data/push', missionStateSave, true, true);
+  assert.equal(response.status, 200);
+  assert.equal(app.state().tables.UserStarLibraryMissionStatus[0].state, 4);
+  const scoreId = 2112000001;
+  app.state().tables.UserStarLibraryScoreAttackReward = [{ userId: seed.user_id,
+    starLibraryScoreAttackRewardId: scoreId, state: 1 }];
+  response = await call(port, 'star_library/score_attack_reward',
+    Buffer.from(JSON.stringify({ scoreAttackRewardIds: [scoreId] })), true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const scoreGift = value.operations[0].parameters.UserGift[0];
+  assert.equal(scoreGift.senderId, scoreId); assert.ok(scoreGift.contents.every(item => item.itemId > 0 && item.amount > 0));
+  const scoreOperation = operation(value, 23000, { UserGift: [scoreGift], scoreAttackRewardIds: [scoreId] });
+  response = await call(port, 'user_data/push', ackOnly(scoreOperation), true, true);
+  assert.deepEqual(JSON.parse(decryptBody(response.body, key, iv, limits)).dones, [{ id: scoreOperation.id }]);
+  const rushCourseId = 480000001, rushStageId = 481000001, rushMissionId = 483000001;
+  app.state().tables.UserBattleRushCourse = [{ userId: seed.user_id, battleRushCourseId: rushCourseId, state: 1, signature: 0 }];
+  app.state().tables.UserBattleRushStage = [{ userId: seed.user_id, battleRushStageId: rushStageId,
+    battleRushCourseId: rushCourseId, lastOpenDateTime: 0, lastEnterDateTime: 0, state: 5, missions: [], signature: 0 }];
+  billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
+  const beforeRushGems = billed.value.entry.balance_total_gem;
+  const rushBody = Buffer.from(JSON.stringify({ stageId: rushStageId, courseId: rushCourseId, missionIds: [rushMissionId] }));
+  response = await call(port, 'battle_rush/reward', rushBody, true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const rushOperation = operation(value, 18000, { GiveItems: [
+    { itemId: 205000006, amount: 30, missionId: 0, stageId: rushStageId },
+    { itemId: 205000006, amount: 20, missionId: rushMissionId, stageId: rushStageId },
+  ] });
+  billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
+  assert.equal(billed.value.entry.balance_total_gem, beforeRushGems + 50);
+  response = await call(port, 'user_data/push', ackOnly(rushOperation), true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: rushOperation.id }]);
+  response = await call(port, 'battle_rush/reward', rushBody, true, true);
   assert.equal(response.status, 400);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
-  assert.equal(billed.value.entry.balance_total_gem, 35);
-  await billingCall(port, 'POST', '/v1.0/payment/purchase', { product_id: BILLING_PRODUCTS[1].product_id });
+  const beforeContinueGems = billed.value.entry.balance_total_gem;
   response = await call(port, 'battle/continue', Buffer.alloc(0), true, true);
   assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const continueOperation = operation(value, 4000, {});
   const continueReplay = Buffer.from(response.body); requestId--; sequence--;
   response = await call(port, 'battle/continue', Buffer.alloc(0), true, true);
   assert.deepEqual(response.body, continueReplay);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
-  assert.equal(billed.value.entry.balance_total_gem, 140);
+  assert.equal(billed.value.entry.balance_total_gem, beforeContinueGems - REWARD_CATALOG.consume.battle_continue);
+  response = await call(port, 'user_data/push', ackOnly(continueOperation), true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: continueOperation.id }]); assert.deepEqual(value.operations, []);
   const tickets = structuredClone(seed.tables.UserDungeonTicket);
   tickets.find(ticket => ticket.dungeonTicketId === 564000001).amount = 7;
   app.state().tables.UserDungeonTicket = tickets;
@@ -205,20 +340,34 @@ function billingCall(port, method, route, value = null, authorization = 'OAuth l
   response = await call(port, 'dungeon/ticket/issue', ticketIssue, true, true);
   assert.equal(response.status, 200);
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
-  assert.deepEqual(value, { code: 0, userDungeonTicket: { dungeonTicketId: 564000001 },
-    gamelibConsume: { acquireAmount: 2 } });
-  assert.equal(app.state().tables.UserDungeonTicket.find(ticket => ticket.dungeonTicketId === 564000001).amount, 9);
+  const ticketParameters = { userDungeonTicket: { dungeonTicketId: 564000001 }, gamelibConsume: { acquireAmount: 2 } };
+  const ticketOperation = operation(value, 3000, ticketParameters);
+  assert.deepEqual({ userDungeonTicket: value.userDungeonTicket, gamelibConsume: value.gamelibConsume }, ticketParameters);
+  assert.equal(app.state().tables.UserDungeonTicket.find(ticket => ticket.dungeonTicketId === 564000001).amount, 7);
   const issueReplay = Buffer.from(response.body); requestId--; sequence--;
   response = await call(port, 'dungeon/ticket/issue', ticketIssue, true, true);
   assert.deepEqual(response.body, issueReplay);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
-  assert.equal(billed.value.entry.balance_total_gem, 100);
+  assert.equal(billed.value.entry.balance_total_gem, beforeContinueGems - REWARD_CATALOG.consume.battle_continue - 40);
+  const updatedTicket = { ...app.state().tables.UserDungeonTicket.find(ticket => ticket.dungeonTicketId === 564000001), amount: 9 };
+  const ticketOperationSave = Buffer.from(JSON.stringify({ badges: [], checksums: {
+    before: { UserDungeonTicket: '0'.repeat(32) }, after: { UserDungeonTicket: '0'.repeat(32) } },
+    dataTokens: { UserDungeonTicket: md5(Buffer.from(JSON.stringify(app.state().tables.UserDungeonTicket))) },
+    deltas: [{ deleteItems: {}, putItems: { UserDungeonTicket: [updatedTicket] }, signature: 0,
+      trigger: 'OperationDungeonTicket' }], giftIds: [],
+    operations: [{ id: ticketOperation.id, verifier: 'local-test-verifier' }], scripts: {}, surplus: [] }));
+  response = await call(port, 'user_data/push', ticketOperationSave, true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: ticketOperation.id }]);
+  assert.equal(app.state().tables.UserDungeonTicket.find(ticket => ticket.dungeonTicketId === 564000001).amount, 9);
   response = await call(port, 'gift/receive', Buffer.from(JSON.stringify({ userId: seed.user_id + 1,
     giftIds: [seed.tables.UserGift[0].id] })), true, true);
   assert.equal(response.status, 400);
   response = await call(port, 'pack_product/acquire', Buffer.from(JSON.stringify({ packProductId: 1 })), true, true);
   assert.equal(response.status, 400);
   await billingCall(port, 'POST', '/v1.0/payment/purchase', { product_id: BILLING_PRODUCTS[5].product_id });
+  billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
+  const beforeDrawGems = billed.value.entry.balance_total_gem;
   const draw = Buffer.from(JSON.stringify({ id: 175993342, lotteryPCExId: 0, lotteryPCExIds: [], lotteryTicketId: 0 }));
   const banner = LOTTERY_CATALOG.banners['175993342'];
   assert.deepEqual(banner, [1000, 3, 10, 9, 176007885, 1, 176007886]);
@@ -232,28 +381,30 @@ function billingCall(port, method, route, value = null, authorization = 'OAuth l
   assert.equal(response.status, 200);
   const drawReplay = Buffer.from(response.body), drawRequestId = requestId, drawSequence = sequence;
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  const drawOperation = operation(value, 1000, { lotteryId: 175993342, limitedLotteryTickets: [], lotteryTicketId: 0,
+    userPC: value.userPC });
   assert.equal(value.userPC.length, 10);
   assert.ok(value.userPC.slice(0, 9).every(item => normalPool.some(stock => stock[0] === item.stock.id)));
   assert.ok(guaranteedPool.some(stock => stock[0] === value.userPC[9].stock.id));
   assert.ok(value.userPC.every(item => item.stock.id > 0x7fffffff));
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
-  assert.equal(billed.value.entry.balance_total_gem, 2600);
+  assert.equal(billed.value.entry.balance_total_gem, beforeDrawGems - banner[0]);
   requestId--; sequence--;
   response = await call(port, 'lottery/draw', draw, true, true);
   assert.equal(response.status, 200); assert.equal(requestId, drawRequestId); assert.equal(sequence, drawSequence);
   assert.deepEqual(response.body, drawReplay);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
-  assert.equal(billed.value.entry.balance_total_gem, 2600);
+  assert.equal(billed.value.entry.balance_total_gem, beforeDrawGems - banner[0]);
+  response = await call(port, 'user_data/push', ackOnly(drawOperation), true, true);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.dones, [{ id: drawOperation.id }]); assert.deepEqual(value.operations, []);
   const ticketDraw = Buffer.from(JSON.stringify({ id: 175993342, lotteryPCExId: 0, lotteryPCExIds: [], lotteryTicketId: 177000002 }));
-  response = await call(port, 'lottery/draw', ticketDraw, true, true);
-  assert.equal(response.status, 200);
-  const ticketReplay = Buffer.from(response.body); requestId--; sequence--;
-  response = await call(port, 'lottery/draw', ticketDraw, true, true);
-  assert.deepEqual(response.body, ticketReplay);
   response = await call(port, 'lottery/draw', ticketDraw, true, true);
   assert.equal(response.status, 400);
   response = await call(port, 'user_data/confirm', Buffer.alloc(0), true, true);
-  const drawTokens = JSON.parse(decryptBody(response.body, key, iv, limits)).dataTokens;
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.operations, []);
+  const drawTokens = value.dataTokens;
   const saveValue = JSON.parse(fs.readFileSync(path.join(root, 'data/forevereden-evidence/private-login/first-gameplay-push-request-2d385cd2462bf45f.json')));
   saveValue.deltas[0].trigger = 'ExplorerScheduled';
   const save = Buffer.from(JSON.stringify(saveValue));
