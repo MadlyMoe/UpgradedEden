@@ -1,5 +1,5 @@
 {
-  "runtime_id": "76c6dacde6229322035cb961d842da507ca9c9d07d0fd62fd43b610ee6217418",
+  "runtime_id": "48d2e6fbc732f40ad33e346edd44ff3947bb8bea283e8034a5430aa8db6eeac3",
   "identity": {
     "project": "ForeverEden",
     "compatibility_version": 1,
@@ -19,15 +19,16 @@
     "server": {
       "tools/forevereden_server.cjs": "0a767f319e771540c1c3fe596f6ae2d4c18b9da63d88f3cf82293fc76919c574",
       "tools/forevereden_save.cjs": "e37746c634e875bb2ab064d0bbd9d3db78dc8093655eecb48ca20bc1856018b6",
-      "tools/forevereden_transport.cjs": "fc8600e460fad97f2ab0da05018b6afb8f2514d68c236291479fb343a4c0b5f5"
+      "tools/forevereden_transport.cjs": "bdccbbb1a71e43e634b8313328df18cc6f5f9d62788575768131df9118a17cbf"
     },
     "active_server": {
       "tools/forevereden_device_listener.cjs": "c0cff18744e2ee3302ea7a9cdf64010c86f2b2e70bf5b6c2e076a74871f57332",
-      "tools/forevereden_mobile_server.cjs": "16467e7538fd1ec5c73d39c4960f3f02a7e5348f6bec7a94faf86021687d82ec",
-      "tools/forevereden_transport.cjs": "fc8600e460fad97f2ab0da05018b6afb8f2514d68c236291479fb343a4c0b5f5",
+      "tools/forevereden_mobile_server.cjs": "5307ab5c68b34b8fd45bc780971bd9c1bcbb14989978d965fc73076ebf0daf26",
+      "tools/forevereden_transport.cjs": "bdccbbb1a71e43e634b8313328df18cc6f5f9d62788575768131df9118a17cbf",
       "tools/forevereden_lottery_3_17_0.bin": "9f40334a99bcb90d6b57ffe882960e514afedcf8dc82eff94f80c7f817807224",
-      "tools/forevereden_rewards_3_17_0.bin": "0a1eca9c4668ac8168287079b7c00795757e1611af387ff7b3d046f8a8d22e1f",
-      "data/forevereden-evidence/network-action-inventory.json": "755cb4024eb0f4425b7d5db8f700b4a3d16fb7fe68a8e4d3e05fc62f000da79b"
+      "tools/forevereden_rewards_3_17_0.bin": "70c485e09d7dd07d6e9243e1a82b13408ba826f361abd3e4af62767fcd2d1485",
+      "data/forevereden-evidence/network-action-inventory.json": "549befd648dbb5b0e3ee637cbe9a9840b322dd288549ad4ff0dc53b1c05e5b38",
+      "data/forevereden-evidence/required-packet-semantics.json": "cf23b759e61a615366ba4bebe52cc4b9db4c05c3204158d163a3cacc7e0f94f8"
     },
     "launcher_source": {
       "android/forevereden-launcher/app/build.gradle.kts": "a3a175fcd86ba1a9789832be6886cf8d7537f3726667d7910f6bc81aba572d28",
@@ -80,10 +81,15 @@
     ],
     "non_stub_routes": [
       "battle/continue",
+      "battle_rush/reward",
       "dungeon/ticket/issue",
+      "gift/receive",
       "lottery/draw",
       "matching_user/game_user_id",
       "quest/close",
+      "star_library/level_reward",
+      "star_library/mission_reward",
+      "star_library/score_attack_reward",
       "user/game_user_id_for_eu",
       "user/login",
       "user/migration/status",
@@ -94,15 +100,10 @@
       "user_data/push"
     ],
     "required_untraced_routes": [
-      "battle_rush/reward",
       "cat_diary/reward",
       "dungeon/complete",
-      "gift/receive",
       "pack_product/acquire",
-      "pc_costume/acquire",
-      "star_library/level_reward",
-      "star_library/mission_reward",
-      "star_library/score_attack_reward"
+      "pc_costume/acquire"
     ],
     "supported_routes": [
       "matching_user/game_user_id",
@@ -118,7 +119,8 @@
     "content_master_sha256": "18c811dabc2a3184c81155a54a234dce64ab23e2eebac4ae1cdfde2ee76386eb",
     "limitations": [
       "untraced routes fail closed with HTTP 503; route recognition is not protocol support",
-      "quest/close is implemented only for exact gem-only rewards and rejects every other reward shape",
+      "operation-backed rewards remain pending until user_data/push supplies the matching id and verifier",
+      "ticket-funded lottery is rejected until the exact ticket-row transition is proven",
       "excluded publisher services are not advertised locally"
     ],
     "resource_routes_source_runtime_id": "fed54047824caeab97b7c667e7d9e2d4dd34ddc6cfc589cfa39dbb48293811cd",

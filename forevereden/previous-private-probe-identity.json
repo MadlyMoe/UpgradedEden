@@ -1,6 +1,6 @@
 {
-  "runtime_id": "262332fac1696244acbc1922022e5e5ef5d58f4d7366fc54357222662bddf873",
-  "generation": "data\\forevereden-evidence\\private-probe\\262332fac1696244",
+  "runtime_id": "23fbbd7c0c146be00579bced85869b9970c50001c8e10313a5f9d451a445292b",
+  "generation": "data\\forevereden-evidence\\private-probe\\23fbbd7c0c146be0",
   "identity": {
     "project": "ForeverEden",
     "purpose": "local routing probe, not a gameplay server",
@@ -15,6 +15,15 @@
       "segment_file_offset": 76234752,
       "segment_virtual_address": 76791808,
       "segment_bytes": 16384
+    },
+    "collabo_availability_patch": {
+      "accessor_offset": 56287752,
+      "expiration_compare_offset": 56275484,
+      "accessor_before": "006040f981018052e2031faa6f22b117",
+      "expiration_compare_before": "606240f981018052e2031faa6a2eb197",
+      "end_at": 317321333999,
+      "end_at_utc": "12025-07-06T14:59:59Z",
+      "extension_years": 9999
     },
     "billing_catalog_patch": {
       "methods": [
@@ -32,7 +41,7 @@
     "apks": {
       "games.wfs.anothereden.apk": {
         "bytes": 73811476,
-        "sha256": "6aac7303ca194a47f4a498d2459dc4f7d453f04bdce2da0ff3f6474535f835a3",
+        "sha256": "87c0ce78b4858140e2d814c4b27060ed8b3f5af4e3e24566fe810faff8dcd7b0",
         "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
       },
       "AssetPack1.apk": {
@@ -42,7 +51,7 @@
       },
       "config.arm64_v8a.apk": {
         "bytes": 24253690,
-        "sha256": "12e97c6e6d9d6c2b70fa6f120b11cfa4318093cd587a1f63f4071553fc8f8eb7",
+        "sha256": "884c4c9f15db35e975eace2410310a57ff92783f5bb47bbd5dbec89a27074d79",
         "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
       },
       "config.en.apk": {
@@ -67,7 +76,7 @@
         "apk": "games.wfs.anothereden.apk",
         "member": "classes5.dex",
         "before_sha256": "b79958973f31bebe12b9d271f45c427c5eba1df7d8146ae1ebefd62b58c492d4",
-        "after_sha256": "107763f274b94c6f924fd0c479b9228c052d2dcaa6ca7764ba839b0ef563bd60"
+        "after_sha256": "ae441a90292337fad121aaf23affcb0f44916053f8793a2e9d13844562c04fe3"
       },
       {
         "apk": "games.wfs.anothereden.apk",
@@ -91,7 +100,7 @@
         "apk": "config.arm64_v8a.apk",
         "member": "lib/arm64-v8a/libapp.so",
         "before_sha256": "2789c0f6bb570d168a14d836a36a3e3fc372c60c63a8e79730dc9c67bc78a1dc",
-        "after_sha256": "ee8c59b7de5d65b8b9a44d872bc229019d9d1760c7a43c5a335eec9ad4eaa0a5"
+        "after_sha256": "57a8300a192a57055f69764bf5f4b72a62d8be03efc88786a98666ddb3cfc225"
       },
       {
         "apk": "config.en.apk",
@@ -118,7 +127,7 @@
         "after_sha256": "4831d3b9576ff073aed26acdea474321cb3af2e878a7e82df8f8a1aaa6057c97"
       }
     ],
-    "tool_sha256": "fbaacb5f76ed033b80ac8a330af3a2f903d805190bd880c21eb2db993f2c8218",
+    "tool_sha256": "394bb1ef9ff8960743efe29f02d3fca62308afb1f02a02c1b0bbc027f73358d5",
     "removed_signing_metadata": [
       "original JAR signatures",
       "original APK signing block",
@@ -126,7 +135,8 @@
     ],
     "server_behavior": "HTTP 503 only; game request schemas UNKNOWN",
     "active_mods": [
-      "private-billing-catalog"
+      "private-billing-catalog",
+      "9999-year-collaboration-events"
     ],
     "original_account_data_copied": false
   }

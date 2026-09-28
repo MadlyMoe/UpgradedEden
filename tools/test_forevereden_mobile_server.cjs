@@ -6,6 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { encryptBody, decryptBody, decodeMsgpack } = require('./forevereden_transport.cjs');
+const { SAVE_KEYS } = require('./forevereden_save.cjs');
 const { ACTIONS, SEMANTIC_ROUTES, BILLING_PRODUCTS, LOTTERY_CATALOG, weightedStock,
   REWARD_CATALOG, createMobileServer } = require('./forevereden_mobile_server.cjs');
 
@@ -23,6 +24,13 @@ assert.deepEqual([...ACTIONS].filter(action => !SEMANTIC_ROUTES.has(action) &&
   inventory.actions.find(row => row.action === action)?.requirement === 'required_gameplay').sort(),
 identity.required_untraced_routes.sort());
 const seed = JSON.parse(fs.readFileSync(path.join(root, identity.seed.path)));
+const collectionTables = Object.entries(seed.tables).filter(([, value]) => Array.isArray(value)).map(([name]) => name).sort();
+assert.deepEqual(Object.keys(SAVE_KEYS).sort(), collectionTables);
+const originalClient = fs.readFileSync(path.join(root, 'data/apk-investigation/lib/arm64-v8a/libapp.so')).toString('latin1');
+const clientKeys = new Map([...originalClient.matchAll(/_([A-Za-z0-9]+)Map\.find\(value->([A-Za-z0-9]+)\(\)\) == _[A-Za-z0-9]+Map\.end\(\)/g)]
+  .map(match => [match[1].toLowerCase(), match[2]]));
+for (const [name, keys] of Object.entries(SAVE_KEYS))
+  assert.equal(keys[1], clientKeys.get(name.slice(4).toLowerCase()), name);
 for (const [group, rarity] of [[176007885, 3], [176007885, 4], [176007886, 5]]) {
   const stock = LOTTERY_CATALOG.pools[group].find(item => item[2] === rarity && item[3] > 0);
   if (!seed.tables.UserPC.some(pc => pc.pcId === stock[1]))
@@ -483,7 +491,7 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   assert.deepEqual(value.putItems, Object.fromEntries(eventTables.sort().map(name => [name,
     eventSave.deltas[0].putItems[name].length])));
   const eventInfoToken = value.dataTokens.UserInfo;
-  const freezeSave = structuredClone(eventSave), freezeRow = { userId: seed.user_id, frozenAt: 1 };
+  const freezeSave = structuredClone(eventSave), freezeRow = { userId: seed.user_id, freezeId: 1, frozenAt: 1 };
   freezeSave.deltas[0].trigger = 'Freezed'; freezeSave.deltas[0].putItems = { UserFreeze: [freezeRow] };
   freezeSave.dataTokens = { UserFreeze: md5(Buffer.from(JSON.stringify(seed.tables.UserFreeze))) };
   freezeSave.checksums = { before: { UserFreeze: '0'.repeat(32) }, after: { UserFreeze: '0'.repeat(32) } };
@@ -549,6 +557,25 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   assert.equal(value.data.UserItemToken.length, 1); assert.ok(value.data.UserItemToken[0].signature);
   response = await call(port, 'user_data/confirm', Buffer.alloc(0), true, true);
   const currentTokens = JSON.parse(decryptBody(response.body, key, iv, limits)).dataTokens;
+  const difficultySave = structuredClone(blockingSave), difficultyRow = {
+    userId: seed.user_id, contentId: 920000009, currentDifficulty: 0, difficultyStatus: 1 };
+  difficultySave.deltas[0].trigger = 'UiClosed'; difficultySave.deltas[0].deleteItems = {};
+  difficultySave.deltas[0].putItems = { UserBattleDifficultyGroup: [difficultyRow] };
+  difficultySave.dataTokens = { UserBattleDifficultyGroup: currentTokens.UserBattleDifficultyGroup };
+  difficultySave.checksums = { before: { UserBattleDifficultyGroup: '0'.repeat(32) },
+    after: { UserBattleDifficultyGroup: '0'.repeat(32) } };
+  response = await call(port, 'user_data/push', Buffer.from(JSON.stringify(difficultySave)), true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
+  assert.deepEqual(value.putItems, { UserBattleDifficultyGroup: 1 });
+  difficultySave.dataTokens.UserBattleDifficultyGroup = value.dataTokens.UserBattleDifficultyGroup;
+  difficultySave.deltas[0].putItems.UserBattleDifficultyGroup[0].currentDifficulty = 1;
+  response = await call(port, 'user_data/push', Buffer.from(JSON.stringify(difficultySave)), true, true);
+  assert.equal(response.status, 200);
+  response = await call(port, 'user_data/pull', Buffer.from(JSON.stringify(
+    { tables: ['UserBattleDifficultyGroup'], consistentRead: false, recovery: false })), true, true);
+  const difficulties = decodeMsgpack(decryptBody(response.body, key, iv, limits)).data.UserBattleDifficultyGroup;
+  assert.deepEqual(difficulties, [{ ...difficultyRow, currentDifficulty: 1 }]);
   const battleSave = structuredClone(blockingSave), partyRow = structuredClone(seed.tables.UserParty[0]);
   delete partyRow._id; partyRow.partyName = 'Battle save identity check';
   battleSave.deltas[0].trigger = 'BattleEnded'; battleSave.deltas[0].deleteItems = {};

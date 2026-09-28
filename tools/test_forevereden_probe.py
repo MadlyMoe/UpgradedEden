@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 import forevereden_client as client
 import forevereden_probe as probe
-from forevereden_probe import API_FORMAT, BILLING_CATALOG_CODE_UNITS, BILLING_CATALOG_OFFSET, BILLING_COUNTRY_CODE_UNITS, BILLING_COUNTRY_OFFSET, BILLING_LOCAL_URL_STRING_OFFSET, BILLING_ORDER_CATALOG_OFFSET, BILLING_PURCHASES_CODE_UNITS, BILLING_PURCHASES_OFFSET, BILLING_REQUEST_URL_CODE_UNITS, BILLING_REQUEST_URL_OFFSET, BILLING_SETUP_OFFSET, BILLING_SIGNED_RESPONSE_OFFSET, BILLING_SUBMIT_CODE_UNITS, BILLING_SUBMIT_OFFSET, ORIGINAL_URL, PACKAGE, chunks, patch_local_billing, patch_manifest, replace_fixed, request_metadata, respond
+from forevereden_probe import API_FORMAT, BILLING_CATALOG_CODE_UNITS, BILLING_CATALOG_OFFSET, BILLING_COUNTRY_CODE_UNITS, BILLING_COUNTRY_OFFSET, BILLING_LOCAL_URL_STRING_OFFSET, BILLING_ORDER_CATALOG_OFFSET, BILLING_PURCHASES_CODE_UNITS, BILLING_PURCHASES_OFFSET, BILLING_REQUEST_URL_CODE_UNITS, BILLING_REQUEST_URL_OFFSET, BILLING_SETUP_OFFSET, BILLING_SIGNED_RESPONSE_OFFSET, BILLING_SUBMIT_CODE_UNITS, BILLING_SUBMIT_OFFSET, COLLABO_FREEZE_END_AT, COLLABO_FREEZE_END_AT_BEFORE, COLLABO_FREEZE_END_AT_OFFSET, COLLABO_FREEZE_END_AT_PATCH, COLLABO_FREEZE_EXPIRED_END_AT_BEFORE, COLLABO_FREEZE_EXPIRED_END_AT_OFFSET, COLLABO_FREEZE_EXPIRED_END_AT_PATCH, ORIGINAL_URL, PACKAGE, chunks, patch_collabo_availability, patch_local_billing, patch_manifest, replace_fixed, request_metadata, respond
 
 assert len(API_FORMAT) == len(ORIGINAL_URL) and b'\0' not in API_FORMAT
 assert API_FORMAT.decode().format('us') == 'http://127.0.0.1:28765/us/private'
@@ -76,6 +76,28 @@ try:
 except ValueError:
     pass
 print('PASS: exact billing catalog adapter patch and DEX integrity fields')
+
+original_lib = None
+for apk in client.APKS:
+    with zipfile.ZipFile(frozen / apk) as z:
+        if 'lib/arm64-v8a/libapp.so' in z.namelist():
+            assert original_lib is None
+            original_lib = z.read('lib/arm64-v8a/libapp.so')
+assert original_lib is not None
+patched_lib = bytearray(original_lib)
+metadata = patch_collabo_availability(patched_lib)
+assert len(patched_lib) == len(original_lib)
+assert original_lib[COLLABO_FREEZE_END_AT_OFFSET:COLLABO_FREEZE_END_AT_OFFSET + 16] == COLLABO_FREEZE_END_AT_BEFORE
+assert patched_lib[COLLABO_FREEZE_END_AT_OFFSET:COLLABO_FREEZE_END_AT_OFFSET + 16] == COLLABO_FREEZE_END_AT_PATCH
+assert original_lib[COLLABO_FREEZE_EXPIRED_END_AT_OFFSET:COLLABO_FREEZE_EXPIRED_END_AT_OFFSET + 16] == COLLABO_FREEZE_EXPIRED_END_AT_BEFORE
+assert patched_lib[COLLABO_FREEZE_EXPIRED_END_AT_OFFSET:COLLABO_FREEZE_EXPIRED_END_AT_OFFSET + 16] == COLLABO_FREEZE_EXPIRED_END_AT_PATCH
+assert metadata['end_at'] == COLLABO_FREEZE_END_AT and metadata['extension_years'] == 9999
+try:
+    patch_collabo_availability(patched_lib)
+    raise AssertionError('Double collaboration patch accepted')
+except ValueError:
+    pass
+print('PASS: shared collaboration cutoff and expiration predicate extended by 9,999 years with exact-byte guards')
 
 header = (b'POST /us/private/game_client/user/login?secret=query HTTP/1.1\r\n'
           b'Host: 127.0.0.1:28765\r\nX-KMS-Token: secret-header\r\nContent-Length: 11\r\n\r\n')

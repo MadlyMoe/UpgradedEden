@@ -6,6 +6,7 @@ const http = require('node:http');
 const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const { encryptBody, decryptBody, encodeMsgpack } = require('./forevereden_transport.cjs');
+const { SAVE_KEYS, mutationKeys } = require('./forevereden_save.cjs');
 
 const PREFIX = /^\/(?:us|ap|eu)\/private\/(game_client|asset)\//;
 const ACTIONS = new Set([
@@ -34,19 +35,6 @@ const CLIENT_SAVE_ACTIONS = {
   'star_library/score_attack_reward': ['scoreAttackRewardIds'],
 };
 const LIMITS = { plaintext: 16 * 1024 * 1024, ciphertext: 4 * 1024 * 1024 };
-const SAVE_KEYS = {
-  UserAreaEnemy: ['userId','areaObjectId'], UserCatDiary: ['userId','termId'], UserGameManual: ['userId','gameManualId'],
-  UserDungeonTicket: ['userId','dungeonTicketId'], UserEnvironmentChangeGroup: ['userId','groupId','tableId','tableIndex'],
-  UserGift: ['userId','id'], UserLimitedLotteryTicket: ['userId','lotteryTicketId'],
-  UserEquipmentSpecie: ['userId','equipmentId'], UserFreeze: ['userId'], UserGlobalFlag: ['userId','globalFlagId'],
-  UserInfo: ['userId'], UserKeyItem: ['userId','keyItemId'], UserMigratoryEnemy: ['userId','migratoryEnemyId'],
-  UserOrdealAchievementStock: ['userId','id'], UserPC: ['userId','pcId'], UserPCJobSet: ['userId','pcId'],
-  UserPCStyle: ['userId','pcStyleId'], UserParty: ['userId','id'], UserStoryStep: ['userId','storyStepId'],
-  UserPCCostumeProduct: ['userId','costumeProductId'], UserStarLibraryMissionStatus: ['userId','missionId'],
-  UserSystemFlag: ['userId','systemFlagId'],
-  UserItemToken: ['userId','consumer','value'], UserMaterial: ['userId','materialId'], UserRandomSeed: ['userId','consumer'],
-  UserTreasure: ['userId','treasureId'],
-};
 const stone = (id, amount, bonus, priority) => ({
   product_id: `games.wfs.anothereden.gem.${id}`, name: `${amount + bonus} Chronos Stones`, price: '0.01',
   formatted_price: '$0.01', description: 'ForeverEden local Chronos Stones', thumbnail_url: '',
@@ -104,19 +92,6 @@ function remove(table, rows, keys) {
   if (!Array.isArray(table)) return null;
   return table.filter(old => !rows.some(row => keys.every(key => old[key] === row[key])));
 }
-function mutationKeys(name, current, rows) {
-  if (!Array.isArray(current)) return [];
-  let keys = SAVE_KEYS[name] ?? (rows.every(row => row && typeof row === 'object' && Object.hasOwn(row, '_id')) ? ['_id'] : null);
-  if (!keys) {
-    const conventional = `${name.replace(/^User/, '')}Id`.toLowerCase();
-    const candidates = Object.keys(rows[0] ?? {}).filter(key => key !== 'userId' && key.toLowerCase() === conventional);
-    if (candidates.length === 1 && rows.every(row => Object.hasOwn(row, candidates[0]))) keys = ['userId', candidates[0]];
-  }
-  requireValue(keys && rows.every(row => keys.every(key => Object.hasOwn(row, key))) &&
-    new Set(rows.map(row => JSON.stringify(keys.map(key => row[key])))).size === rows.length, `Unsupported table identity ${name}`);
-  return keys;
-}
-
 function atomicJson(file, value) {
   const body = `${JSON.stringify(value)}\n`, temporary = `${file}.tmp-${process.pid}`;
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -129,6 +104,9 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
   const key = Buffer.from(codec.key_hex, 'hex'), fallbackIV = Buffer.from(codec.fallback_iv_hex, 'hex');
   if (key.length !== 32 || fallbackIV.length !== 16 || !Number.isSafeInteger(seed.user_id) || Object.keys(seed.tables ?? {}).length !== 207)
     throw new Error('Invalid mobile runtime inputs');
+  const collectionTables = Object.entries(seed.tables).filter(([, value]) => Array.isArray(value)).map(([name]) => name).sort();
+  if (JSON.stringify(collectionTables) !== JSON.stringify(Object.keys(SAVE_KEYS).sort()))
+    throw new Error('Save identity catalog does not cover the local profile');
   if (Boolean(statePath) === Boolean(database)) throw new Error('Choose one profile store');
   const freshState = () => ({ version: 1, user_id: seed.user_id, capability: crypto.randomBytes(16).toString('hex'),
     aes_iv: crypto.randomBytes(8).toString('hex'), device_hash: null, last_sequence: '-1', meta: {}, tables: {}, replies: {},

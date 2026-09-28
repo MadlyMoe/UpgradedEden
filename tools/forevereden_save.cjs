@@ -2,15 +2,100 @@
 const crypto = require('node:crypto');
 
 const SAVE_KEYS = {
-  UserAreaEnemy: ['userId','areaObjectId'], UserCatDiary: ['userId','termId'], UserGameManual: ['userId','gameManualId'],
-  UserDungeonTicket: ['userId','dungeonTicketId'], UserEnvironmentChangeGroup: ['userId','groupId','tableId','tableIndex'],
-  UserEquipmentSpecie: ['userId','equipmentId'], UserFreeze: ['userId'], UserGlobalFlag: ['userId','globalFlagId'],
-  UserInfo: ['userId'], UserKeyItem: ['userId','keyItemId'], UserMigratoryEnemy: ['userId','migratoryEnemyId'],
-  UserOrdealAchievementStock: ['userId','id'], UserPC: ['userId','pcId'], UserPCJobSet: ['userId','pcId'],
-  UserPCStyle: ['userId','pcStyleId'], UserParty: ['userId','id'], UserStoryStep: ['userId','storyStepId'],
-  UserSystemFlag: ['userId','systemFlagId'],
-  UserItemToken: ['userId','consumer','value'], UserMaterial: ['userId','materialId'], UserRandomSeed: ['userId','consumer'],
-  UserTreasure: ['userId','treasureId'],
+  UserAbilityOrbMaterial: ['userId','materialId'], UserAbilityOrbSlotBase: ['userId','slotNumber'],
+  UserAchievement: ['userId','achievementId'], UserAdventureStage: ['userId','adventureStageId'],
+  UserAlchemicItem: ['userId','alchemicItemId'], UserArea: ['userId','areaId'],
+  UserAreaEnemy: ['userId','areaObjectId'], UserAreaFlag: ['userId','areaFlagId'],
+  UserAuctionBroker: ['userId','brokerId'], UserAuctionBuyItem: ['userId','auctionBuyItemId'],
+  UserAuctionNamedBroker: ['userId','brokerId'], UserAuctionSkill: ['userId','skillID'],
+  UserAuctionTreasure: ['userId','auctionTreasureId'], UserAutoEffectItem: ['userId','autoEffectItemId'],
+  UserAutoEffectItemGroup: ['userId','contentType'], UserBattleDifficultyGroup: ['userId','contentId'],
+  UserBattleReturnMatch: ['userId','battleReturnMatchId'], UserBattleRushCourse: ['userId','battleRushCourseId'],
+  UserBattleRushStage: ['userId','battleRushStageId'], UserBattleRushWave: ['userId','battleRushWaveId'],
+  UserBikeGameResult: ['userId','courseId'], UserBuddy: ['userId','buddyId'],
+  UserBuddyChangeType: ['userId','buddyChangeTypeId'], UserBuddyEquipmentSpecie: ['userId','equipmentId'],
+  UserBuddyEquipmentStock: ['userId','id'], UserBuddyItem: ['userId','buddyItemId'],
+  UserBuddyStyle: ['userId','buddyStyleId'], UserCatDiaryChain: ['userId','id'],
+  UserCatDiaryChainLocation: ['userId','id'], UserCipherText: ['userId','cipherTextId'],
+  UserCoalmineFacility: ['userId','id'], UserCoalmineItem: ['userId','id'],
+  UserCollabo: ['userId','collaboId'], UserCollabo08CollectItem: ['userId','itemId'],
+  UserCollabo08CoreItem: ['userId','pcStyleId'], UserCollabo08CreateItem: ['userId','itemId'],
+  UserCollabo08EquipmentStockOfCoreItem: ['userId','id'], UserCollabo08Recipe: ['userId','recipeId'],
+  UserCollabo09AbilitySet: ['userId','pcStyleId'], UserCollabo09EquipmentSet: ['userId','pcStyleId'],
+  UserCollabo09EquipmentStock: ['userId','equipmentStockId'], UserCollabo09GraphItem: ['userId','collabo09GraphItemId'],
+  UserCollabo09Proficiency: ['userId','pcStyleId'], UserColosseumPassiveEffect: ['userId','passiveEffectId'],
+  UserConsumableItem: ['userId','consumableItemId'], UserContentCorrectionInfo: ['userId','type'],
+  UserCookingMaterial: ['userId','cookingMaterialId'], UserCookingMenu: ['userId','menuId'],
+  UserCounter: ['userId','counterId'], UserCurrency: ['userId','currencyId'],
+  UserDailyBonus: ['userId','dailyBonusId'], UserDanshou: ['userId','danshouId'],
+  UserDestinyItem: ['userId','destinyItemId'], UserDungeon: ['userId','dungeonId'],
+  UserDungeonFlag: ['userId','dungeonFlagId'], UserDungeonTicket: ['userId','dungeonTicketId'],
+  UserEnchantWeapon: ['userId','enchantWeaponId'], UserEnchantWeaponBoss: ['userId','enchantWeaponBossId'],
+  UserEnchantWeaponBossResultList: ['userId','enchantWeaponBossId'],
+  UserEnchantWeaponShopItem: ['userId','enchantWeaponShopItemId'],
+  UserEnchantWeaponSlotItem: ['userId','enchantWeaponSlotItemId'], UserEnemyParty: ['userId','enemyPartyId'],
+  UserEnemySpecie: ['userId','enemySpecieId'], UserEnvironmentChangeGroup: ['userId','groupId'],
+  UserEquipmentSpecie: ['userId','equipmentId'], UserEquipmentStock: ['userId','id'],
+  UserEquipmentStockOfAbilityOrb: ['userId','id'], UserEquipmentStockOfElementBadge: ['userId','id'],
+  UserEquipmentStockOfRune: ['userId','id'], UserExpItem: ['userId','expItemId'],
+  UserFestival: ['userId','festivalId'], UserFish: ['userId','fishId'],
+  UserFishCollectingFeed: ['userId','fishCollectingFeedId'],
+  UserFishCollectingFishSpecie: ['userId','fishCollectingFishSpecieId'],
+  UserFishCollectingFishStock: ['userId','id'], UserFishCollectingItem: ['userId','id'],
+  UserFishCollectingPlace: ['userId','areaObjectId'], UserFishFood: ['userId','id'],
+  UserFishingPlace: ['userId','areaObjectId'], UserFishItem: ['userId','id'],
+  UserFishSpecie: ['userId','fishId'], UserFishStock: ['userId','id'],
+  UserFortuneAreaRoute: ['userId','fortuneAreaRouteId'], UserFreeze: ['userId','freezeId'],
+  UserFriendsInvitationGuest: ['userId','invitationId'], UserFriendsInvitationHost: ['userId','invitationId'],
+  UserGaiden: ['userId','gaidenId'], UserGaishi: ['userId','gaishiId'],
+  UserGameManual: ['userId','gameManualId'], UserGenericItem: ['userId','genericItemId'],
+  UserGift: ['userId','id'], UserGimmickItem: ['userId','gimmickItemId'],
+  UserGlobalFlag: ['userId','globalFlagId'], UserHelixCollectItem: ['userId','collectItemId'],
+  UserHelixCraftItem: ['userId','craftItemId'], UserHelixCraftRecipe: ['userId','craftRecipeId'],
+  UserHelixRecordItem: ['userId','recordItemId'], UserHelixStarItem: ['userId','starItemId'],
+  UserIGRPGFriend: ['userId','igrpgFriendId'], UserItemToken: ['userId','signature'],
+  UserJobRankItem: ['userId','jobRankItemId'], UserJobRankItemTicket: ['userId','jobRankItemTicketId'],
+  UserKaikouCondition: ['userId','conditionId'], UserKaikouFlag: ['userId','kaikouFlagId'],
+  UserKeyConfig: ['userId','id'], UserKeyItem: ['userId','keyItemId'],
+  UserLimitedLotteryTicket: ['userId','lotteryTicketId'], UserLocation: ['userId','locationId'],
+  UserLocationFlag: ['userId','locationFlagId'], UserLottery: ['userId','lotteryExId'],
+  UserLotteryTicket: ['userId','lotteryTicketId'], UserMaterial: ['userId','materialId'],
+  UserMigratoryEnemy: ['userId','migratoryEnemyId'], UserMysteryEventInfo: ['userId','mysteryEventInfoId'],
+  UserMysteryFlag: ['userId','mysteryFlagId'], UserMysteryItem: ['userId','mysteryItemId'],
+  UserNotice: ['userId','id'], UserOperaBook: ['userId','operaBookId'],
+  UserOperaFlag: ['userId','operaFlagId'], UserOperaPCRanking: ['userId','operaPCRankingId'],
+  UserOperaRole: ['userId','operaRoleId'], UserOrdealAchievementStock: ['userId','id'],
+  UserPackProduct: ['userId','packProductId'], UserPackProductViewedState: ['userId','packProductId'],
+  UserParty: ['userId','id'], UserPartyPosition: ['userId','partyId'], UserPartySquad: ['userId','partyId'],
+  UserPaymentPointCard: ['userId','paymentPointCardId'], UserPC: ['userId','pcId'],
+  UserPCCostume: ['userId','costumeId'], UserPCCostumeProduct: ['userId','costumeProductId'],
+  UserPCCostumeProductViewedState: ['userId','costumeProductId'], UserPCCostumeWearState: ['userId','costumeId'],
+  UserPCElementBadge: ['userId','pcStyleId'], UserPCFavoriteEquipment: ['userId','pcFavoriteEquipmentId'],
+  UserPCJobSet: ['userId','pcId'], UserPCPartyJoin: ['userId','pcId'], UserPCStyle: ['userId','pcStyleId'],
+  UserPCStyleZodiac: ['userId','pcStyleZodiacId'], UserPCTag: ['userId','pcTagId'], UserPet: ['userId','petId'],
+  UserPetEnemyParty: ['userId','enemyPartyId'], UserPetEquipmentSpecie: ['userId','petEquipmentId'],
+  UserPetEquipmentStock: ['userId','id'], UserPetFood: ['userId','petFoodId'],
+  UserPetFoodBox: ['userId','petFoodBoxId'], UserPetFurniture: ['userId','petFurnitureId'],
+  UserPetHouse: ['userId','petHouseId'], UserPetHouseArrangement: ['userId','petHouseArrangementId'],
+  UserPetMaterial: ['userId','petMaterialId'], UserPetParty: ['userId','partyId'],
+  UserPetRoomExpansion: ['userId','petRoomExpansionId'], UserPetRoomReform: ['userId','petRoomReformId'],
+  UserPetSkillDeck: ['userId','petSkillDeckId'], UserPetToy: ['userId','petToyId'],
+  UserPresetEquipment: ['userId','presetEquipmentId'], UserQuest: ['userId','questId'],
+  UserQuestFlag: ['userId','questFlagId'], UserRaidBattleEnemyParty: ['userId','enemyObjectId'],
+  UserRaidBattleParty: ['userId','partyId'], UserRandomSeed: ['userId','signature'],
+  UserRepeatableQuestStep: ['userId','questStepId'], UserRetsuden: ['userId','retsudenId'],
+  UserRoguelikeDungeon: ['userId','dungeonId'], UserSerialStory: ['userId','serialStoryId'],
+  UserSkitEvent: ['userId','skitEventId'], UserSkyTownEvent: ['userId','eventId'],
+  UserSkyTownStatus: ['userId','skyTownId'], UserSkyTownWorker: ['userId','workerId'],
+  UserStarLibraryBookStatus: ['userId','bookId'], UserStarLibraryLevel: ['userId','starLibraryLevelId'],
+  UserStarLibraryMissionStatus: ['userId','missionId'],
+  UserStarLibraryScoreAttackInfo: ['userId','starLibraryScoreAttackInfoId'],
+  UserStarLibraryScoreAttackReward: ['userId','starLibraryScoreAttackRewardId'],
+  UserStoryEpisodeFlag: ['userId','storyEpisodeFlagId'], UserStoryPart: ['userId','storyPartId'],
+  UserStoryStep: ['userId','storyStepId'], UserSystemFlag: ['userId','systemFlagId'],
+  UserTokenShopCommodity: ['userId','id'], UserTreasure: ['userId','treasureId'],
+  UserUnitFriendship: ['userId','targetId'], UserUnknownEquipment: ['userId','unknownEquipmentId'],
+  UserUnknownEquipmentStock: ['userId','id'], UserVessel: ['userId','vesselId'],
 };
 const md5 = value => crypto.createHash('md5').update(value).digest('hex');
 function invalid(message) { throw Object.assign(new Error(message), { status: 400 }); }
@@ -22,15 +107,11 @@ function identityMatches(value, userId) {
   return (!Object.hasOwn(value, 'userId') || value.userId === userId) && Object.values(value).every(item => identityMatches(item, userId));
 }
 function mutationKeys(name, current, rows) {
-  if (!Array.isArray(current)) return [];
-  let keys = SAVE_KEYS[name] ?? (rows.every(row => row && typeof row === 'object' && Object.hasOwn(row, '_id')) ? ['_id'] : null);
-  if (!keys) {
-    const conventional = `${name.replace(/^User/, '')}Id`.toLowerCase();
-    const candidates = Object.keys(rows[0] ?? {}).filter(key => key !== 'userId' && key.toLowerCase() === conventional);
-    if (candidates.length === 1 && rows.every(row => Object.hasOwn(row, candidates[0]))) keys = ['userId', candidates[0]];
-  }
+  if (!Array.isArray(current)) { requireValue(rows.length === 1, `Unsupported singleton table ${name}`); return []; }
+  const keys = SAVE_KEYS[name];
   requireValue(keys && rows.every(row => keys.every(key => Object.hasOwn(row, key))) &&
-    new Set(rows.map(row => JSON.stringify(keys.map(key => row[key])))).size === rows.length, `Unsupported table identity ${name}`);
+    new Set(rows.map(row => JSON.stringify(keys.map(key => row[key])))).size === rows.length,
+  `Unsupported table identity ${name} fields=${Object.keys(rows[0] ?? {}).sort().join(',')}`);
   return keys;
 }
 function upsert(table, rows, keys) {
@@ -108,4 +189,4 @@ function applySave(value, { userId, tables, tokenAliases = {} }) {
     dataTokens: Object.fromEntries(responseTokenNames.map(name => [name, nextTokens[name]])) } };
 }
 
-module.exports = { applySave };
+module.exports = { SAVE_KEYS, applySave, mutationKeys };

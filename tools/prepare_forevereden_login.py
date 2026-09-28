@@ -120,7 +120,7 @@ def prepare(capture, migrate_database=False):
     client.atomic_json(OUT/'wire-codec-fixtures.json',checks)
     inventory_path = client.ROOT/'data/forevereden-evidence/network-action-inventory.json'
     inventory = json.loads(inventory_path.read_text())
-    active_files = ('tools/forevereden_device_listener.cjs','tools/forevereden_mobile_server.cjs',
+    active_files = ('tools/forevereden_device_listener.cjs','tools/forevereden_mobile_server.cjs','tools/forevereden_save.cjs',
         'tools/forevereden_transport.cjs','tools/forevereden_lottery_3_17_0.bin',
         'tools/forevereden_rewards_3_17_0.bin',
         'data/forevereden-evidence/network-action-inventory.json',

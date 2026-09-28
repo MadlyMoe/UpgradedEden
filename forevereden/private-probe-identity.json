@@ -1,6 +1,6 @@
 {
-  "runtime_id": "ea41553f4a1ef8465833805a0a7bedac11507b0d21cd2720a674135ceb54b679",
-  "generation": "data\\forevereden-evidence\\private-probe\\ea41553f4a1ef846",
+  "runtime_id": "f9ae03ab849854745f9df8b6dd36bbe5a67eb9d964e6432e678027c18f665140",
+  "generation": "data\\forevereden-evidence\\private-probe\\f9ae03ab84985474",
   "identity": {
     "project": "ForeverEden",
     "purpose": "local routing probe, not a gameplay server",
@@ -15,6 +15,15 @@
       "segment_file_offset": 76234752,
       "segment_virtual_address": 76791808,
       "segment_bytes": 16384
+    },
+    "collabo_availability_patch": {
+      "accessor_offset": 56287752,
+      "expiration_compare_offset": 56275484,
+      "accessor_before": "006040f981018052e2031faa6f22b117",
+      "expiration_compare_before": "606240f981018052e2031faa6a2eb197",
+      "end_at": 317321333999,
+      "end_at_utc": "12025-07-06T14:59:59Z",
+      "extension_years": 9999
     },
     "billing_catalog_patch": {
       "methods": [
@@ -42,7 +51,7 @@
       },
       "config.arm64_v8a.apk": {
         "bytes": 24253690,
-        "sha256": "12e97c6e6d9d6c2b70fa6f120b11cfa4318093cd587a1f63f4071553fc8f8eb7",
+        "sha256": "7256e0de29df240ef794ce25eae06fba3b80027c9e82a9970a9d9d817208bf74",
         "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
       },
       "config.en.apk": {
@@ -91,7 +100,7 @@
         "apk": "config.arm64_v8a.apk",
         "member": "lib/arm64-v8a/libapp.so",
         "before_sha256": "2789c0f6bb570d168a14d836a36a3e3fc372c60c63a8e79730dc9c67bc78a1dc",
-        "after_sha256": "ee8c59b7de5d65b8b9a44d872bc229019d9d1760c7a43c5a335eec9ad4eaa0a5"
+        "after_sha256": "7db2d49ded6e561cf09e9b61f72ed4767a52005664fd4b2141cfa2a5e778cb30"
       },
       {
         "apk": "config.en.apk",
@@ -118,7 +127,7 @@
         "after_sha256": "4831d3b9576ff073aed26acdea474321cb3af2e878a7e82df8f8a1aaa6057c97"
       }
     ],
-    "tool_sha256": "28bfde424e22fb93742da316c40f2d2c12fce6d32f74f7c4a7e63ae99a7c0097",
+    "tool_sha256": "985e07cddbb669a6858b8d60d6faa2d759ef901c3800f635effbc9ed8d015083",
     "removed_signing_metadata": [
       "original JAR signatures",
       "original APK signing block",
@@ -126,7 +135,8 @@
     ],
     "server_behavior": "HTTP 503 only; game request schemas UNKNOWN",
     "active_mods": [
-      "private-billing-catalog"
+      "private-billing-catalog",
+      "9999-year-collaboration-events"
     ],
     "original_account_data_copied": false
   }

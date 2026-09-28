@@ -33,6 +33,13 @@ XUID_GETTER_OFFSET = 0x3D3DFAC
 XUID_GETTER_BEFORE = bytes.fromhex('01200091e00308aae31c1614')
 STRING_COPY_OFFSET = 0x42C5340
 ELF_PAGE = 0x4000
+COLLABO_FREEZE_END_AT_OFFSET = 0x35AE208
+COLLABO_FREEZE_END_AT_BEFORE = bytes.fromhex('006040f981018052e2031faa6f22b117')
+COLLABO_FREEZE_EXPIRED_END_AT_OFFSET = 0x35AB21C
+COLLABO_FREEZE_EXPIRED_END_AT_BEFORE = bytes.fromhex('606240f981018052e2031faa6a2eb197')
+COLLABO_FREEZE_END_AT = 317321333999  # 12025-07-06 14:59:59 UTC; original cutoff + 9,999 years.
+COLLABO_FREEZE_END_AT_PATCH = bytes.fromhex('e09d89d2603abcf22009c0f2c0035fd6')
+COLLABO_FREEZE_EXPIRED_END_AT_PATCH = bytes.fromhex('e09d89d2603abcf22009c0f21f2003d5')
 BILLING_SETUP_OFFSET = 0x10BBE8
 BILLING_PURCHASES_OFFSET = 0x10BCA0
 BILLING_PURCHASES_CODE_UNITS = 42
@@ -257,6 +264,22 @@ def patch_local_identity(data):
                 segment_file_offset=file_offset, segment_virtual_address=virtual_address, segment_bytes=ELF_PAGE)
 
 
+def patch_collabo_availability(data):
+    """Extend the shared collaboration freeze cutoff without bypassing its state machine."""
+    locations = ((COLLABO_FREEZE_END_AT_OFFSET, COLLABO_FREEZE_END_AT_BEFORE),
+                 (COLLABO_FREEZE_EXPIRED_END_AT_OFFSET, COLLABO_FREEZE_EXPIRED_END_AT_BEFORE))
+    if any(data[offset:offset + 16] != before for offset, before in locations):
+        raise ValueError('Collaboration freeze end-time logic changed')
+    data[COLLABO_FREEZE_END_AT_OFFSET:COLLABO_FREEZE_END_AT_OFFSET + 16] = COLLABO_FREEZE_END_AT_PATCH
+    data[COLLABO_FREEZE_EXPIRED_END_AT_OFFSET:COLLABO_FREEZE_EXPIRED_END_AT_OFFSET + 16] = COLLABO_FREEZE_EXPIRED_END_AT_PATCH
+    return dict(accessor_offset=COLLABO_FREEZE_END_AT_OFFSET,
+                expiration_compare_offset=COLLABO_FREEZE_EXPIRED_END_AT_OFFSET,
+                accessor_before=COLLABO_FREEZE_END_AT_BEFORE.hex(),
+                expiration_compare_before=COLLABO_FREEZE_EXPIRED_END_AT_BEFORE.hex(),
+                end_at=COLLABO_FREEZE_END_AT, end_at_utc='12025-07-06T14:59:59Z',
+                extension_years=9999)
+
+
 def build(args):
     baseline, frozen = client.verify()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -275,7 +298,7 @@ def build(args):
              '-storepass:env', 'FOREVEREDEN_PROBE_KEY_PASSWORD', '-keyalg', 'RSA',
              '-keysize', '2048', '-validity', '3650', '-dname', 'CN=ForeverEden Local Probe'], env=env)
     stage = Path(tempfile.mkdtemp(prefix='.stage-', dir=OUT))
-    output, changes, identity_patch, billing_patch = {}, [], None, None
+    output, changes, identity_patch, billing_patch, collabo_patch = {}, [], None, None, None
     for apk in client.APKS:
         unsigned, aligned, signed = stage / ('unsigned-' + apk), stage / ('aligned-' + apk), stage / apk
         expected = {}
@@ -294,6 +317,7 @@ def build(args):
                     data = replace_fixed(data, client.PACKAGE.encode('utf-16le'), PACKAGE.encode('utf-16le'), 1)
                 elif name == 'lib/arm64-v8a/libapp.so':
                     data = bytearray(replace_fixed(data, ORIGINAL_URL, API_FORMAT, 1))
+                    collabo_patch = patch_collabo_availability(data)
                     identity_patch = patch_local_identity(data)
                     data = bytes(data)
                 elif name == 'classes5.dex':
@@ -335,11 +359,13 @@ def build(args):
                     parent_runtime_id=baseline['runtime_id'], package=PACKAGE, endpoint=ENDPOINT,
                      api_format=API_FORMAT.decode(),
                      sdk_identity_patch=identity_patch,
+                     collabo_availability_patch=collabo_patch,
                      billing_catalog_patch=billing_patch,
                      apks=output, changes=changes, tool_sha256=client.digest(__file__),
                     removed_signing_metadata=['original JAR signatures', 'original APK signing block', 'stamp-cert-sha256'],
                     server_behavior='HTTP 503 only; game request schemas UNKNOWN',
-                     active_mods=['private-billing-catalog'], original_account_data_copied=False)
+                     active_mods=['private-billing-catalog', '9999-year-collaboration-events'],
+                     original_account_data_copied=False)
     rid = client.identity_digest(identity)
     destination = OUT / rid[:16]
     if destination.exists():

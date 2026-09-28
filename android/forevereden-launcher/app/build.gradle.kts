@@ -17,7 +17,7 @@ val generatedAssets = layout.buildDirectory.dir("generated/forevereden-assets")
 val prepareRuntimeAssets by tasks.registering(Sync::class) {
     into(generatedAssets.map { it.dir("runtime") })
     from("$repositoryRoot/tools") {
-        include("forevereden_transport.cjs", "forevereden_capture_proxy.cjs", "forevereden_mobile_server.cjs",
+        include("forevereden_transport.cjs", "forevereden_capture_proxy.cjs", "forevereden_save.cjs", "forevereden_mobile_server.cjs",
             "forevereden_lottery_3_17_0.bin", "forevereden_rewards_3_17_0.bin")
     }
     from("$repositoryRoot/$seedRelative") { rename { "seed.json" } }
