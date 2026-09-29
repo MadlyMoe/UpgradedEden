@@ -127,6 +127,22 @@ function remove(table, rows, keys) {
   if (!Array.isArray(table)) return null;
   return table.filter(old => !rows.some(row => keys.every(key => old[key] === row[key])));
 }
+function preserveEquipmentStockCounter(tables) {
+  const info = tables.UserInfo;
+  if (!info) return false;
+  requireValue(Number.isSafeInteger(info.lastEquipmentStockId) && info.lastEquipmentStockId >= 0,
+    'Invalid equipment stock counter');
+  let highWater = 0;
+  for (const name of ['UserEquipmentStock','UserEquipmentStockOfAbilityOrb','UserEquipmentStockOfElementBadge']) {
+    for (const row of tables[name] ?? []) {
+      requireValue(Number.isSafeInteger(row.id) && row.id > 0, `Invalid equipment stock id ${name}`);
+      highWater = Math.max(highWater, row.id);
+    }
+  }
+  if (info.lastEquipmentStockId >= highWater) return false;
+  tables.UserInfo = { ...info, lastEquipmentStockId: highWater };
+  return true;
+}
 
 function applySave(value, { userId, tables, tokenAliases = {} }) {
   const table = name => tables[name];
@@ -172,13 +188,23 @@ function applySave(value, { userId, tables, tokenAliases = {} }) {
       deleteCounts[name] = (deleteCounts[name] ?? 0) + rows.length;
     }
   }
-  const itemTokenCount = (putCounts.UserItemToken ?? 0) + (deleteCounts.UserItemToken ?? 0);
-  if (itemTokenCount) data.UserItemToken = Array.from({ length: itemTokenCount }, () =>
-    ({ userId, signature: crypto.randomInt(1, 0x80000000) }));
-  const randomSeedCount = (putCounts.UserRandomSeed ?? 0) + (deleteCounts.UserRandomSeed ?? 0);
-  if (randomSeedCount) data.UserRandomSeed = Array.from({ length: randomSeedCount }, () => ({ userId,
-    dynamoDbExpiredAt: Math.floor(Date.now() / 1000) + 86400, seed: crypto.randomInt(1, 0x80000000),
-    signature: crypto.randomInt(1, 0x80000000) }));
+  if (mutationNames.includes('UserInfo')) preserveEquipmentStockCounter(nextTables);
+  const itemTokenCount = deleteCounts.UserItemToken ?? 0;
+  if (itemTokenCount) {
+    data.UserItemToken = Array.from({ length: itemTokenCount }, () =>
+      ({ userId, signature: crypto.randomInt(1, 0x80000000) }));
+    nextTables.UserItemToken.push(...data.UserItemToken.map(row =>
+      ({ consumer: 0, context: '', signature: row.signature, userId: row.userId, value: 0, verifier: '' })));
+  }
+  const randomSeedCount = deleteCounts.UserRandomSeed ?? 0;
+  if (randomSeedCount) {
+    data.UserRandomSeed = Array.from({ length: randomSeedCount }, () => ({ userId,
+      dynamoDbExpiredAt: Math.floor(Date.now() / 1000) + 86400, seed: crypto.randomInt(1, 0x80000000),
+      signature: crypto.randomInt(1, 0x80000000) }));
+    nextTables.UserRandomSeed.push(...data.UserRandomSeed.map(row => ({ consumer: 0,
+      dynamoDbExpiredAt: row.dynamoDbExpiredAt, result: [], seed: row.seed, signature: row.signature,
+      userId: row.userId, verifier: '' })));
+  }
   const nextTokens = Object.fromEntries(Object.entries(nextTables).map(([name, rows]) => [name, md5(JSON.stringify(rows))]));
   for (const [alias, name] of Object.entries(tokenAliases)) nextTokens[alias] = nextTokens[name];
   const responseTokenNames = [...mutationNames];
@@ -189,4 +215,4 @@ function applySave(value, { userId, tables, tokenAliases = {} }) {
     dataTokens: Object.fromEntries(responseTokenNames.map(name => [name, nextTokens[name]])) } };
 }
 
-module.exports = { SAVE_KEYS, applySave, mutationKeys };
+module.exports = { SAVE_KEYS, applySave, mutationKeys, preserveEquipmentStockCounter };

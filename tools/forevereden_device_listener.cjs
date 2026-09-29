@@ -11,7 +11,7 @@ const adb = process.env.ADB || (process.platform === 'win32' && fs.existsSync(mu
 const launcher = 'dev.forevereden.launcher', service = `${launcher}/.NodeListenerService`;
 const game = 'games.fed.anothereden/net.wrightflyer.toybox.AppActivity';
 const run = (args, timeout = 15000) => execFileSync(adb, args,
-  { encoding: 'utf8', timeout, maxBuffer: 20 * 1024 * 1024, windowsHide: true }).trim();
+  { encoding: 'utf8', timeout, maxBuffer: 64 * 1024 * 1024, windowsHide: true }).trim();
 function serial() {
   if (process.env.ANDROID_SERIAL) return process.env.ANDROID_SERIAL;
   const stateFile = path.join(process.env.ProgramFiles || 'C:\\Program Files',

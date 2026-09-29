@@ -3,7 +3,7 @@
 const { createCipheriv, createDecipheriv, createHash } = require('node:crypto');
 const { deflateSync, inflateSync } = require('node:zlib');
 const { constants: bufferConstants } = require('node:buffer');
-const MAX_NODES = 2_000_000;
+const MAX_NODES = 3_000_000;
 
 function validate(data, key, iv, limits, inputKind) {
   if (!Buffer.isBuffer(data) || !Buffer.isBuffer(key) || key.length !== 32 ||

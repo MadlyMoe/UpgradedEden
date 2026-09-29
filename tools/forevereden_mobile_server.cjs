@@ -6,7 +6,7 @@ const http = require('node:http');
 const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const { encryptBody, decryptBody, encodeMsgpack } = require('./forevereden_transport.cjs');
-const { SAVE_KEYS, mutationKeys } = require('./forevereden_save.cjs');
+const { SAVE_KEYS, mutationKeys, preserveEquipmentStockCounter } = require('./forevereden_save.cjs');
 
 const PREFIX = /^\/(?:us|ap|eu)\/private\/(game_client|asset)\//;
 const ACTIONS = new Set([
@@ -34,7 +34,7 @@ const CLIENT_SAVE_ACTIONS = {
   'star_library/level_reward': ['levelIds'], 'star_library/mission_reward': ['missionIds','bookId'],
   'star_library/score_attack_reward': ['scoreAttackRewardIds'],
 };
-const LIMITS = { plaintext: 16 * 1024 * 1024, ciphertext: 4 * 1024 * 1024 };
+const LIMITS = { plaintext: 32 * 1024 * 1024, ciphertext: 4 * 1024 * 1024 };
 const stone = (id, amount, bonus, priority) => ({
   product_id: `games.wfs.anothereden.gem.${id}`, name: `${amount + bonus} Chronos Stones`, price: '0.01',
   formatted_price: '$0.01', description: 'ForeverEden local Chronos Stones', thumbnail_url: '',
@@ -166,9 +166,11 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
   if (!validState(state)) throw new Error('Invalid mobile server state');
   state.tables ??= {};
   state.next_operation_id ??= 1; state.pending_operations ??= {}; state.claims ??= {};
+  state.opening_transition_repaired ??= false;
   if (!Number.isSafeInteger(state.next_operation_id) || state.next_operation_id < 1 ||
       !state.pending_operations || Array.isArray(state.pending_operations) || typeof state.pending_operations !== 'object' ||
-      !state.claims || Array.isArray(state.claims) || typeof state.claims !== 'object')
+      !state.claims || Array.isArray(state.claims) || typeof state.claims !== 'object' ||
+      typeof state.opening_transition_repaired !== 'boolean')
     throw new Error('Invalid mobile operation state');
   state.billing ??= { charge: 0, free: 0, subscriptions: {}, orders: {}, transactions: [] };
   state.lottery ??= { draws: 0, used_tickets: {} }; state.lottery.used_tickets ??= {};
@@ -190,10 +192,59 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       db.exec('COMMIT');
     } catch (error) { db.exec('ROLLBACK'); throw error; }
   }
+  function preserveFreshOpeningPosition(tables) {
+    const current = name => Object.hasOwn(tables, name) ? tables[name] : seed.tables[name];
+    const opening = current('UserStoryPart').find(row => row.storyPartId === 601000001);
+    const complete = current('UserStoryStep').some(row => row.storyStepId === 603001001 && row.state === 2);
+    const info = current('UserInfo'), position = seed.tables.UserInfo.position;
+    if (opening?.state !== 2 || complete || JSON.stringify(info.position) === JSON.stringify(position)) return false;
+    tables.UserInfo = { ...info, position: structuredClone(position) };
+    return true;
+  }
+  function finishOpeningTransition(tables) {
+    if (state.opening_transition_repaired) return false;
+    const current = name => Object.hasOwn(tables, name) ? tables[name] : seed.tables[name];
+    if (!current('UserStoryStep').some(row => row.storyStepId === 603001001 && row.state === 2)) return false;
+    state.opening_transition_repaired = true;
+    const info = current('UserInfo');
+    if (info.position?.areaId !== 511003004) return false;
+    tables.UserInfo = { ...info, position: { ...info.position, areaId: 511001003, lineId: 1,
+      rate: 0.690324664115906, safetyPositionId: 2, encountRangeNow: 0, encountRangeOcc: 0,
+      vesselAreaPosX: 0, vesselAreaPosY: 0, vesselAreaPosZ: 0 } };
+    return true;
+  }
+  const startupDirty = [];
+  const openingTransitionWasRepaired = state.opening_transition_repaired;
+  if (preserveEquipmentStockCounter(state.tables)) startupDirty.push('UserInfo');
+  if (preserveFreshOpeningPosition(state.tables)) startupDirty.push('UserInfo');
+  if (finishOpeningTransition(state.tables)) startupDirty.push('UserInfo');
+  if (startupDirty.length || openingTransitionWasRepaired !== state.opening_transition_repaired)
+    persist([...new Set(startupDirty)]);
   if (newStore && !database) persist();
   const uuidHex = hash(`forevereden-gree:${seed.user_id}`).slice(0, 32);
   const greeUuid = `${uuidHex.slice(0, 8)}-${uuidHex.slice(8, 12)}-${uuidHex.slice(12, 16)}-${uuidHex.slice(16, 20)}-${uuidHex.slice(20)}`;
   const table = (name, overrides = state.tables) => Object.hasOwn(overrides, name) ? overrides[name] : seed.tables[name];
+  const info = table('UserInfo'), storyParts = table('UserStoryPart'), storySteps = table('UserStoryStep');
+  const systemFlags = table('UserSystemFlag'), opening = storyParts.find(row => row.storyPartId === 601000001);
+  const featureNotice = systemFlags.find(row => row.systemFlagId === 91210011);
+  const completedOpening = storySteps.some(row => row.storyStepId === 603001001 && row.state === 2);
+  const failedOpening = info.position?.areaId === 511003004 && featureNotice?.flagValue !== 1 && !completedOpening;
+  if (opening?.state === 3 && failedOpening) {
+    const updatedAt = opening.updatedAt ?? info.updatedAt ?? 0;
+    const dirty = ['UserStoryPart','UserInfo','UserStoryStep','UserSystemFlag'];
+    state.tables.UserStoryPart = storyParts.map(row => row.storyPartId === 601000001 ? { ...row, state: 2, updatedAt } : row);
+    state.tables.UserInfo = structuredClone(info);
+    Object.assign(state.tables.UserInfo.position, { areaId: 511001003, lineId: 1, rate: 0.690324664115906,
+      safetyPositionId: 2, encountRangeNow: 0, encountRangeOcc: 0, vesselAreaPosX: 0, vesselAreaPosY: 0, vesselAreaPosZ: 0 });
+    state.tables.UserStoryStep = [...storySteps, { _id: hash(`forevereden:story-step:${state.user_id}:603001001`).slice(0, 24),
+      userId: state.user_id, storyStepId: 603001001, state: 2, updatedAt }];
+    state.tables.UserSystemFlag = featureNotice
+      ? systemFlags.map(row => row.systemFlagId === 91210011 ? { ...row, flagValue: 1, updatedAt } : row)
+      : [...systemFlags, { userId: state.user_id, systemFlagId: 91210011, flagValue: 1, updatedAt }];
+    state.opening_transition_repaired = true;
+    persist(dirty);
+    log(JSON.stringify({ event: 'private-opening-skip-recovered', story_step_id: 603001001, area_id: 511001003 }));
+  }
   const tokens = (overrides = state.tables) => {
     const value = Object.fromEntries(Object.keys(seed.tables).map(name => [name, hash(JSON.stringify(table(name, overrides)), 'md5')]));
     for (const [alias, name] of Object.entries(seed.token_aliases)) value[alias] = value[name];
@@ -325,9 +376,14 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       requireValue(mutationNames.every(name => Object.hasOwn(seed.tables, name)) && sameKeys(value.dataTokens, mutationNames) &&
         sameKeys(value.checksums, ['after','before']) && sameKeys(value.checksums.before, mutationNames) &&
         sameKeys(value.checksums.after, mutationNames), 'Unsupported save transaction');
-      for (const name of mutationNames) requireValue(/^[0-9a-f]{32}$/.test(value.dataTokens[name]) &&
-        value.dataTokens[name] === allTokens[name] && /^[0-9a-f]{32}$/.test(value.checksums.before[name]) &&
-        /^[0-9a-f]{32}$/.test(value.checksums.after[name]), 'Invalid save table');
+      const staleTokens = [];
+      for (const name of mutationNames) {
+        requireValue(/^[0-9a-f]{32}$/.test(value.dataTokens[name]), `Invalid save token ${name}`);
+        if (value.dataTokens[name] !== allTokens[name]) staleTokens.push(name);
+        requireValue(/^[0-9a-f]{32}$/.test(value.checksums.before[name]) &&
+          /^[0-9a-f]{32}$/.test(value.checksums.after[name]), `Invalid save checksum ${name}`);
+      }
+      if (staleTokens.length) log(JSON.stringify({ event: 'private-save-token-resync', tables: staleTokens }));
       // ponytail: local single-player compatibility trusts authenticated client deltas; add domain rules before multiplayer.
       nextTables = { ...state.tables };
       const putCounts = {}, deleteCounts = {}, data = {};
@@ -351,13 +407,27 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
           deleteCounts[name] = (deleteCounts[name] ?? 0) + rows.length;
         }
       }
-      const itemTokenCount = (putCounts.UserItemToken ?? 0) + (deleteCounts.UserItemToken ?? 0);
-      if (itemTokenCount) data.UserItemToken = Array.from({ length: itemTokenCount }, () =>
-        ({ userId: state.user_id, signature: crypto.randomInt(1, 0x80000000) }));
-      const randomSeedCount = (putCounts.UserRandomSeed ?? 0) + (deleteCounts.UserRandomSeed ?? 0);
-      if (randomSeedCount) data.UserRandomSeed = Array.from({ length: randomSeedCount }, () => ({ userId: state.user_id,
-        dynamoDbExpiredAt: Math.floor(Date.now() / 1000) + 86400, seed: crypto.randomInt(1, 0x80000000),
-        signature: crypto.randomInt(1, 0x80000000) }));
+      if (mutationNames.includes('UserInfo')) {
+        preserveEquipmentStockCounter(nextTables);
+        preserveFreshOpeningPosition(nextTables);
+      }
+      if (finishOpeningTransition(nextTables)) dirtyTables = [...new Set([...dirtyTables, 'UserInfo'])];
+      const itemTokenCount = deleteCounts.UserItemToken ?? 0;
+      if (itemTokenCount) {
+        data.UserItemToken = Array.from({ length: itemTokenCount }, () =>
+          ({ userId: state.user_id, signature: crypto.randomInt(1, 0x80000000) }));
+        nextTables.UserItemToken.push(...data.UserItemToken.map(row =>
+          ({ consumer: 0, context: '', signature: row.signature, userId: row.userId, value: 0, verifier: '' })));
+      }
+      const randomSeedCount = deleteCounts.UserRandomSeed ?? 0;
+      if (randomSeedCount) {
+        data.UserRandomSeed = Array.from({ length: randomSeedCount }, () => ({ userId: state.user_id,
+          dynamoDbExpiredAt: Math.floor(Date.now() / 1000) + 86400, seed: crypto.randomInt(1, 0x80000000),
+          signature: crypto.randomInt(1, 0x80000000) }));
+        nextTables.UserRandomSeed.push(...data.UserRandomSeed.map(row => ({ consumer: 0,
+          dynamoDbExpiredAt: row.dynamoDbExpiredAt, result: [], seed: row.seed, signature: row.signature,
+          userId: row.userId, verifier: '' })));
+      }
       const nextTokens = tokens(nextTables);
       const responseTokenNames = [...mutationNames];
       if (mutationNames.includes('UserItemToken')) responseTokenNames.push('ItemTokens');
@@ -372,6 +442,7 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
       requireValue(value && Object.keys(value).sort().join(',') === 'consistentRead,recovery,tables' && Array.isArray(value.tables) &&
         typeof value.consistentRead === 'boolean' && value.recovery === false && value.tables.length <= 207 && new Set(value.tables).size === value.tables.length,
       'Unsupported profile pull');
+      log(JSON.stringify({ event: 'private-pull-observed', tables: value.tables }));
       const data = {}, dataTokens = {};
       for (const name of value.tables) {
         requireValue(typeof name === 'string' && Object.hasOwn(seed.tables, name), 'Unknown profile table');
@@ -651,7 +722,7 @@ function createMobileServer({ seed, codec, statePath, database, initialState, re
         const match = req.url?.match(PREFIX);
         log(JSON.stringify({ event: billing ? 'private-billing-rejected' : 'private-rejected', action: billing ? req.url?.split('?', 1)[0] : match ? req.url.slice(match[0].length) : null,
           request_id: req.headers['x-kms-request-id'] ?? null, sequence: req.headers['x-kms-request-sequence'] ?? null,
-          status, reason: error.status ? error.message : error.name }));
+          status, reason: error.message }));
         res.writeHead(status, { Connection: 'close', 'Content-Length': '0', 'Cache-Control': 'no-store' }); res.end();
       }
     });

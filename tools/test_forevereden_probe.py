@@ -2,6 +2,7 @@
 import struct
 import asyncio
 import hashlib
+import io
 import json
 import zipfile
 import zlib
@@ -84,6 +85,114 @@ for apk in client.APKS:
             assert original_lib is None
             original_lib = z.read('lib/arm64-v8a/libapp.so')
 assert original_lib is not None
+story_lib = bytearray(original_lib)
+identity_patch, story_skip = probe.patch_local_identity(story_lib)
+assert story_lib[probe.SCRIPT_SKIP_EVENT_OFFSET:probe.SCRIPT_SKIP_EVENT_OFFSET + 4] == probe.arm64_branch(
+    probe.SCRIPT_SKIP_EVENT_OFFSET, story_skip['script_skip_event_hook_address'])
+assert story_lib[probe.MALLOC_PLT_OFFSET:probe.MALLOC_PLT_OFFSET + 4] == probe.arm64_branch(
+    probe.MALLOC_PLT_OFFSET, story_skip['malloc_hook_address'])
+assert story_lib[probe.REALLOC_PLT_OFFSET:probe.REALLOC_PLT_OFFSET + 4] == probe.arm64_branch(
+    probe.REALLOC_PLT_OFFSET, story_skip['realloc_hook_address'])
+assert story_lib[probe.CALLOC_PLT_OFFSET:probe.CALLOC_PLT_OFFSET + 4] == probe.arm64_branch(
+    probe.CALLOC_PLT_OFFSET, story_skip['calloc_hook_address'])
+assert story_lib[probe.POSIX_MEMALIGN_PLT_OFFSET:probe.POSIX_MEMALIGN_PLT_OFFSET + 4] == probe.arm64_branch(
+    probe.POSIX_MEMALIGN_PLT_OFFSET, story_skip['posix_memalign_hook_address'])
+assert story_skip['script_skip_event_hook_address'] > len(original_lib)
+hook_file_offset = (identity_patch['segment_file_offset'] + story_skip['script_skip_event_hook_address']
+                    - identity_patch['segment_virtual_address'])
+hook_code = story_lib[hook_file_offset:hook_file_offset + 0x2c0]
+assert hook_code.count(bytes.fromhex('60e20291')) == 3
+cleanup_start = story_lib.index(b'local function S(f)pcall(f)end;')
+cleanup = story_lib[cleanup_start:story_lib.index(b'\0', cleanup_start)]
+for cleanup_call in (b'Custom_basicObjectRegist()', b'Custom_basicObjectSetVisible(true)',
+                     b'Custom_basicObjectPlayAnim("idle",true)', b'Common_setFreeMovingEnable(true)',
+                     b'Common_resetSpecificCharacterOnlyOnField()',
+                     b'Common_forcePartyOverlapFadeIn()',
+                     b'Common_stopVoice()', b'Common_stopNarration()', b'Common_closeCinemaTalk()',
+                     b'Common_cancelSystemFadeIn()', b'Common_closeFadeUI()', b'Common_fadeIn(0)',
+                     b'Common_hideTalkerForEvent(false)', b'Common_setLetterBox(false)',
+                     b'Common_resetCameraInfo(0)', b'Common_setCameraState(Enum_CameraState.FIELD)',
+                     b'pcall(Object_joinEvent,o,false)', b'pcall(Object_setInnerVisible,o,true)',
+                     b'pcall(Object_setColor,o,1,1,1)', b'pcall(Object_setSpineAlpha,o,1)',
+                     b'pcall(Object_setAlpha,o,1)', b'pcall(Object_setVisible,o,true)',
+                     b'Enum_ObjectActionType.MOVE',
+                     b'Enum_ObjectActionType.ROTATE', b'Enum_ObjectActionType.SCALE',
+                     b'Enum_ObjectActionType.FADE'):
+    assert cleanup_call in cleanup
+assert cleanup.count(b'S(function()') >= 20
+assert b'forevereden_prologue_skip\0' in story_lib
+assert b'Common_areaChangeWithLine(511001003,1,0.690324664115906,false)' in story_lib
+assert b'Common_clearScript()' not in story_lib[identity_patch['segment_file_offset']:
+                                                identity_patch['segment_file_offset'] + identity_patch['segment_bytes']]
+malloc_file_offset = (identity_patch['segment_file_offset'] + story_skip['malloc_hook_address']
+                      - identity_patch['segment_virtual_address'])
+malloc_code = story_lib[malloc_file_offset:malloc_file_offset + 52]
+assert malloc_code[:4] == bytes.fromhex('1f0001f1')
+assert malloc_code[8:12] == bytes.fromhex('1f4001f1')
+assert malloc_code[40:48] == bytes.fromhex('000c80d2') + probe.arm64_adrp(
+    16, story_skip['malloc_hook_address'] + 44, probe.MALLOC_GOT_OFFSET)
+realloc_file_offset = (identity_patch['segment_file_offset'] + story_skip['realloc_hook_address']
+                       - identity_patch['segment_virtual_address'])
+realloc_code = story_lib[realloc_file_offset:realloc_file_offset + 52]
+assert realloc_code[:4] == bytes.fromhex('3f0001f1')
+assert realloc_code[8:12] == bytes.fromhex('3f4001f1')
+assert realloc_code[40:48] == bytes.fromhex('010c80d2') + probe.arm64_adrp(
+    16, story_skip['realloc_hook_address'] + 44, probe.REALLOC_GOT_OFFSET)
+calloc_file_offset = (identity_patch['segment_file_offset'] + story_skip['calloc_hook_address']
+                      - identity_patch['segment_virtual_address'])
+calloc_code = story_lib[calloc_file_offset:calloc_file_offset + 60]
+assert calloc_code[:8] == bytes.fromhex('027c019b3f0001f1')
+assert calloc_code[12:16] == bytes.fromhex('5f4001f1')
+assert calloc_code[44:56] == bytes.fromhex('000c80d2210080d2') + probe.arm64_adrp(
+    16, story_skip['calloc_hook_address'] + 52, probe.CALLOC_GOT_OFFSET)
+posix_file_offset = (identity_patch['segment_file_offset'] + story_skip['posix_memalign_hook_address']
+                     - identity_patch['segment_virtual_address'])
+posix_code = story_lib[posix_file_offset:posix_file_offset + 52]
+assert posix_code[:4] == bytes.fromhex('5f0001f1')
+assert posix_code[8:12] == bytes.fromhex('5f4001f1')
+assert posix_code[40:48] == bytes.fromhex('020c80d2') + probe.arm64_adrp(
+    16, story_skip['posix_memalign_hook_address'] + 44, probe.POSIX_MEMALIGN_GOT_OFFSET)
+assert story_skip['allocation_counter_address'] == identity_patch['segment_virtual_address'] - 8
+elf = struct.unpack_from('<16sHHIQQQIHHHHHH', story_lib)
+programs = [struct.unpack_from('<IIQQQQQQ', story_lib, elf[5] + i * elf[9]) for i in range(elf[10])]
+assert any(p[0] == 1 and p[1] == 5 and p[3] == identity_patch['segment_virtual_address'] for p in programs)
+assert any(p[0] == 1 and p[1] == 6 and p[3] < story_skip['allocation_counter_address']
+           and p[3] + p[6] == identity_patch['segment_virtual_address'] for p in programs)
+assert story_skip['prologue_skip_destination'] == {
+    'area_id': 511001003, 'line_id': 1, 'rate': 0.690324664115906,
+    'story_step': 'story_step.story_step_ch1_1'}
+assert all(value in story_skip['behavior'] for value in ('independently clear voice', 'narration',
+                                                          'every fade layer', 'letterbox',
+                                                          'actor actions', 'party registration',
+                                                          'alpha', 'visibility filters', 'idle animation',
+                                                          'field movement', 'final cleanup'))
+try:
+    probe.patch_local_identity(story_lib)
+    raise AssertionError('Double story-skip patch accepted')
+except ValueError:
+    pass
+print('PASS: TalkSkip cleanup and pinned 96-byte Scudo allocation-class split')
+
+with zipfile.ZipFile(frozen / 'AssetPack1.apk') as z:
+    original_lua_zip = z.read('assets/lua.zip')
+patched_lua_zip, opening_lua = probe.patch_opening_lua(original_lua_zip)
+with zipfile.ZipFile(io.BytesIO(original_lua_zip)) as original, zipfile.ZipFile(io.BytesIO(patched_lua_zip)) as patched:
+    assert original.namelist() == patched.namelist()
+    assert all(original.read(name) == patched.read(name) for name in original.namelist()
+               if name not in probe.OPENING_LUA_MEMBERS)
+    assert all(original.read(name) != patched.read(name) for name in probe.OPENING_LUA_MEMBERS)
+assert {item['member'] for item in opening_lua['members']} == probe.OPENING_LUA_MEMBERS
+behaviors = ' '.join(item['behavior'] for item in opening_lua['members'])
+assert 'register and show' in behaviors and 'forest-to-house area transition' in behaviors
+assert any(item[0] == 'story/episode1/event.prologue1.enc' and b'Sequence_waitAreaChange()' in item[5]
+           and b'skipEvent=FE_skip_update' in item[5] for item in probe.OPENING_LUA_PATCHES)
+try:
+    probe.patch_opening_lua(patched_lua_zip)
+    raise AssertionError('Double opening Lua patch accepted')
+except ValueError:
+    pass
+print('PASS: opening Lua keeps party visibility and waits for the forest-to-house transition; no other member changes')
+
 patched_lib = bytearray(original_lib)
 metadata = patch_collabo_availability(patched_lib)
 assert len(patched_lib) == len(original_lib)

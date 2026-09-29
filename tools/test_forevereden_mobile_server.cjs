@@ -106,7 +106,8 @@ function ackOnly(item, verifier = 'local-test-verifier') {
 }
 
 (async () => {
-  let app = createMobileServer({ seed, codec, statePath, log: () => {} }), port = await listen(app);
+  const logs = [];
+  let app = createMobileServer({ seed, codec, statePath, log: line => logs.push(JSON.parse(line)) }), port = await listen(app);
   let billed = await billingCall(port, 'POST', '/v1.0/auth/initialize', { device_id: 'android-test', token: 'local-key' });
   assert.equal(billed.status, 200); assert.match(billed.value.uuid, /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/);
   billed = await billingCall(port, 'POST', '/v1.0/auth/authorize'); assert.equal(billed.value.result, 'OK');
@@ -155,7 +156,7 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   const replay = { requestId, sequence, response: Buffer.from(response.body) };
   await new Promise(resolve => app.server.close(resolve));
 
-  app = createMobileServer({ seed, codec, statePath, log: () => {} }); port = await listen(app);
+  app = createMobileServer({ seed, codec, statePath, log: line => logs.push(JSON.parse(line)) }); port = await listen(app);
   billed = await billingCall(port, 'GET', '/v1.0/payment/balance');
   assert.equal(billed.value.entry.balance_total_gem, 30);
   billed = await billingCall(port, 'GET', '/v1.0/payment/subscription/status');
@@ -196,7 +197,7 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   assert.equal(app.state().tables.UserQuest.find(quest => quest.questId === questId).state, 4);
   const questReplay = { requestId, sequence, response: Buffer.from(response.body) };
   await new Promise(resolve => app.server.close(resolve));
-  app = createMobileServer({ seed, codec, statePath, log: () => {} }); port = await listen(app);
+  app = createMobileServer({ seed, codec, statePath, log: line => logs.push(JSON.parse(line)) }); port = await listen(app);
   requestId = questReplay.requestId - 1; sequence = questReplay.sequence - 1;
   response = await call(port, 'quest/close', questClose, true, true);
   assert.deepEqual(response.body, questReplay.response);
@@ -417,12 +418,19 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   const drawTokens = value.dataTokens;
   const saveValue = JSON.parse(fs.readFileSync(path.join(root, 'data/forevereden-evidence/private-login/first-gameplay-push-request-2d385cd2462bf45f.json')));
   saveValue.deltas[0].trigger = 'ExplorerScheduled';
+  const equipmentHighWater = seed.tables.UserInfo.lastEquipmentStockId + 100;
+  app.state().tables.UserEquipmentStock = [...seed.tables.UserEquipmentStock,
+    { ...seed.tables.UserEquipmentStock[0], id: equipmentHighWater }];
+  saveValue.deltas[0].putItems.UserInfo[0].position = {
+    ...saveValue.deltas[0].putItems.UserInfo[0].position, areaId: 511001001, lineId: 40, rate: 0.75 };
   const save = Buffer.from(JSON.stringify(saveValue));
   response = await call(port, 'user_data/push', save, true, true);
   assert.equal(response.status, 200);
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
   assert.deepEqual(value.triggers, ['ExplorerScheduled']);
   assert.deepEqual(value.putItems, { UserEnvironmentChangeGroup: 1, UserInfo: 1, UserMigratoryEnemy: 1 });
+  assert.equal(app.state().tables.UserInfo.lastEquipmentStockId, equipmentHighWater);
+  assert.deepEqual(app.state().tables.UserInfo.position, seed.tables.UserInfo.position);
   const migratoryToken = value.dataTokens.UserMigratoryEnemy;
   const nextSave = structuredClone(saveValue);
   delete nextSave.deltas[0].putItems.UserMigratoryEnemy;
@@ -441,12 +449,13 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   delete migratedSave.checksums.before.UserEnvironmentChangeGroup; delete migratedSave.checksums.after.UserEnvironmentChangeGroup;
   delete migratedSave.dataTokens.UserEnvironmentChangeGroup;
   migratedSave.dataTokens = Object.fromEntries(Object.keys(migratedSave.dataTokens).map(name =>
-    [name, name === 'UserMigratoryEnemy' ? migratoryToken : value.dataTokens[name]]));
+    [name, name === 'UserMigratoryEnemy' ? migratoryToken : '0'.repeat(32)]));
   migratedSave.deltas[0].putItems.UserInfo[0].totalPlayingTime += 2;
   response = await call(port, 'user_data/push', Buffer.from(JSON.stringify(migratedSave)), true, true);
   assert.equal(response.status, 200);
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
   assert.deepEqual(value.putItems, { UserInfo: 1, UserMigratoryEnemy: 1 });
+  assert.ok(logs.some(row => row.event === 'private-save-token-resync' && row.tables.includes('UserInfo')));
   const ticketSave = structuredClone(saveValue);
   ticketSave.deltas[0].putItems.UserDungeonTicket = structuredClone(seed.tables.UserDungeonTicket);
   ticketSave.dataTokens = {
@@ -545,8 +554,7 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
   assert.deepEqual(value.putItems, { UserItemToken: 1, UserRandomSeed: 1 });
   assert.ok(value.dataTokens.ItemTokens && value.dataTokens.RandomSeeds);
-  assert.equal(value.data.UserItemToken.length, 1); assert.ok(value.data.UserItemToken[0].signature);
-  assert.equal(value.data.UserRandomSeed.length, 1); assert.ok(value.data.UserRandomSeed[0].signature);
+  assert.deepEqual(value.data, {});
   const tokenOnlySave = structuredClone(blockingSave);
   delete tokenOnlySave.deltas[0].putItems.UserRandomSeed;
   delete tokenOnlySave.dataTokens.UserRandomSeed;
@@ -556,7 +564,17 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   assert.equal(response.status, 200);
   value = JSON.parse(decryptBody(response.body, key, iv, limits));
   assert.deepEqual(value.putItems, { UserItemToken: 1 });
+  assert.deepEqual(value.data, {});
+  const itemTokenCount = app.state().tables.UserItemToken.length;
+  const tokenDeleteSave = structuredClone(tokenOnlySave);
+  tokenDeleteSave.deltas[0].putItems = {};
+  tokenDeleteSave.deltas[0].deleteItems = { UserItemToken: [structuredClone(app.state().tables.UserItemToken[0])] };
+  tokenDeleteSave.dataTokens.UserItemToken = value.dataTokens.UserItemToken;
+  response = await call(port, 'user_data/push', Buffer.from(JSON.stringify(tokenDeleteSave)), true, true);
+  assert.equal(response.status, 200);
+  value = JSON.parse(decryptBody(response.body, key, iv, limits));
   assert.equal(value.data.UserItemToken.length, 1); assert.ok(value.data.UserItemToken[0].signature);
+  assert.equal(app.state().tables.UserItemToken.length, itemTokenCount);
   response = await call(port, 'user_data/confirm', Buffer.alloc(0), true, true);
   const currentTokens = JSON.parse(decryptBody(response.body, key, iv, limits)).dataTokens;
   const difficultySave = structuredClone(blockingSave), difficultyRow = {
@@ -663,6 +681,44 @@ function ackOnly(item, verifier = 'local-test-verifier') {
   assert.ok(JSON.parse(db.prepare("SELECT data FROM profile WHERE name='UserPC'").get().data)
     .some(pc => Number.isSafeInteger(pc.destinyPoint) && pc.destinyPoint > 0));
   db.close();
+  const recoveryDatabase = path.join(temp, 'opening-skip-recovery.sqlite'), staleOpening = structuredClone(imported);
+  staleOpening.tables.UserInfo.position = { ...staleOpening.tables.UserInfo.position, areaId: 511003004, lineId: 2,
+    rate: 0.25, safetyPositionId: 1 };
+  staleOpening.tables.UserStoryPart = [{ userId: seed.user_id, storyPartId: 601000001, state: 3, updatedAt: 1790396821 }];
+  staleOpening.tables.UserStoryStep = [];
+  staleOpening.opening_transition_repaired = false;
+  staleOpening.tables.UserSystemFlag = staleOpening.tables.UserSystemFlag.map(row =>
+    row.systemFlagId === 91210011 ? { ...row, flagValue: 0 } : row);
+  app = createMobileServer({ seed, codec, database: recoveryDatabase, initialState: staleOpening,
+    log: line => logs.push(JSON.parse(line)) });
+  await listen(app);
+  assert.deepEqual(app.state().tables.UserInfo.position, { ...staleOpening.tables.UserInfo.position,
+    areaId: 511001003, lineId: 1, rate: 0.690324664115906, safetyPositionId: 2,
+    encountRangeNow: 0, encountRangeOcc: 0, vesselAreaPosX: 0, vesselAreaPosY: 0, vesselAreaPosZ: 0 });
+  assert.deepEqual(app.state().tables.UserStoryStep.map(row => [row.storyStepId, row.state]), [[603001001, 2]]);
+  assert.equal(app.state().tables.UserStoryPart[0].state, 2);
+  assert.equal(app.state().tables.UserSystemFlag.find(row => row.systemFlagId === 91210011).flagValue, 1);
+  assert.ok(logs.some(row => row.event === 'private-opening-skip-recovered'));
+  await app.close();
+  const recovered = new DatabaseSync(recoveryDatabase, { readOnly: true });
+  for (const name of ['UserInfo','UserStoryPart','UserStoryStep','UserSystemFlag']) {
+    const row = recovered.prepare('SELECT data,token FROM profile WHERE name=?').get(name);
+    assert.equal(row.token, md5(Buffer.from(row.data)));
+  }
+  recovered.close();
+  const completedRecoveryDatabase = path.join(temp, 'completed-opening-recovery.sqlite');
+  const completedOpening = structuredClone(imported);
+  completedOpening.opening_transition_repaired = false;
+  completedOpening.tables.UserInfo.position = { ...completedOpening.tables.UserInfo.position,
+    areaId: 511003004, lineId: 2, rate: 0.25, safetyPositionId: 1 };
+  completedOpening.tables.UserStoryPart = [{ userId: seed.user_id, storyPartId: 601000001, state: 2, updatedAt: 1790396821 }];
+  completedOpening.tables.UserStoryStep = [{ userId: seed.user_id, storyStepId: 603001001, state: 2 }];
+  app = createMobileServer({ seed, codec, database: completedRecoveryDatabase, initialState: completedOpening, log: () => {} });
+  await listen(app);
+  assert.equal(app.state().tables.UserInfo.position.areaId, 511001003);
+  assert.equal(app.state().tables.UserInfo.position.safetyPositionId, 2);
+  assert.equal(app.state().opening_transition_repaired, true);
+  await app.close();
   app = createMobileServer({ seed, codec, database, log: () => {} }); port = await listen(app);
   requestId = sqliteReplay.requestId - 1; sequence = sqliteReplay.sequence - 1;
   response = await call(port, 'user_data/confirm', Buffer.alloc(0), true, true);

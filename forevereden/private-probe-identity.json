@@ -1,6 +1,6 @@
 {
-  "runtime_id": "f9ae03ab849854745f9df8b6dd36bbe5a67eb9d964e6432e678027c18f665140",
-  "generation": "data\\forevereden-evidence\\private-probe\\f9ae03ab84985474",
+  "runtime_id": "b348f03ad089df0dcbc1a09e49210f5c8550bcb2deef26dd90f964ec0ce87566",
+  "generation": "data\\forevereden-evidence\\private-probe\\b348f03ad089df0d",
   "identity": {
     "project": "ForeverEden",
     "purpose": "local routing probe, not a gameplay server",
@@ -15,6 +15,47 @@
       "segment_file_offset": 76234752,
       "segment_virtual_address": 76791808,
       "segment_bytes": 16384
+    },
+    "native_story_skip_button_patch": {
+      "talk_layer_added_offset": 50142716,
+      "talk_layer_added_before": "e00313aa",
+      "hook_address": 76792320,
+      "create_wrapper_address": 76792384,
+      "talk_finish_offset": 50136116,
+      "talk_finish_hook_address": 76792576,
+      "script_skip_event_offset": 52294744,
+      "script_skip_event_before": "fd7bbea9",
+      "script_skip_event_hook_address": 76792704,
+      "malloc_hook_address": 76793408,
+      "realloc_hook_address": 76793472,
+      "calloc_hook_address": 76793536,
+      "posix_memalign_hook_address": 76793600,
+      "allocation_counter_address": 76791800,
+      "allocation_behavior": "alternate 65-80 byte libc allocations across the 96-byte and 112-byte Scudo classes",
+      "prologue_skip_destination": {
+        "area_id": 511001003,
+        "line_id": 1,
+        "rate": 0.690324664115906,
+        "story_step": "story_step.story_step_ch1_1"
+      },
+      "state_id": 403,
+      "behavior": "preserve authored skipEvent handlers; otherwise independently clear voice, narration, talk UI, every fade layer, letterbox, camera and actor actions, restore party registration, alpha, visibility filters, idle animation and field movement, stop the active update phase, and run final cleanup"
+    },
+    "opening_scene_visibility_patch": {
+      "members": [
+        {
+          "member": "area/area_511001003/area_511001003.enc",
+          "before_sha256": "96f8e66f5698da2ece7a38492535b312fb3da3912f2762d83fe972759f48cd44",
+          "after_sha256": "45274363aedfa3a57821b157ec5f206eefea06d41332eb99d9206a4fb7235ce5",
+          "behavior": "register and show the basic party object on house entry after the opening step completes"
+        },
+        {
+          "member": "story/episode1/event.prologue1.enc",
+          "before_sha256": "3ce1ae8fdf030b188f909b00252238972f21f9e0d364e9f7b5c61b271161bcd0",
+          "after_sha256": "f48e4be23555d2f03234463c8b67b3ebed4d352fdb0beb7ca40214f6c83dfcc9",
+          "behavior": "run the authored forest-to-house area transition to completion before committing opening story state"
+        }
+      ]
     },
     "collabo_availability_patch": {
       "accessor_offset": 56287752,
@@ -46,12 +87,12 @@
       },
       "AssetPack1.apk": {
         "bytes": 113332371,
-        "sha256": "34f7c1d34d5a98f6b76e83f6e8f2c9b626e207d8a37806906c69f60c2e74383b",
+        "sha256": "edce368889814c310b7e7be800d5854dfecee5e551261427bc4f78874d343f62",
         "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
       },
       "config.arm64_v8a.apk": {
         "bytes": 24253690,
-        "sha256": "7256e0de29df240ef794ce25eae06fba3b80027c9e82a9970a9d9d817208bf74",
+        "sha256": "ddb73e00476da1ef712c92f311f28294e2495afc2a03c2bfd9966a88b4ec2492",
         "signer_sha256": "678ab51bcf9c093e50215be9166d8c8235f0c1182be82523d21de039b9e07f40"
       },
       "config.en.apk": {
@@ -91,6 +132,12 @@
         "after_sha256": "148796b70ed512677b3b49f72eece913905b503e48eff839d19a4d9790539990"
       },
       {
+        "apk": "AssetPack1.apk",
+        "member": "assets/lua.zip",
+        "before_sha256": "f026c13545cebcdada2b98b57553e837c87e00726c2aad46c48d093aeb501e04",
+        "after_sha256": "85f49ef7d1c36114c20a4422f169be3b668798f566bb2335c77a7b83bc4e5135"
+      },
+      {
         "apk": "config.arm64_v8a.apk",
         "member": "AndroidManifest.xml",
         "before_sha256": "2efb10f2d5a04f96ca55b987061d95cc66ea65097c2e2d921ea398b4a87d19df",
@@ -100,7 +147,7 @@
         "apk": "config.arm64_v8a.apk",
         "member": "lib/arm64-v8a/libapp.so",
         "before_sha256": "2789c0f6bb570d168a14d836a36a3e3fc372c60c63a8e79730dc9c67bc78a1dc",
-        "after_sha256": "7db2d49ded6e561cf09e9b61f72ed4767a52005664fd4b2141cfa2a5e778cb30"
+        "after_sha256": "153b9c5989a730df78d9639cf583fe2b1feee7001c5f9dc9b038f4324c38e232"
       },
       {
         "apk": "config.en.apk",
@@ -127,7 +174,7 @@
         "after_sha256": "4831d3b9576ff073aed26acdea474321cb3af2e878a7e82df8f8a1aaa6057c97"
       }
     ],
-    "tool_sha256": "985e07cddbb669a6858b8d60d6faa2d759ef901c3800f635effbc9ed8d015083",
+    "tool_sha256": "96818dce0ffa05d7c702297ec65729d065911226c983eba06c1fa45c390a20a2",
     "removed_signing_metadata": [
       "original JAR signatures",
       "original APK signing block",
@@ -136,7 +183,9 @@
     "server_behavior": "HTTP 503 only; game request schemas UNKNOWN",
     "active_mods": [
       "private-billing-catalog",
-      "9999-year-collaboration-events"
+      "9999-year-collaboration-events",
+      "native-story-skip-button",
+      "opening-scene-visibility-recovery"
     ],
     "original_account_data_copied": false
   }

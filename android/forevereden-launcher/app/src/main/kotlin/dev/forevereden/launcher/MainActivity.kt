@@ -339,7 +339,8 @@ class MainActivity : Activity() {
 
     private fun profileLabel(file: File): String = runCatching {
         val seed = JSONObject(file.readText())
-        val name = seed.getJSONObject("tables").getJSONObject("UserInfo").optString("name").takeUnless { it.isBlank() || it == "-" }
+        val name = seed.optString("profile_name").takeUnless { it.isBlank() }
+            ?: seed.getJSONObject("tables").getJSONObject("UserInfo").optString("name").takeUnless { it.isBlank() || it == "-" }
         "${name ?: "Captured profile"} • ${file.name.substringAfter("profile-").substringBefore('.')}"
     }.getOrDefault(file.name)
 
@@ -353,6 +354,6 @@ class MainActivity : Activity() {
         private const val BACKUP_FORMAT = "forevereden-profile-backup"
         private const val EXPORT_REQUEST = 92
         private const val IMPORT_REQUEST = 93
-        private const val MAX_BACKUP_BYTES = 16 * 1024 * 1024
+        private const val MAX_BACKUP_BYTES = 64 * 1024 * 1024
     }
 }
